@@ -1,0 +1,21 @@
+1. Inicio
+2. Si tiene PC
+    1. Encender la PC
+    2. Ingresar a un navegador
+    3. Ingresar a https://Youtube.com
+3. Sino si tiene teléfono o si tiene tablet o si tiene smart TV
+    1. Encender el dispositivo
+    2. Sino tiene Youtube instalado
+        1. Ingresar en la tienda de aplicaciones
+        2. buscar  Youtube
+        3. Descargarlo
+        4. esperar a que se descargué 
+    3. Ingresar a la app
+4. Sino
+    1. Buscar alguien que le preste un dispositivo para ver Youtube
+    2. Abrir la app
+5. Mientras quiera ver videos
+    1. Buscar video
+    2. Click en el video 
+    3. Ver video
+6. Fin

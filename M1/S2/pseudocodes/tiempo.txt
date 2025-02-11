@@ -1,0 +1,16 @@
+1. Inicio
+2. Definir `tiempo_segundos`
+3. Definir `tiempo_faltante`
+4. Mostrar “Ingrese un tiempo en segundos”
+5. Pedir `tiempo_segundos`
+6. Si (`tiempo_segundos` < 600) entonces:
+    1. `tiempo_faltante` = 600 - `tiempo_segundos` 
+    2. Mostrar “Es menor y faltan ” +`tiempo_faltante` + “ segundos para ser 10 minutos”
+7. Sino si (`tiempo_segundos`  == 600) entonces:
+    1. Mostrar”Valor es igual a 10 minutos”
+8. Sino si (`tiempo_segundos` > 600) entonces:
+    1. Mostrar “Es mayor a 10 minutos”
+9. Sino
+    1. Mostrar “Error, valor no valido”
+10. FinSi
+11. Fin

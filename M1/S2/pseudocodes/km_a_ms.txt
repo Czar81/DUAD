@@ -1,0 +1,8 @@
+1. Inicio
+2. Definir `Km_h` 
+3. Definir `m_s`
+4. Mostrar “Ingrese la velocidad en km/h”
+5. Pedir `Km_h` 
+6. `m_s` =`Km_h` / 3.6
+7. Mostrar “El resultado en es: ” + `m_s` +”m/s ”
+8. Fin

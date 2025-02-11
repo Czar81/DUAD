@@ -1,0 +1,21 @@
+1. Inicio
+2. Definir `mujeres`
+3. Definir `hombres`
+4. Definir `porcentaje_hombres`
+5. Definir `porcentaje_mujeres`
+6. Definir `sexo`
+7. Mientras que (i≤6) hacer:
+    1. Mostrar "Ingrese el sexo de la persona. 1 para mujer, 2 para hombre.”
+    2. Pedir `sexo`
+    3. Si (`sexo` == 1) entonces 
+        1. mujeres += 1
+    4. Sino si (sexo = 2) entonces
+        1. hombres += 1
+    5. Sino 
+        1. Mostrar “Error, valor no valido”
+    6. FinSi
+8. FinMientras
+9. `porcentaje_mujeres` = (`mujeres` / 6) * 100
+10. `porcentaje_hombres` = (`hombres` / 6) * 100
+11. Mostrar "Porcentaje de mujeres: " + porcentaje_mujeres + "%” +"Porcentaje de hombres: " + porcentaje_hombres + "%”
+12. Fin

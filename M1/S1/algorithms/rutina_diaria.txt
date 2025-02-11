@@ -1,0 +1,60 @@
+1. Inicio
+2. Despertar
+3. Bañarse
+4. Hacer desayuno 
+5. Desayunar
+6. Por 5 minutos 
+    1. Lavarse los dientes
+7. Si hay clases 
+    1. Alistar almuerzo
+    2. Ponerse uniforme 
+    3. Ir a la parada de bus mas cercana 
+    4. Esperar bus
+    5. Subirse a bus
+    6. pagar pasaje
+    7. bajarme en el colegio
+    8. entrar a clases 
+    9. Si hora de almuerzo 
+        1. Calentar comida
+        2. Buscar lugar donde comer 
+        3. Comer
+        4. Por 5 minutos 
+            1. Lavarse los dientes
+    10. Si hora de irse
+        1. Guardar todo
+        2. ir a la parada de bus
+        3. pagar pasaje 
+        4. bajarme cerca de casa
+8. Sino 
+    1. Si hay oficio
+        1. Hacer oficio
+    2. Por 1 hora
+        1. Jugar videojuegos
+    3. Por  1 horas
+        1. Leer
+    4. Si hora de almuerzo
+        1. Ver que se va a cocinar
+        2. Hacer almuerzo
+        3. Comer
+        4. Por 5 minutos 
+            1. Lavarse los dientes
+9. Si hay tareas
+    1. Ordenarlas segun prioridad 
+    2. Si tarea se puede hacer en digital
+        1. Si se tiene PC o Tablet o Telefono
+            1. Abrir app necesario
+            2. Si es necesario investigar 
+                1. Buscar informacion en google
+    3. Sino 
+        1. Buscar instrucciones de tarea
+        2. Si  tiene que hacer en cuaderno 
+            1. Usar cuaderno
+            2. Buscar lapiz
+        3. Sino 
+            1. Buscar materiales necesarios
+10. Preparar cena 
+11. Cenar 
+12. Por 5 minutos 
+    1. Lavarse los dientes
+13. Ir a dormir
+14. Fin

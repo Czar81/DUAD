@@ -1,0 +1,16 @@
+1. Inicio
+2. Definir `n`
+3. Definir `i` = 1
+4. Definir `sum`
+5. Mostrar “Ingrese un numero”
+6. Pedir `n`
+7.  Mientras que (`i`≤ `n`) hacer:
+    1. Si  (`i` == `n`) entonces:
+        1. mostrar( `i` + “ = ”)
+    2. Sino
+        1. mostrar( `i` + “ + ”)
+    3. FinSi
+    4. `sum` += `i`
+    5. `i`+= 1
+8. Mostrar `sum` 
+9. Fin

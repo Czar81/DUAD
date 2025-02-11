@@ -1,0 +1,13 @@
+1. Inicio
+2. Definir `primero` 
+3. Definir `segundo`
+4. Mostrar “Ingrese el primer valor”
+5. Pedir `primero` 
+6. Mostrar “Ingrese el segundo valor”
+7. Pedir `segundo`
+8. Si (`primero` >`segundo`) entonces:
+    1. Mostrar ”A: ” +`primero` +”B: ”+`segundo`
+9. Sino
+    1. Mostrar ”A: ” +`segundo`+”B: ”+`primero` 
+10. FinSi
+11. Fin
