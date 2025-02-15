@@ -2,10 +2,6 @@ import csv  # Import the CSV module for reading and writing CSV files
 
 # Function to export student data to a CSV file
 def export_students(path, students_data, headers):
-    # Check if there is no data to export
-    if not students_data:
-        print("No data to export.")
-        return  # Exit the function if there is no data
 
     try:
         # Open the file in write mode with UTF-8 encoding and no extra newlines

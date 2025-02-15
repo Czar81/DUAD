@@ -10,7 +10,7 @@ def menu_student_grade_control():
     option = 0  # Variable to store the user's selected option
     while option != 7:  # Repeat until the user chooses to exit (option 7)
         # Display the main menu
-        actions.output_in_CLI("""------------------------------------
+        print("""------------------------------------
 - Welcome to student grade control -
 ------------------------------------
 --------- Choose an option -----------
@@ -43,11 +43,8 @@ def input_menu():
             return option  # Return the valid option
         
     except IndexError:
-        # Show an error message if the option is out of range
-        actions.output_in_CLI("Error, the option must be between 1 and 7")
-    except ValueError as error:
-        # Show an error message if the input is not a number
-        print(f"Error, value not valid: {error}")
+        # Show an error message if the option is not correct
+        print("Error, the option must be between 1 and 7")
 
 
 # Function to execute the action corresponding to the selected option
@@ -67,10 +64,16 @@ def direct_actions(option):
         actions.see_each_student_average(students_data)
     elif option == 5:
         # Export student data to a CSV file
+        # Check if there is no data to export
+        if not students_data:
+            print("""------------------------------------
+No data to export
+------------------------------------""")
+            return  # Exit the function if there is no data
         data.export_students('students_data.csv', students_data, students_data[0].keys())
     elif option == 6:
         # Import student data from a CSV file
         students_data = data.import_students('students_data.csv')
-    else:
+    elif option == 7:
         # Exit the program
-        actions.output_in_CLI("Thanks for using Student Grade Control")
+        print("Thanks for using Student Grade Control")

@@ -25,12 +25,12 @@ def input_students_data():
 def see_all_students_data(students_data):
     print(students_data)  # Debugging: Print raw student data
     # Display header for all students' data
-    output_in_CLI("""------------------------------------
+    print("""------------------------------------
 -------- All Students Data ---------
 ------------------------------------""")
     # Loop through each student and display their data
     for student in students_data:
-        output_in_CLI(f"""NAME: {student['name']}
+        print(f"""NAME: {student['name']}
 SECTION: {student['section']}
 SPANISH NOTE: {student['spanish_note']}
 ENGLISH NOTE: {student['english_note']}
@@ -51,12 +51,12 @@ def see_best_three_students_average(students_data):
     # Sort the averages in descending order
     averages.sort(key=lambda x: x['average'], reverse=True)
     # Display header for top 3 averages
-    output_in_CLI("""------------------------------------
+    print("""------------------------------------
 --------- Best 3 averages ----------
 ------------------------------------""")
     # Display the top 3 students
     for i in range(min(3, len(averages))):  # Ensure there are at least 3 students
-        output_in_CLI(f"""-- TOP {i+1} ---------------------------
+        print(f"""-- TOP {i+1} ---------------------------
 NAME: {averages[i]['name']}
 AVERAGE: {averages[i]['average']}) 
 ------------------------------------""")
@@ -65,14 +65,14 @@ AVERAGE: {averages[i]['average']})
 # Function to display the average grade of each student
 def see_each_student_average(students_data):
     # Display header for students' averages
-    output_in_CLI("""------------------------------------
+    print("""------------------------------------
 -------- Students Averages ---------
 ------------------------------------""")
     # Calculate and display the average for each student
     for student in students_data:
         average = (int(student['spanish_note']) + int(student['english_note'])
                 + int(student['social_studies_note']) + int(student['science_note'])) / 4
-        output_in_CLI(f"NAME: {student['name']} \nAVERAGE: {average}\n------------------------------------")
+        print(f"NAME: {student['name']} \nAVERAGE: {average}\n------------------------------------")
 
 
 # Function to input the number of students
@@ -82,15 +82,12 @@ def input_number_students():
             # Ask the user to enter the number of students
             amount_students = int(input("Enter the number of students\n"))
             if amount_students < 0:  # Validate that the number is positive
-                raise IndexError
+                raise ValueError
             else:
                 return amount_students  # Return the valid number
-        except IndexError:
-            # Display error if the number is negative
-            output_in_CLI("Error, must be a positive number")
         except ValueError as error:
-            # Display error if the input is not a valid integer
-            output_in_CLI(f"Error, invalid value must be a int: {error}")
+            # Display error if the input is not a valid number
+            print(f"Error, invalid value must be a positive number: {error}")
 
 
 # Function to input a student's note for a subject
@@ -100,17 +97,9 @@ def input_student_note(subject):
             # Ask the user to enter the note for the subject
             note = int(input(f"Enter the note of {subject}\n"))
             if note > 100 or note < 1:  # Validate that the note is between 1 and 100
-                raise IndexError
+                raise ValueError
             else:
                 return note  # Return the valid note
-        except IndexError:
-            # Display error if the note is out of range
-            output_in_CLI("Error, the note must be between 1 and 100")
-        except ValueError as error:
-            # Display error if the input is not a valid integer
-            output_in_CLI(f"Error, invalid value: {error}")
-
-
-# Function to display text in the CLI
-def output_in_CLI(text):
-    print(text)  # Print the provided text to the console
+        except ValueError:
+            # Display error if the input is not a valid numberd
+            print(f"Error, the note must be between 1 and 100")
