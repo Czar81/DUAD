@@ -3,7 +3,7 @@ This directory contains all the exercises done, organized by modules, weeks and 
 ## Directory structure
 Each module contains its own weeks, and the weeks have their topics and README file.
 ### Module 1
-- #### s[Week 1](/M1/S1/)
+- #### [Week 1](/M1/S1/)
     - [Algorithms](/M1/S1/algorithms/)
 - #### [Week 2](/M1/S2/)
     - [Pseudocodes](/M1/S2/pseudocodes/)
@@ -28,5 +28,7 @@ Each module contains its own weeks, and the weeks have their topics and README f
     - [Exercises Json](/M1/S8/exercises_json/)
 - #### Week 9
     - Was create this repo
+- #### [Week 10](/M1/S10/)
+    - [Project Student Grade Control](/M1/S10/project/)
 ---
 ![https://giphy.com/gifs/cbs-hacker-h50-26Ff8qu2JXRWKtppm/](https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExdmhwaGtsdzAzdHlxYmt2dHFra3RhY3V6OThjNTk4Z2gzaHdjNm1iaiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/26Ff8qu2JXRWKtppm/giphy.gif)
