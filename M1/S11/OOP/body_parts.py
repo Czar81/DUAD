@@ -8,10 +8,10 @@ class Hand:
 
 class Arm:
     def __init__(self, hand):
-        self.shoulder= None
-        self.elbow= None
-        self.forearm= None
-        self.hand = hand= None
+        self.shoulder = None
+        self.elbow = None
+        self.forearm = None
+        self.hand = hand
 
 
 class Foot:

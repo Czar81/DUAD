@@ -40,7 +40,7 @@ def validate_option_menu():
 
 
 def main():
-    Bus = BusClass(int(input("Enter the maximum of passangers of the bus\n")))
+    bus = BusClass(int(input("Enter the maximum of passangers of the bus\n")))
     while True:
         option = validate_option_menu()
 
@@ -48,9 +48,9 @@ def main():
             name = input("Enter the name of the passenger\n")
             id = input("Enter the id of the passenger\n")
             person = People(name, id)
-            Bus.add_passengers(person)
+            bus.add_passengers(person)
         elif option == 2:
-            Bus.remove_passengers()
+            bus.remove_passengers()
         elif option == 3:
             print("Thanks for using the program")
             break
