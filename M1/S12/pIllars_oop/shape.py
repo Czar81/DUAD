@@ -2,10 +2,11 @@ from abc import ABC, abstractmethod
 import math
 
 
-class Shape():
+class Shape(ABC):
     @abstractmethod
     def calculate_perimeter(self):
         pass
+
     @abstractmethod
     def calculate_area(self):
         pass
@@ -16,107 +17,124 @@ The result of {request} is {result}""")
 
 
 class Circle(Shape):
-    def calculate_perimeter(self, radio):
-        result = math.pi*radio*2
-        self.print_result("perimeter", result) 
-    
+    def __init__(self, radio):
+        self.radio = radio
 
-    def calculate_area(self, radio):
-        result = math.pi*radio*radio
-        self.print_result("area", result) 
+    def calculate_perimeter(self):
+        result = math.pi * self.radio * 2
+        self.print_result("perimeter", result)
+
+    def calculate_area(self):
+        result = math.pi * self.radio * self.radio
+        self.print_result("area", result)
 
 
 class Square(Shape):
-    def calculate_perimeter(self, side):
-        result = side * 4
-        self.print_result("perimeter", result) 
+    def __init__(self, side):
+        self.side = side
 
+    def calculate_perimeter(self):
+        result = self.side * 4
+        self.print_result("perimeter", result)
 
-    def calculate_area(self,side):
-        result = side*side
-        self.print_result("area", result) 
+    def calculate_area(self):
+        result = self.side * self.side
+        self.print_result("area", result)
 
 
 class Rectangle(Shape):
-    def calculate_perimeter(self, base, side):
-        result = (base*2)+(side*2)
-        self.print_result("perimeter", result) 
-    
+    def __init__(self, base, side):
+        self.base = base
+        self.side = side
 
-    def calculate_area(self, base, side):
-        result = (base*2)+(side*2)
-        self.print_result("area", result) 
+    def calculate_perimeter(self):
+        result = (self.base * 2) + (self.side * 2)
+        self.print_result("perimeter", result)
+
+    def calculate_area(self):
+        result = self.base * self.side
+        self.print_result("area", result)
+
+
+def __input_submenu_option():
+    while True:
+        try:
+            option = int(input("Enter an option: "))
+            if option > 3 or option < 1:
+                raise ValueError
+            else:
+                return option
+        except ValueError as error:
+            print(f"Error, value must be between 1 and 3: {error}")
 
 
 def __input_menu_option():
-    try:
-        option = int(input("Enter an option: "))
-        if option > 7  or option < 1:
-            raise ValueError
-        else:
-            return option
-    except ValueError as error:
-        print(f"Error, value must be between 1 and 7: {error}")
+    while True:
+        try:
+            option = int(input("Enter an option: "))
+            if option > 4 or option < 1:
+                raise ValueError
+            else:
+                return option
+        except ValueError as error:
+            print(f"Error, value must be between 1 and 4: {error}")
 
 
 def __input_numbers(text):
-    try:
-        amount = int(input(text))
-        if amount < 0:
-            raise ValueError
-        else:
-            return amount
-    except ValueError as error:
-        print(f"Error, invalid value, must be a positive number: {error}")
+    while True:
+        try:
+            amount = float(input(text))
+            if amount < 0:
+                raise ValueError
+            else:
+                return amount
+        except ValueError as error:
+            print(f"Error, invalid value, must be a positive number: {error}")
 
 
-def menu():
+def submenu(shape_object):
     while True:
         print("""----------------------------
-1. Circle Area
-2. Circle Perimeter
-3. Square Area
-4. Square Perimeter
-5. Rectangle Area
-6. Rectangle Perimeter
-7. Exit
+1. Perimeter
+2. Area
+3. Get back
 ----------------------------""")
-        option = __input_menu_option()
-        if 1 == option:
-            circle_area = Circle()
-            radio = __input_numbers("Enter the radio: ")
-            circle_area.calculate_area(radio)
-        elif 2 == option:
-            circle_perimeter = Circle()
-            radio = __input_numbers("Enter the radio: ")
-            circle_perimeter.calculate_perimeter(radio)
-        elif 3 == option:
-            square_area = Square()
+        option_submenu = __input_submenu_option()
+        if option_submenu == 1:
+            shape_object.calculate_perimeter()
+        elif option_submenu == 2:
+            shape_object.calculate_area()
+        elif option_submenu == 3:
+            return
+
+
+def menu_main():
+    while True:
+        print("""----------------------------
+1. Circle 
+2. Square 
+3. Rectangle 
+4. Exit
+----------------------------""")
+        option_main = __input_menu_option()
+
+        if option_main == 1:
+            radio = __input_numbers("Enter the radius: ")
+            circle = Circle(radio)
+            submenu(circle)
+        elif option_main == 2:
             side = __input_numbers("Enter the side: ")
-            square_area.calculate_area(side)
-        elif 4 == option:
-            square_perimeter = Square()
-            side = __input_numbers("Enter the side: ")
-            square_perimeter.calculate_perimeter(side)
-        elif 5 == option:
-            rectangle_area = Rectangle()
+            square = Square(side)
+            submenu(square)
+        elif option_main == 3:
             base = __input_numbers("Enter the base: ")
             side = __input_numbers("Enter the side: ")
-            rectangle_area.calculate_area(base, side)
-        elif 6 == option:
-            rectangle_perimeter = Rectangle()
-            base = __input_numbers("Enter the base: ")
-            side = __input_numbers("Enter the side: ")
-            rectangle_perimeter.calculate_perimeter(base, side)        
-        elif 7 == option:
+            rectangle = Rectangle(base, side)
+            submenu(rectangle)
+        elif option_main == 4:
             print("Thanks for using")
             break
 
 
-
-def main():
-    menu()
-
-
 if __name__ == "__main__":
-    main()
+    menu_main()
