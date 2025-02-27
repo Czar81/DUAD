@@ -28,10 +28,12 @@ Each module contains its own weeks, and the weeks have their topics and README f
     - [Exercises Json](/M1/S8/exercises_json/)
 - #### Week 9
     - Was create this repo
-- #### [Week 10](/M1/S10/)
-    - [Project Student Grade Control](/M1/S10/project/)
+- #### [Week 10](M1/S10/)
+    - [Project Student Grade Control/](/M1/S10/project/)
 - #### [Week 11](/M1/S11/)
-    - [OOP](M1/S11/OOP/)
-    - [Project Student Grade Control with objects](/M1/S11/project/)
+    - [Exercises OOP](/M1/S11/OOP/)
+    - [Student Grade Control with OOP](/M1/S11/project/)
+- #### [Week 12](/M1/12/)
+    - [Exercises Pillars of OOP ](/M1/S12/pillars_oop)
 ---
 ![https://giphy.com/gifs/cbs-hacker-h50-26Ff8qu2JXRWKtppm/](https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExdmhwaGtsdzAzdHlxYmt2dHFra3RhY3V6OThjNTk4Z2gzaHdjNm1iaiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/26Ff8qu2JXRWKtppm/giphy.gif)
