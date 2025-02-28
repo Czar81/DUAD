@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 import math
 
 
-class Shape():
+class Shape(ABC):
     @abstractmethod
     def calculate_perimeter(self):
         pass
@@ -16,13 +16,17 @@ The result of {request} is {result}""")
 
 
 class Circle(Shape):
-    def calculate_perimeter(self, radio):
-        result = math.pi*radio*2
+    def __init__(self,radio):
+        self.radio = radio
+
+
+    def calculate_perimeter(self):
+        result = math.pi*self.radio*2
         self.print_result("perimeter", result) 
     
 
-    def calculate_area(self, radio):
-        result = math.pi*radio*radio
+    def calculate_area(self):
+        result = math.pi*self.radio*self.radio
         self.print_result("area", result) 
 
 
