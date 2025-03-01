@@ -1,14 +1,17 @@
 def look_for_numbers(func):
-    def wrapper(*args):
+    def wrapper(*args, **kwargs):
         try: 
             for argument in args:
-                if isinstance(argument,(int,float, complex)):
-                    pass
-                else:
+                if not isinstance(argument,(int,float, complex)):
+                    raise ValueError   
+            for argument in kwargs.values():
+                if not isinstance(argument,(int,float, complex)):
                     raise ValueError
-            func(*args)
+                
+            return func(*args, **kwargs)
         except ValueError as error:
-            print(f"Argument must be a number: {error}")
+            print(f"{argument} must be a number: {error}")
+            return None
     return wrapper
 
 
@@ -22,5 +25,7 @@ def multiply(a, b, c):
     #Functionality
     pass
 
-sum(32, "23",  90.2)
-multiply(0.22, "3.14", 89)
+print(sum(32, 23, 90.2))  
+print(sum(32, "23", 90.2))  
+print(multiply(0.22, 3.14, 89))  
+print(multiply(0.22, "3.14", 89)) 

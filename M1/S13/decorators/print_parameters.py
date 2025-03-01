@@ -1,7 +1,7 @@
 def print_arguments(func):
-    def wrapper(*args):
-        print(f"The arguments of the function {func.__name__} are {args}")
-        func(*args) 
+    def wrapper(*args, **kwargs):
+        print(f"The arguments of the function {func.__name__} are {args} {kwargs}")
+        return func(*args, **kwargs) 
 
     return wrapper
 

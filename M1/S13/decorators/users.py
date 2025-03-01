@@ -15,11 +15,14 @@ class User:
 
 def is_adult(func):
     def wrapper(user):
-        if user.age >= 18:
-            print("Is an adult")
-            return func(user)
-        else:
-            print("Is not an adult")
+        try:
+            if user.age >= 18:
+                print("Is an adult")
+                return func(user)
+            else:
+                raise ValueError("Is not an adult")
+        except ValueError as error:
+            print(f"Error: {error}")
     return wrapper
 
 
@@ -28,4 +31,4 @@ def login(user):
     pass
 
 my_user = User(date(2007, 6, 19))
-login(my_user)
+print(login(my_user))
