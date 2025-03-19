@@ -35,7 +35,8 @@ def make_main_interface(data):
         window = fsg.Window(title="Personal Finance Management", 
                             background_color=light_blue,
                             font=font,
-                            layout=layout)
+                            layout=layout, 
+                            element_justification="center")
 
         # ------ Event Loop ------
         while True:
@@ -60,4 +61,4 @@ def __load_data_table():
     pass
 
 if __name__ == "__main__":
-    make_main_interface([["Blasphemus",10000,"Games"], ["Half life", 2000, "Games"]])
+    make_main_interface([["Blasphemus",10_000,"Games"], ["Half life", 2_000, "Games"]])
