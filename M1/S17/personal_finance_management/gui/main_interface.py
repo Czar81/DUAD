@@ -3,12 +3,11 @@ import FreeSimpleGUI as fsg
 def make_main_interface(data, headings):
     # ------ Window Layout ------
     layout = [
-        [fsg.Text("Personal Finance Management")],
         [fsg.Button("New Category"), fsg.Button("New Expenses"), fsg.Button("New Revenues")],
         [fsg.Table(
             values = data, 
             headings = headings, 
-            max_col_width = 3, 
+            max_col_width = 10, 
             background_color=0xD9D9D9,
             auto_size_columns=True,
             justification="center",
@@ -17,11 +16,11 @@ def make_main_interface(data, headings):
             )]
         ]
     # ------ Create Window ------
-    window = fsg.Window('The Table', layout)
+    window = fsg.Window('Personal Finance Management', layout)
 
     # ------ Event Loop ------
     while True:
-        event = window.read()
+        event, values = window.read()
         if event is None:
             break
         if event == "New Category":
@@ -34,4 +33,4 @@ def make_main_interface(data, headings):
     window.close()
 
 if __name__ == "__main__":
-    make_main_interface([123, 123,234,431], ["s", "sa", "SAd", "sd"])
+    make_main_interface([["Blasphemus",10000,"Games"], ["Half life", 2000, "Games"]], ["Titulo", "Monto", "Categoria"])
