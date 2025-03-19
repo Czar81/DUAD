@@ -4,23 +4,38 @@ from interface_new_expenses import _make_new_expenses_interface
 from interface_new_revenues import _make_new_revenues_interface
 
 def make_main_interface(data):
+    # ------ Constants ------
+    light_blue="#4A5C6A"
+    gray="#D9D9D9"
+    dark_blue="#11212D"
+    font = ("Helvatica", 12, "bold")
+
     try:
         # ------ Window Layout ------
         layout = [
-            [fsg.Button("New Category"), fsg.Button("New Expenses"), fsg.Button("New Revenues")],
+            [fsg.Button("New Category", button_color=dark_blue),
+            fsg.Button("New Expenses", button_color=dark_blue), 
+            fsg.Button("New Revenues", button_color=dark_blue)],
             [fsg.Table(
                 values = data, 
                 headings =  ["Title", "Amount", "Category"], 
-                max_col_width = 10, 
-                background_color=0xD9D9D9,
+                background_color=gray,
+                sbar_background_color=gray,
+                header_background_color=gray,
                 auto_size_columns=False,
                 justification="center",
                 key="-TABLE-",
-                tooltip="This is a table"
+                tooltip="This is a table",
+                text_color=light_blue,                
+                def_col_width=11,
+                header_text_color=light_blue,
                 )]
             ]
         # ------ Create Window ------
-        window = fsg.Window('Personal Finance Management', layout)
+        window = fsg.Window(title="Personal Finance Management", 
+                            background_color=light_blue,
+                            font=font,
+                            layout=layout)
 
         # ------ Event Loop ------
         while True:
@@ -45,5 +60,4 @@ def __load_data_table():
     pass
 
 if __name__ == "__main__":
-    make_main_interface([["Blasphemus",10000,"Games"], 
-                         ["Half life", 2000, "Games"]])
+    make_main_interface([["Blasphemus",10000,"Games"], ["Half life", 2000, "Games"]])
