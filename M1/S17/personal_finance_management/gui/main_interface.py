@@ -1,4 +1,7 @@
 import FreeSimpleGUI as fsg
+from interface_new_category import _make_new_category_interface
+from interface_new_expenses import _make_new_expenses_interface
+from interface_new_revenues import _make_new_revenues_interface
 
 def make_main_interface(data, headings):
     # ------ Window Layout ------
@@ -20,17 +23,23 @@ def make_main_interface(data, headings):
 
     # ------ Event Loop ------
     while True:
-        event, values = window.read()
+        event, value = window.read()
         if event is None:
             break
         if event == "New Category":
-            pass
+            _make_new_category_interface()
         elif event == "New Expenses":
-            pass
+            _make_new_expenses_interface()
         elif event == "New Revenues":
-            pass
+            _make_new_revenues_interface()
 
     window.close()
 
+
+def __load_data_table():
+    pass
+
 if __name__ == "__main__":
-    make_main_interface([["Blasphemus",10000,"Games"], ["Half life", 2000, "Games"]], ["Titulo", "Monto", "Categoria"])
+    make_main_interface([["Blasphemus",10000,"Games"], 
+                         ["Half life", 2000, "Games"]], 
+                         ["Title", "Amount", "Category"])
