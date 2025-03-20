@@ -67,6 +67,3 @@ def make_main_interface(data):
 
 def __load_data_table():
     pass
-
-if __name__ == "__main__":
-    make_main_interface([["Blasphemous",10_000,"Games"], ["Half life", 2_000, "Games"]])
