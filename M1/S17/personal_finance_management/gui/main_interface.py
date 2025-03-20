@@ -13,9 +13,16 @@ def make_main_interface(data):
     try:
         # ------ Window Layout ------
         layout = [
-            [fsg.Button("New Category", button_color=dark_blue),
-            fsg.Button("New Expenses", button_color=dark_blue), 
-            fsg.Button("New Revenues", button_color=dark_blue)],
+            [fsg.Button(button_text="New Category", 
+                        button_color=dark_blue,
+                       border_width=0),
+            fsg.Button(button_text="New Expenses", 
+                       button_color=dark_blue,
+                       border_width=0),
+            fsg.Button(button_text="New Revenues", 
+                       button_color=dark_blue,
+                       border_width=0)
+                ],
             [fsg.Table(
                 values = data, 
                 headings =  ["Title", "Amount", "Category"], 
@@ -29,14 +36,16 @@ def make_main_interface(data):
                 text_color=light_blue,                
                 def_col_width=11,
                 header_text_color=light_blue,
+                border_width=0,
+                header_border_width=1
                 )]
             ]
         # ------ Create Window ------
         window = fsg.Window(title="Personal Finance Management", 
                             background_color=light_blue,
                             font=font,
-                            layout=layout, 
-                            element_justification="center")
+                            element_justification="center",
+                            layout=layout)
 
         # ------ Event Loop ------
         while True:
@@ -53,12 +62,11 @@ def make_main_interface(data):
         window.close()
     # Find correct tipy for this
     except Exception as error:
-        # Change to display mesessage
-        print(f"An unexpected error ocurred trying to display Main Interface: {error}")
+        fsg.popup_error(f"An unexpected error ocurred trying to display Main Interface: {error}")
 
 
 def __load_data_table():
     pass
 
 if __name__ == "__main__":
-    make_main_interface([["Blasphemus",10_000,"Games"], ["Half life", 2_000, "Games"]])
+    make_main_interface([["Blasphemous",10_000,"Games"], ["Half life", 2_000, "Games"]])
