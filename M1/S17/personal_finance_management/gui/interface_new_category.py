@@ -14,7 +14,8 @@ def _make_new_category_interface():
                       background_color=light_blue)],
             [fsg.Input(background_color=gray,
                        text_color="#4A5C6A",
-                       border_width=0, 
+                       border_width=0,
+                       key="-CATEGORY-", 
                        size=(20, 1)), 
             fsg.Button(button_text="Create", 
                        button_color=dark_blue, 
@@ -30,12 +31,12 @@ def _make_new_category_interface():
 
         # ------ Event Loop ------
         while True:
-            event, values = window.read()
+            event, value = window.read()
             if event is None:
                 break
-            elif event is "Create":
-                pass
-            
+            elif event == "Create":
+                window.close()    
+                return value["-CATEGORY-"]
 
         window.close()
     # Find correct tipy for this

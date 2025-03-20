@@ -1,7 +1,7 @@
 import FreeSimpleGUI as fsg
-from interface_new_category import _make_new_category_interface
-from interface_new_expenses import _make_new_expenses_interface
-from interface_new_revenues import _make_new_revenues_interface
+from gui.interface_new_category import _make_new_category_interface
+from gui.interface_new_expenses import _make_new_expenses_interface
+from gui.interface_new_revenues import _make_new_revenues_interface
 
 def make_main_interface(data):
     # ------ Constants ------
@@ -10,6 +10,8 @@ def make_main_interface(data):
     dark_blue="#11212D"
     font = ("Helvatica", 12, "bold")
 
+    # -- Options for Combo --
+    options = []
     try:
         # ------ Window Layout ------
         layout = [
@@ -31,8 +33,6 @@ def make_main_interface(data):
                 header_background_color=gray,
                 auto_size_columns=False,
                 justification="center",
-                key="-TABLE-",
-                tooltip="This is a table",
                 text_color=light_blue,                
                 def_col_width=11,
                 header_text_color=light_blue,
@@ -53,14 +53,14 @@ def make_main_interface(data):
             if event is None:
                 break
             if event == "New Category":
-                _make_new_category_interface()
+                options.append(_make_new_category_interface())
             elif event == "New Expenses":
-                _make_new_expenses_interface()
+                _make_new_expenses_interface(options)
             elif event == "New Revenues":
-                _make_new_revenues_interface()
+                _make_new_revenues_interface(options)
 
         window.close()
-    # Find correct tipy for this
+    # Find correct type for this
     except Exception as error:
         fsg.popup_error(f"An unexpected error ocurred trying to display Main Interface: {error}")
 
