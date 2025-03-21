@@ -5,7 +5,7 @@ def _make_new_expenses_interface(options):
     light_blue="#4A5C6A"
     gray="#D9D9D9"
     dark_blue="#11212D"
-    font = ("Helvatica", 12, "bold")
+    font = ("Helvatica", 20, "bold")
 
     try:
         # ------ Window Layout ------

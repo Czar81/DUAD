@@ -8,7 +8,7 @@ def make_main_interface(data):
     light_blue="#4A5C6A"
     gray="#D9D9D9"
     dark_blue="#11212D"
-    font = ("Helvatica", 12, "bold")
+    font = ("Helvatica", 20, "bold")
 
     # -- Options for Combo --
     options = []
