@@ -14,7 +14,7 @@ def _import_data_table_csv(path):
         return []
 
 
-def _import_data_category_csv(path="C:/Users/Aaron/VS/Lyfther/DUAD/M1/S17/personal_finance_management/exports/data.csv"):
+def _import_data_category_csv(path="exports/data.csv"):
     categories = []
     exist_data = __verify_if_data_exist(path)
     if exist_data:

@@ -17,8 +17,6 @@ def make_main_interface():
     try:
         # ------ Load data ------
         data_import = __load_data_table()
-        # -------- Advice -------
-        fsg.popup(("Change path of the fuction __load_data_table"))
         # ------ Window Layout ------
         layout = [
             [fsg.Button(button_text="New Category", 
@@ -72,5 +70,5 @@ def make_main_interface():
 
 def __load_data_table():
     # Change to your path
-    data_import = _import_data_table_csv("C:/Users/Aaron/VS/Lyfther/DUAD/M1/S17/personal_finance_management/exports/data.csv")
+    data_import = _import_data_table_csv("exports/data.csv")
     return data_import
