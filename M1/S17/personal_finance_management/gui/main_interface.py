@@ -2,7 +2,7 @@ import FreeSimpleGUI as fsg
 from gui.interface_new_category import _make_new_category_interface
 from gui.interface_new_expenses import _make_new_expenses_interface
 from gui.interface_new_revenues import _make_new_revenues_interface
-from utils.import_csv import _import_data_csv
+from utils.import_csv import _import_data_table_csv
 
 def make_main_interface():
     # ------ Constants ------
@@ -14,9 +14,11 @@ def make_main_interface():
     # -- Options for Combo --
     options = []
 
-    # ------ Load data ------
-    data_import = __load_data_table()
     try:
+        # ------ Load data ------
+        data_import = __load_data_table()
+        # -------- Advice -------
+        fsg.popup(("Change path of the fuction __load_data_table"))
         # ------ Window Layout ------
         layout = [
             [fsg.Button(button_text="New Category", 
@@ -27,8 +29,7 @@ def make_main_interface():
                        border_width=0),
             fsg.Button(button_text="New Revenues", 
                        button_color=dark_blue,
-                       border_width=0)
-                ],
+                       border_width=0)],
             [fsg.Table(
                 values = data_import, 
                 headings =  ["Title", "Amount", "Category"], 
@@ -56,12 +57,12 @@ def make_main_interface():
             event, value = window.read()
             if event is None:
                 break
-            if event == "New Category":
-                options.append(_make_new_category_interface())
+            elif event == "New Category":
+                _make_new_category_interface()
             elif event == "New Expenses":
-                _make_new_expenses_interface(options)
+                _make_new_expenses_interface()
             elif event == "New Revenues":
-                _make_new_revenues_interface(options)
+                _make_new_revenues_interface()
 
         window.close()
     # Find correct type for this
@@ -70,5 +71,6 @@ def make_main_interface():
 
 
 def __load_data_table():
-    data_import = _import_data_csv("C:/Users/Aaron/VS/Lyfther/DUAD/M1/S17/personal_finance_management/exports/data.csv")
+    # Change to your path
+    data_import = _import_data_table_csv("C:/Users/Aaron/VS/Lyfther/DUAD/M1/S17/personal_finance_management/exports/data.csv")
     return data_import

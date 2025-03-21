@@ -1,6 +1,7 @@
 import FreeSimpleGUI as fsg
+from utils.import_csv import _import_data_category_csv
 
-def _make_new_expenses_interface(options):
+def _make_new_expenses_interface():
     # ------ Constants ------
     light_blue="#4A5C6A"
     gray="#D9D9D9"
@@ -8,6 +9,8 @@ def _make_new_expenses_interface(options):
     font = ("Helvatica", 20, "bold")
 
     try:
+        # ------ Load data ------
+        categories = __load_categories()
         # ------ Window Layout ------
         layout = [
             [fsg.Text(text="Enter Title",
@@ -27,7 +30,7 @@ def _make_new_expenses_interface(options):
             [fsg.Text(text="Enter Category",
                       text_color=gray,
                       background_color=light_blue)],
-            [fsg.Combo(values=options, 
+            [fsg.Combo(values=categories, 
                        background_color=gray,
                        text_color="#4A5C6A",
                        readonly=True,
@@ -56,3 +59,8 @@ def _make_new_expenses_interface(options):
     # Find correct type for this
     except Exception as error:
         fsg.popup_error(f"An unexpected error ocurred trying to display New Expenses: {error}")
+
+
+def __load_categories():
+    categories = _import_data_category_csv()
+    return categories
