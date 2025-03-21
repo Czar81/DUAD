@@ -2,8 +2,9 @@ import FreeSimpleGUI as fsg
 from gui.interface_new_category import _make_new_category_interface
 from gui.interface_new_expenses import _make_new_expenses_interface
 from gui.interface_new_revenues import _make_new_revenues_interface
+from utils.import_csv import _import_data_csv
 
-def make_main_interface(data):
+def make_main_interface():
     # ------ Constants ------
     light_blue="#4A5C6A"
     gray="#D9D9D9"
@@ -12,6 +13,9 @@ def make_main_interface(data):
 
     # -- Options for Combo --
     options = []
+
+    # ------ Load data ------
+    data_import = __load_data_table()
     try:
         # ------ Window Layout ------
         layout = [
@@ -26,7 +30,7 @@ def make_main_interface(data):
                        border_width=0)
                 ],
             [fsg.Table(
-                values = data, 
+                values = data_import, 
                 headings =  ["Title", "Amount", "Category"], 
                 background_color=gray,
                 sbar_background_color=gray,
@@ -66,4 +70,5 @@ def make_main_interface(data):
 
 
 def __load_data_table():
-    pass
+    data_import = _import_data_csv("C:/Users/Aaron/VS/Lyfther/DUAD/M1/S17/personal_finance_management/exports/data.csv")
+    return data_import
