@@ -1,5 +1,6 @@
 import FreeSimpleGUI as fsg
 from utils.import_csv import import_data_category_csv
+from utils.export_csv import export_movements
 
 def _make_new_revenues_interface():
     # ------ Constants ------
@@ -19,6 +20,7 @@ def _make_new_revenues_interface():
             [fsg.Input(background_color=gray,
                        text_color="#4A5C6A", 
                        border_width=0,
+                       key="-TITLE-", 
                        size=(25, 1))], 
             [fsg.Text(text="Enter Amount",
                       text_color=gray,
@@ -26,6 +28,7 @@ def _make_new_revenues_interface():
             [fsg.Input(background_color=gray,
                        text_color="#4A5C6A", 
                        border_width=0,
+                       key="-AMOUNT-",
                        size=(25, 1))], 
             [fsg.Text(text="Enter Category",
                       text_color=gray,
@@ -33,6 +36,7 @@ def _make_new_revenues_interface():
             [fsg.Combo(values=categories,
                        background_color=gray,
                        text_color="#4A5C6A",
+                       key="-CATEGORIES-",
                        readonly=True,
                        size=(25, 1))], 
             [fsg.Button(button_text="Create", 
@@ -53,6 +57,8 @@ def _make_new_revenues_interface():
             if event is None:
                 break  
             elif event == "Create":
+                movement = [values["-TITLE-"],values["-AMOUNT-"],values["-CATEGORIES-"]]
+                __send_data(movement)
                 window.close()    
 
         window.close()
@@ -60,7 +66,10 @@ def _make_new_revenues_interface():
     except Exception as error:
         fsg.popup_error(f"An unexpected error ocurred trying to display New Revenues: {error}")
 
-
+# Pasar a otra carpeta
 def __load_categories():
     categories = import_data_category_csv()
     return categories
+
+def __send_data(movement):
+    export_movements(new_movement=movement)
