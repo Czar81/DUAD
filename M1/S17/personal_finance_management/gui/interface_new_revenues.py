@@ -1,5 +1,5 @@
 import FreeSimpleGUI as fsg
-from utils.import_csv import _import_data_category_csv
+from utils.import_csv import import_data_category_csv
 
 def _make_new_revenues_interface():
     # ------ Constants ------
@@ -62,5 +62,5 @@ def _make_new_revenues_interface():
 
 
 def __load_categories():
-    categories = _import_data_category_csv()
+    categories = import_data_category_csv()
     return categories

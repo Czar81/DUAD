@@ -1,10 +1,10 @@
 import csv
-import os
-def _import_data_table_csv(path):
+from utils.verfy_data import _verify_if_data_exist
+def import_data_table_csv(path="exports/data.csv"):
     data_import = []
-    exist_data = __verify_if_data_exist(path)
+    exist_data = _verify_if_data_exist(path)
     if exist_data:
-        with open(path, mode="r") as file:
+        with open(file=path, mode="r") as file:
             reader = csv.reader(file)
             next(reader)
             for row in reader:
@@ -14,27 +14,13 @@ def _import_data_table_csv(path):
         return []
 
 
-def _import_data_category_csv(path="exports/data.csv"):
+def import_data_category_csv(path="data/categories.csv"):
     categories = []
-    exist_data = __verify_if_data_exist(path)
+    exist_data = _verify_if_data_exist(path)
     if exist_data:
-        with open(path, mode="r", encoding="utf-8") as file:
+        with open(file=path, mode="r", encoding="utf-8") as file:
             reader = csv.DictReader(file)
             categories = [row["Category"] for row in reader]
-        categories_clean=__remove_duplicates(categories)
-        return categories_clean
+        return categories
     else:
-        return []
-
-def __verify_if_data_exist(path):
-    if os.path.exists(path):
-        if os.path.getsize(path) > 0:
-            return True
-        else:
-            return False
-    else:
-        return False
-
-
-def __remove_duplicates(categories):
-    return list(set(categories))
+        return None

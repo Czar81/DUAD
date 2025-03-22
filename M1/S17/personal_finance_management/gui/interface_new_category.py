@@ -1,5 +1,5 @@
 import FreeSimpleGUI as fsg
-# from utils.export_csv import 
+from utils.export_csv import export_category
 
 def _make_new_category_interface():
     # ------ Constants ------
@@ -35,9 +35,9 @@ def _make_new_category_interface():
             event, value = window.read()
             if event is None:
                 break
-            elif event == "Create":
-                window.close()    
-                return value["-CATEGORY-"]
+            elif event == "Create":    
+                export_category(new_data=value["-CATEGORY-"])
+                window.close()
 
         window.close()
     # Find correct tipy for this

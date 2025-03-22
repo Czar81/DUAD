@@ -2,7 +2,7 @@ import FreeSimpleGUI as fsg
 from gui.interface_new_category import _make_new_category_interface
 from gui.interface_new_expenses import _make_new_expenses_interface
 from gui.interface_new_revenues import _make_new_revenues_interface
-from utils.import_csv import _import_data_table_csv
+from utils.import_csv import import_data_table_csv
 
 def make_main_interface():
     # ------ Constants ------
@@ -70,5 +70,5 @@ def make_main_interface():
 
 def __load_data_table():
     # Change to your path
-    data_import = _import_data_table_csv("exports/data.csv")
+    data_import = import_data_table_csv()
     return data_import
