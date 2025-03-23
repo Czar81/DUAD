@@ -36,7 +36,7 @@ def _make_new_category_interface():
             if event is None:
                 break
             elif event == "Create":    
-                export_category(new_data=value["-CATEGORY-"])
+                export_category(new_category=value["-CATEGORY-"])
                 window.close()
 
         window.close()

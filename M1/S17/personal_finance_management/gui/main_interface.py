@@ -11,12 +11,9 @@ def make_main_interface():
     dark_blue="#11212D"
     font = ("Helvatica", 20, "bold")
 
-    # -- Options for Combo --
-    options = []
-
     try:
         # ------ Load data ------
-        data_import = import_data_table_csv
+        data_import = import_data_table_csv()
         # ------ Window Layout ------
         layout = [
             [fsg.Button(button_text="New Category", 
