@@ -11,7 +11,7 @@ def _make_new_expenses_interface():
 
     try:
         # ------ Load data ------
-        categories = __load_categories()
+        categories = import_data_category_csv()
         # ------ Window Layout ------
         layout = [
             [fsg.Text(text="Enter Title",
@@ -57,20 +57,10 @@ def _make_new_expenses_interface():
             if event is None:
                 break
             elif event == "Create":
-                movement = [values["-TITLE-"],values["-AMOUNT-"],values["-CATEGORIES-"]]
-                __send_data(movement)
+                export_movements(new_movement=[values["-TITLE-"],values["-AMOUNT-"],values["-CATEGORIES-"]])
                 window.close()    
                 
         window.close()
     # Find correct type for this
     except Exception as error:
         fsg.popup_error(f"An unexpected error ocurred trying to display New Expenses: {error}")
-
-# Pasar a otra carpeta
-def __load_categories():
-    categories = import_data_category_csv()
-    return categories
-
-# Pasar a otra carpeta
-def __send_data(movement):
-    export_movements(new_movement=movement)

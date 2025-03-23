@@ -16,7 +16,7 @@ def make_main_interface():
 
     try:
         # ------ Load data ------
-        data_import = __load_data_table()
+        data_import = import_data_table_csv
         # ------ Window Layout ------
         layout = [
             [fsg.Button(button_text="New Category", 
@@ -66,9 +66,3 @@ def make_main_interface():
     # Find correct type for this
     except Exception as error:
         fsg.popup_error(f"An unexpected error ocurred trying to display Main Interface: {error}")
-
-# Pasar a otra carpeta
-def __load_data_table():
-    # Change to your path
-    data_import = import_data_table_csv()
-    return data_import
