@@ -9,7 +9,7 @@ def make_main_interface():
     light_blue="#4A5C6A"
     gray="#D9D9D9"
     dark_blue="#11212D"
-    font = ("Helvatica", 20, "bold")
+    font = ("Helvetica", 20, "bold")
 
     try:
         # ------ Load data ------
@@ -28,6 +28,7 @@ def make_main_interface():
             [fsg.Table(
                 values = data_import, 
                 headings =  ["Title", "Amount", "Category"], 
+                key="-TABLE-",
                 background_color=gray,
                 sbar_background_color=gray,
                 header_background_color=gray,
@@ -50,14 +51,17 @@ def make_main_interface():
         # ------ Event Loop ------
         while True:
             event, value = window.read()
-            if event is None:
+            if event == fsg.WIN_CLOSED:
                 break
             elif event == "New Category":
                 _make_new_category_interface()
             elif event == "New Expenses":
                 _make_new_expenses_interface()
+                window["-TABLE-"].Update(import_data_table_csv())
             elif event == "New Revenues":
                 _make_new_revenues_interface()
+                window["-TABLE-"].Update(import_data_table_csv())
+
 
         window.close()
     # Find correct type for this

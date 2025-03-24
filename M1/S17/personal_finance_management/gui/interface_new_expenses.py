@@ -7,7 +7,7 @@ def _make_new_expenses_interface():
     light_blue="#4A5C6A"
     gray="#D9D9D9"
     dark_blue="#11212D"
-    font = ("Helvatica", 20, "bold")
+    font = ("Helvetica", 20, "bold")
 
     try:
         # ------ Load data ------
