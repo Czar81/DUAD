@@ -11,4 +11,4 @@ A simple system for recording income, expenses and transaction categories, with:
 #### Key functionalities:
 - Add new transactions (revenue/expense).
 - Manage custom categories.
-- Display records in table
+- Display transactions in table

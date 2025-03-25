@@ -72,25 +72,16 @@ def make_main_interface():
                 break 
             # New Category button handler
             elif event == "New Category":
-                try:
-                    if _make_new_category_interface():  # Returns True if successful
-                        window["-TABLE-"].Update(import_data_table_csv())
-                except Exception as e:
-                    fsg.popup_error(f"Category creation failed: {str(e)}")         
-            # New Expenses button handler
+                _make_new_category_interface()
+                window["-TABLE-"].Update(import_data_table_csv())
             elif event == "New Expenses":
-                try:
-                    if _make_new_expenses_interface():
-                        window["-TABLE-"].Update(import_data_table_csv())
-                except Exception as e:
-                    fsg.popup_error(f"Expense recording failed: {str(e)}")              
+                _make_new_expenses_interface()
+                window["-TABLE-"].Update(import_data_table_csv())        
             # New Revenues button handler
             elif event == "New Revenues":
-                try:
-                    if _make_new_revenues_interface():
-                        window["-TABLE-"].Update(import_data_table_csv())
-                except Exception as e:
-                    fsg.popup_error(f"Income recording failed: {str(e)}")
+                _make_new_revenues_interface()
+                window["-TABLE-"].Update(import_data_table_csv())
+
 
         # Cleanup on window close
         window.close()
