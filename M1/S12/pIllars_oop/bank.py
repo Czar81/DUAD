@@ -11,6 +11,11 @@ class SavingsAccount(BankAccount):
         self.min_balance = min_balance
 
 
+class SavingsAccount(BankAccount):
+    def __init__(self, min_balance):
+        self.min_balance = min_balance
+    
+
     def withdraw(self, money):
         if (self.balance - money) >= self.min_balance:
             self.balance -= money
@@ -52,7 +57,6 @@ def __menu():
 3. Exit
 -----------------------""")
         option = __input_menu()
-
         if 1 == option:
             account.add_money(__input_amount("Enter amount of money: "))
         elif 2 == option:
