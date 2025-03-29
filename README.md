@@ -46,5 +46,7 @@ Each module contains its own weeks, and the weeks have their topics and README f
     - [Exercises Unit Testing](/M1/S15/unit_testing/)
 - #### [Week 17](/M1/S17/README.md)
     - [Personal Finance Management System](/M1/S17/finance_management/)
+### Module 2
+- #### [Week 1](/M2/)
 ---
 ![https://giphy.com/gifs/cbs-hacker-h50-26Ff8qu2JXRWKtppm/](https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExdmhwaGtsdzAzdHlxYmt2dHFra3RhY3V6OThjNTk4Z2gzaHdjNm1iaiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/26Ff8qu2JXRWKtppm/giphy.gif)
