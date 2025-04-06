@@ -1,18 +1,7 @@
 from flask import Flask, request, Response
+from scripts.management_json import export_json, import_json
 
 app = Flask(__name__)
-tasks_list=[{"id":1322,
-            "title":"Homework English",
-            "description":"Deep entire cave mail lose soon physical new count title leave cow opportunity sunlight dozen directly him record stared explain detail label plastic limited",
-            "state":"in progress"},
-            {"id":7272,
-            "title":"Homework English",
-            "description":"Deep entire cave mail lose soon physical new count title leave cow opportunity sunlight dozen directly him record stared explain detail label plastic limited",
-            "state":"in progress"},
-            {"id":9292,
-            "title":"Homework English",
-            "description":"Deep entire cave mail lose soon physical new count title leave cow opportunity sunlight dozen directly him record stared explain detail label plastic limited",
-            "state":"ready"}]
 
 @app.route("/")
 def root():
@@ -30,13 +19,13 @@ def root():
 @app.route("/make_task", methods=["POST"])  
 def post_task():
     request_body = request.json
-    # Call function save data
+    export_json(request_body)
     return {"request_body":request_body}
 
 
 @app.route("/tasks", methods=["GET"])
 def get_tasks():
-    # Call function import data 
+    tasks_list = import_json()
     filtered_tasks = tasks_list
     state_filter = request.args.get("state")
     if state_filter:
