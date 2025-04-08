@@ -29,7 +29,7 @@ def post_task():
 @app.route("/tasks", methods=["GET"])
 def get_tasks():
     tasks_list = import_json()
-    state_filter = request.args.get("state")
+    state_filter = request.args.get("state").lower()
     if state_filter:
         filtered_tasks = list(
             filter(lambda task: task["state"] == state_filter, tasks_list)
