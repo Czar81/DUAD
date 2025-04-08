@@ -1,6 +1,6 @@
 from flask import Flask, request, jsonify
 from scripts.management_json import import_json, export_json, update_task, remove_task
-
+from scripts.verify_task import verify
 app = Flask(__name__)
 
 @app.route("/")
@@ -19,6 +19,9 @@ def root():
 @app.route("/make_task", methods=["POST"])  
 def post_task():
     request_body = request.json
+    verified, message = verify(request_body)
+    if not verified:
+        return jsonify({"message" : message}), 400
     export_json(new_task_list=request_body)
     return {"request_body":request_body}
 

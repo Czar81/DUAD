@@ -629,8 +629,8 @@ def test_export_50_tasks_return_string_of_done():
   }
 ]
     # Act
-    export_json(path_export="test/50_task_export.json",path_import="test/50_tasks.json" ,new_task_list=new_task)
+    export_json(path_export="test/50_tasks_export.json",path_import="test/50_tasks.json" ,new_task_list=new_task)
     # Assert
-    result = import_json("test/50_task_export.json")
+    result = import_json("test/50_tasks_export.json")
     print()
     assert result  == task_list_expected

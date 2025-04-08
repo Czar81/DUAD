@@ -25,20 +25,20 @@ def export_json(path_export="data/tasks.json", path_import="data/tasks.json", ne
     except Exception as error:
         print(f"An unexpected error occurred trying to export json: {error}")
 
-def update_task(id, updated_task):
+def update_task(id, updated_task, path="data/tasks.json"):
     try:
-        tasks = import_json()
+        tasks = import_json(path)
         new_tasks = [task for task in tasks if task.get("id") != int(id)]
         new_tasks.append(updated_task)
-        export_json(new_task_list=new_tasks, export_all=True)
+        export_json(new_task_list=new_tasks, export_all=True, path_export=path,path_import=path)
     except Exception as error:
         print(f"An unexpected error occurred trying to export json: {error}")
 
 
-def remove_task(id):
+def remove_task(id, path="data/tasks.json"):
     try:
-        tasks = import_json()
+        tasks = import_json(path)
         new_tasks = [task for task in tasks if task.get("id") != int(id)]
-        export_json(new_task_list=new_tasks, export_all=True)
+        export_json(new_task_list=new_tasks, export_all=True, path_export=path,path_import=path)
     except Exception as error:
         print(f"An unexpected error occurred trying to export json: {error}")
