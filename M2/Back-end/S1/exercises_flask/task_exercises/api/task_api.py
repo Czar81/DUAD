@@ -19,30 +19,41 @@ def root():
 @app.route("/make_task", methods=["POST"])  
 def post_task():
     request_body = request.json
-    verified, message = verify(request_body)
+    verified, message, response = verify(request_body)
     if not verified:
-        return jsonify({"message" : message}), 400
-    export_json(new_task_list=request_body)
-    return {"request_body":request_body}
+        return jsonify({"message" : message}), response
+    verified, message, response = export_json(new_task_list=request_body)
+    if verify:
+        return jsonify({"request_body":request_body}), response
+    else:
+        return jsonify({"message" : message}), response
 
 
 @app.route("/tasks", methods=["GET"])
 def get_tasks():
-    tasks_list = import_json()
-    state_filter = request.args.get("state").lower()
-    if state_filter:
-        filtered_tasks = list(
-            filter(lambda task: task["state"] == state_filter, tasks_list)
-            )
-        return {"data": filtered_tasks}
-    return tasks_list
+    tasks_list, message, response = import_json()
+    if not tasks_list:
+        return jsonify(message), response
+    try:
+        state_filter = request.args.get("state")
+        if state_filter:
+            filtered_tasks = list(
+                filter(lambda task: task["state"] == state_filter, tasks_list)
+                )
+            return jsonify({"data": filtered_tasks}), response
+        return jsonify(tasks_list), response
+    except ValueError as error:
+        return jsonify(f"invalid state input: {error}"), 400
+    except Exception as error:
+        return jsonify(f"unexpected error occured trying to get tasks"), 500
+        
 
 
 @app.route("/change_task/<id>", methods=["PUT", "PATCH"])
 def put_task(id):
     updated_task = request.json
     new_updated_task = update_task(id, updated_task)
-    return {"request_body":new_updated_task}
+    return jsonify({"request_body":new_updated_task}), 200
 
 
 @app.route("/delete_task/<id>", methods=["DELETE"])
