@@ -1,8 +1,12 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, Response
 from scripts.management_json import import_json, export_json, update_task, remove_task
 from scripts.verify_task import verify
+
+# Initialize Flask application
 app = Flask(__name__)
 
+
+# Root endpoint that displays the main page with navigation links
 @app.route("/")
 def root():
     return f"""<h1>Index Task</h1>
@@ -15,51 +19,84 @@ def root():
         </ul>
     </p>"""
 
-
+# POST Method
 @app.route("/make_task", methods=["POST"])  
 def post_task():
+    # Get JSON data from request body
     request_body = request.json
+    # Call verify fuction to verify request
     verified, message, response = verify(request_body)
+    # Verify If there was an error
     if not verified:
-        return jsonify({"message" : message}), response
+        return jsonify({"message" : str(message)}), response
+    print("not good")
     verified, message, response = export_json(new_task_list=request_body)
-    if verify:
+    # Verify If was something wrong on export
+    if verified: 
         return jsonify({"request_body":request_body}), response
-    else:
-        return jsonify({"message" : message}), response
+    else: 
+        return jsonify({"message" : str(message)}), response
 
-
+# GET Method with optional state filtering
 @app.route("/tasks", methods=["GET"])
 def get_tasks():
+    # Import tasks from JSON file
     tasks_list, message, response = import_json()
+    # Verify if task_list is avoid
     if not tasks_list:
-        return jsonify(message), response
+        return jsonify(message), response # Return error
+    # Try for state filtering
     try:
+        # Check for state filter in query parameters
         state_filter = request.args.get("state")
         if state_filter:
+            # Filter tasks by state
             filtered_tasks = list(
                 filter(lambda task: task["state"] == state_filter, tasks_list)
                 )
-            return jsonify({"data": filtered_tasks}), response
-        return jsonify(tasks_list), response
-    except ValueError as error:
-        return jsonify(f"invalid state input: {error}"), 400
+            # Return filter tasks, with html code
+            return jsonify({"data": filtered_tasks}), response 
+        # Return tasks without filter, with html code
+        return jsonify(tasks_list), response 
+    except TypeError as error:
+        # Handle invalid state input
+        return jsonify(f"invalid state input: {str(error)}"), 400
     except Exception as error:
+        # Handle unexpected errors
         return jsonify(f"unexpected error occured trying to get tasks"), 500
         
 
-
-@app.route("/change_task/<id>", methods=["PUT", "PATCH"])
-def put_task(id):
+# PUT and PATCH Method
+@app.route("/change_task/<task_id>", methods=["PUT", "PATCH"])
+def put_task(task_id):
+    # Get updated task data from request body
     updated_task = request.json
-    new_updated_task = update_task(id, updated_task)
-    return jsonify({"request_body":new_updated_task}), 200
+    # Verify updated task
+    verified, message, response = verify(updated_task)
+    # Verify return
+    if not verified:
+        return jsonify({"message" : str(message)}), response
+    # Update the taks by id with update_task()
+    verified, message, response = update_task(task_id, updated_task)
+    # Verify if was an error
+    if verified:
+        return jsonify({"request_body":updated_task}), response
+    else:
+        return jsonify({"message":str(message)}), response
 
 
+# DELETE Method
 @app.route("/delete_task/<id>", methods=["DELETE"])
 def delete_task(id):
-    remove_task(id)
-    return jsonify({"message": f"Task {id} deleted"}), 200
+    # Call a function to delate a task by given id
+    verified, message, response = remove_task(id)
+    # Verify if was an error
+    if verified:
+        return jsonify({"message": f"Task {id} deleted"}), 200
+    else:
+        return jsonify({"message":str(message)}), response
 
+
+# Function to start the Flask application
 def start():
     app.run(host="localhost", debug=True)
