@@ -5,20 +5,6 @@ from scripts.verify_task import verify
 # Initialize Flask application
 app = Flask(__name__)
 
-
-# Root endpoint that displays the main page with navigation links
-@app.route("/")
-def root():
-    return f"""<h1>Index Task</h1>
-    <p>
-        <ul>
-            <li><a href="/make_task"> Create a new task</a></li>
-            <li><a href="/tasks">See all task</a></li>
-            <li><a href="/change_task/{id}">Change an existed task</a></li>
-            <li><a href="/delate_task/{id}">Delate_task</a></li>
-        </ul>
-    </p>"""
-
 # POST Method
 @app.route("/make_task", methods=["POST"])  
 def post_task():
