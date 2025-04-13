@@ -10,14 +10,14 @@ app = Flask(__name__)
 def post_task():
     # Get JSON data from request body
     request_body = request.json
-    # Call verify fuction to verify request
+    # Call verify function to verify request
     verified, message, response = verify(request_body)
-    # Verify If there was an error
+    # Check if there was an error
     if not verified:
         return jsonify({"message" : str(message)}), response
     print("not good")
     verified, message, response = export_json(new_task_list=request_body)
-    # Verify If was something wrong on export
+    # Verify If there was an error during export
     if verified: 
         return jsonify({"request_body":request_body}), response
     else: 
@@ -28,10 +28,9 @@ def post_task():
 def get_tasks():
     # Import tasks from JSON file
     tasks_list, message, response = import_json()
-    # Verify if task_list is avoid
+    # Verify if task_list is empty
     if not tasks_list:
         return jsonify(message), response # Return error
-    # Try for state filtering
     try:
         # Check for state filter in query parameters
         state_filter = request.args.get("state")
@@ -40,9 +39,9 @@ def get_tasks():
             filtered_tasks = list(
                 filter(lambda task: task["state"] == state_filter, tasks_list)
                 )
-            # Return filter tasks, with html code
+            # Return filter tasks, with HTTP code
             return jsonify({"data": filtered_tasks}), response 
-        # Return tasks without filter, with html code
+        # Return tasks without filter, with HTTP code
         return jsonify(tasks_list), response 
     except TypeError as error:
         # Handle invalid state input
