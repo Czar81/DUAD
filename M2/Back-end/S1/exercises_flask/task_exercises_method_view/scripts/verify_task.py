@@ -6,17 +6,17 @@ def verify(request):
     Returns a tuple with (success status, message, HTTP status code).
     """
     try:
-        # Verify blank spaces in request fields
+        # Check blank spaces in request fields
         verified, message =__verify_blank_spaces(request)
         if not verified:
             return False, message, 400
         
-        # Verify the state field has valid values
+        # Check the state field has valid values
         verified, message =__verify_states(request["state"])
         if not verified:
             return False, message, 400
         
-        # Verify the ID is unique
+        # Check the ID is unique
         verified, message, response =__verify_id(request["id"])
         if not verified:
             return False, message, response
@@ -36,10 +36,10 @@ def __verify_blank_spaces(request):
     try:
         # Check each key in the request
         for key, value in request.items():
-            # Verify if is None
+            # Check if is None
             if value is None:
                 raise TypeError(f"invalid request blank space in {key}")
-            # Verify if is blank
+            # Check if is blank
             elif not str(value).strip():
                 raise ValueError(f"invalid request blank space in {key}")
             
@@ -69,7 +69,6 @@ def __verify_states(state):
         if state.lower() in ["ready", "in progress", "pending"]:
             return True, None
         else:
-            # If are not correct
             raise ValueError("invalid state")
     except TypeError as error:
         return False, error
@@ -86,13 +85,13 @@ def __verify_id(id):
     Returns tuple with (success status, error message if any).
     """
     try:
-        # Verify ID is an integer
+        # Check ID is an integer
         if not isinstance(id, int):
             raise TypeError("id not a int")
         
         # Import tasks from JSON file
         tasks, message, response = import_json()
-        # Look for error from importing
+        # Check error from importing
         if not tasks:
                 return False, message, response
         

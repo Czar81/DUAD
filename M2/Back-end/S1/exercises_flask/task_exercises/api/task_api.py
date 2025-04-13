@@ -2,7 +2,7 @@ from flask import Flask, request, jsonify, Response
 from scripts.management_json import import_json, export_json, update_task, remove_task
 from scripts.verify_task import verify
 
-# Initialize Flask application
+# Initializing Flask application
 app = Flask(__name__)
 
 # POST Method
@@ -10,14 +10,13 @@ app = Flask(__name__)
 def post_task():
     # Get JSON data from request body
     request_body = request.json
-    # Call verify function to verify request
+    # Call verification function to verify request
     verified, message, response = verify(request_body)
     # Check if there was an error
     if not verified:
         return jsonify({"message" : str(message)}), response
-    print("not good")
     verified, message, response = export_json(new_task_list=request_body)
-    # Verify If there was an error during export
+    # Check if there was an error during export
     if verified: 
         return jsonify({"request_body":request_body}), response
     else: 
@@ -28,7 +27,7 @@ def post_task():
 def get_tasks():
     # Import tasks from JSON file
     tasks_list, message, response = import_json()
-    # Verify if task_list is empty
+    # Check if task_list is empty
     if not tasks_list:
         return jsonify(message), response # Return error
     try:
@@ -58,12 +57,11 @@ def put_task(task_id):
     updated_task = request.json
     # Verify updated task
     verified, message, response = verify(updated_task)
-    # Verify return
     if not verified:
         return jsonify({"message" : str(message)}), response
     # Update the taks by id with update_task()
     verified, message, response = update_task(task_id, updated_task)
-    # Verify if was an error
+    # Check if there was an error
     if verified:
         return jsonify({"request_body":updated_task}), response
     else:
@@ -72,12 +70,12 @@ def put_task(task_id):
 
 # DELETE Method
 @app.route("/delete_task/<id>", methods=["DELETE"])
-def delete_task(id):
-    # Call a function to delate a task by given id
-    verified, message, response = remove_task(id)
-    # Verify if was an error
+def delete_task(task_id):
+    # Call a function to delete a task by given id
+    verified, message, response = remove_task(task_id)
+    # Check if there was an error
     if verified:
-        return jsonify({"message": f"Task {id} deleted"}), 200
+        return jsonify({"message": f"Task {task_id} deleted"}), 200
     else:
         return jsonify({"message":str(message)}), response
 

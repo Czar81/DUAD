@@ -10,7 +10,7 @@ def import_json(path="data/tasks.json"):
         # Open and read JSON file from given path
         with open(path, mode="r", newline="", encoding="UTF-8") as file:
             tasks_list = json.load(file)
-        # Return success when was not an error
+        # Return success when there was not an error
         return tasks_list, None, 200
     except FileNotFoundError as error:
          # Handle file not found
@@ -30,7 +30,7 @@ def export_json(
     Returns tuple with (success status, error message if any, HTTP status code).
     """
     try:
-        # Look if export_all is True
+        # Check if export_all is True
         if export_all:
             # Overwrite tasks
             with open(path_export, mode="w", encoding="UTF-8")as file:
@@ -39,7 +39,7 @@ def export_json(
         else:
             # Import existing tasks
             task_list, message, response = import_json(path_import)
-            # Look for error from importing 
+            # Check error from importing 
             if not task_list:
                 return False, message, response
             # Append new task to tasks json
@@ -62,7 +62,7 @@ def update_task(task_id, updated_task, path="data/tasks.json"):
     try:
         # Import existing tasks
         tasks, message, response = import_json(path)
-        # Look for error from importing 
+        # Check error from importing 
         if not tasks:
             return False, message, response 
         # Filter tasks by id
@@ -74,7 +74,7 @@ def update_task(task_id, updated_task, path="data/tasks.json"):
                                                   export_all=True, 
                                                   path_export=path,
                                                   path_import=path)
-        # Look for error from exporting 
+        # Check error from exporting 
         if not verified:
             return False, message, response
         return True, None, 200
@@ -91,7 +91,7 @@ def remove_task(task_id, path="data/tasks.json"):
     try:
         # Import existing tasks
         tasks, message, response = import_json(path)
-        # Look for error from importing 
+        # Check error from importing 
         if not tasks:
             return False, message, response
         # Filter tasks by id
@@ -101,7 +101,7 @@ def remove_task(task_id, path="data/tasks.json"):
                                                   export_all=True, 
                                                   path_export=path,
                                                   path_import=path)
-        # Look for error from exporting 
+        # Check error from exporting 
         if not verified:
             return False, message, response
         return True, None, 200

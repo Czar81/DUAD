@@ -11,10 +11,9 @@ class TaskView(View):
     def get(self):
         # Import tasks from JSON file
         tasks_list, message, response = import_json()
-        # Verify if task_list is empty
+        # Check if task_list is empty
         if not tasks_list:
             return jsonify(message), response # Return error
-        # Try for state filtering
         try:
             # Check for state filter in query parameters
             state_filter = request.args.get("state")
@@ -23,9 +22,9 @@ class TaskView(View):
                 filtered_tasks = list(
                     filter(lambda task: task["state"] == state_filter, tasks_list)
                     )
-                # Return filter tasks, with html code
+                # Return filter tasks, with HTTP code
                 return jsonify({"data": filtered_tasks}), response 
-            # Return tasks without filter, with html code
+            # Return tasks without filter, with HTTP code
             return jsonify(tasks_list), response 
         except TypeError as error:
             # Handle invalid state input
@@ -37,14 +36,13 @@ class TaskView(View):
     def post(self):
         # Get JSON data from request body
         request_body = request.json
-        # Call verify fuction to verify request
+        # Call verification function to verify request
         verified, message, response = verify(request_body)
-        # Verify If there was an error
+        # Check if there was an error
         if not verified:
             return jsonify({"message" : str(message)}), response
-        print("not good")
         verified, message, response = export_json(new_task_list=request_body)
-        # Verify If was something wrong on export
+        # Check if there was an error during export
         if verified: 
             return jsonify({"request_body":request_body}), response
         else: 
@@ -56,12 +54,11 @@ class TaskView(View):
         updated_task = request.json
         # Verify updated task
         verified, message, response = verify(updated_task)
-        # Verify return
         if not verified:
             return jsonify({"message" : str(message)}), response
         # Update the taks by id with update_task()
         verified, message, response = update_task(task_id, updated_task)
-        # Verify if was an error
+        # Check if there was an error
         if verified:
             return jsonify({"request_body":updated_task}), response
         else:
@@ -69,16 +66,13 @@ class TaskView(View):
 
 
     def delete(self, task_id):
-        # Call a function to delate a task by given id
-        verified, message, response = remove_task(id)
-        # Verify if was an error
+        # Call a function to delete a task by given id
+        verified, message, response = remove_task(task_id)
+        # Check if there was an error
         if verified:
-            return jsonify({"message": f"Task {id} deleted"}), 200
+            return jsonify({"message": f"Task {task_id} deleted"}), 200
         else:
             return jsonify({"message":str(message)}), response
-
-
-
 
 
 # Function to start the Flask application
