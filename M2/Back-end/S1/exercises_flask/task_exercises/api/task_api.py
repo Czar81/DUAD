@@ -6,7 +6,7 @@ from scripts.verify_task import verify
 app = Flask(__name__)
 
 # POST Method
-@app.route("/make_task", methods=["POST"])  
+@app.route("/task", methods=["POST"])  
 def post_task():
     # Get JSON data from request body
     request_body = request.json
@@ -51,7 +51,7 @@ def get_tasks():
         
 
 # PUT and PATCH Method
-@app.route("/change_task/<task_id>", methods=["PUT", "PATCH"])
+@app.route("/task/<task_id>", methods=["PUT", "PATCH"])
 def put_task(task_id):
     # Get updated task data from request body
     updated_task = request.json
@@ -69,7 +69,7 @@ def put_task(task_id):
 
 
 # DELETE Method
-@app.route("/delete_task/<id>", methods=["DELETE"])
+@app.route("/task/<task_id>", methods=["DELETE"])
 def delete_task(task_id):
     # Call a function to delete a task by given id
     verified, message, response = remove_task(task_id)
