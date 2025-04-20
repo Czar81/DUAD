@@ -1,0 +1,104 @@
+[
+    {
+        "id": 1001,
+        "title": "Math Assignment",
+        "description": "Solve quadratic equations and graph the results factor proper noun liquid sunshine",
+        "state": "in progress"
+    },
+    {
+        "id": 1002,
+        "title": "Science Project",
+        "description": "Research photosynthesis and present findings broken glass mountain river",
+        "state": "ready"
+    },
+    {
+        "id": 1003,
+        "title": "History Essay",
+        "description": "Write about the Industrial Revolution silver moon hidden treasure",
+        "state": "in progress"
+    },
+    {
+        "id": 1004,
+        "title": "Programming Task",
+        "description": "Build a Python script to analyze data lost city ancient code",
+        "state": "pending"
+    },
+    {
+        "id": 1005,
+        "title": "Art Presentation",
+        "description": "Create a slideshow on Renaissance art floating island digital dream",
+        "state": "ready"
+    },
+    {
+        "id": 1006,
+        "title": "Physics Homework",
+        "description": "Calculate velocity and acceleration silent star midnight theory",
+        "state": "in progress"
+    },
+    {
+        "id": 1007,
+        "title": "Biology Lab Report",
+        "description": "Document the microscope observations frozen light empty space",
+        "state": "pending"
+    },
+    {
+        "id": 1008,
+        "title": "Geography Quiz Prep",
+        "description": "Study European capitals and landmarks invisible bridge rising sun",
+        "state": "ready"
+    },
+    {
+        "id": 1009,
+        "title": "Literature Analysis",
+        "description": "Compare two Shakespeare plays lonely road forgotten words",
+        "state": "in progress"
+    },
+    {
+        "id": 1010,
+        "title": "Chemistry Experiment",
+        "description": "Mix compounds and record reactions electric storm quiet shadow",
+        "state": "pending"
+    },
+    {
+        "id": 1011,
+        "title": "Music Composition",
+        "description": "Write a short melody using piano chords golden leaf echo chamber",
+        "state": "ready"
+    },
+    {
+        "id": 1012,
+        "title": "Economics Research",
+        "description": "Analyze supply and demand curves in local markets hidden path crystal ball",
+        "state": "in progress"
+    },
+    {
+        "id": 1013,
+        "title": "Psychology Paper",
+        "description": "Discuss cognitive biases in decision-making silent ocean burning flame",
+        "state": "pending"
+    },
+    {
+        "id": 1014,
+        "title": "Physical Education Log",
+        "description": "Track weekly exercise routines and progress broken mirror infinite loop",
+        "state": "ready"
+    },
+    {
+        "id": 1015,
+        "title": "Spanish Homework",
+        "description": "Conjugate irregular verbs in past tense dark forest whispering wind",
+        "state": "in progress"
+    },
+    {
+        "id": 1016,
+        "title": "Computer Science Lab",
+        "description": "Implement a binary search algorithm in Java frozen river digital ghost",
+        "state": "pending"
+    },
+    {
+        "id": 1017,
+        "title": "Philosophy Essay",
+        "description": "Debate the ethics of artificial intelligence hollow mountain bright star",
+        "state": "ready"
+    }
+]
