@@ -16,6 +16,11 @@ CREATE TABLE Receipts(
     total_amount INTEGER NOT NULL
 );
 
+CREATE TABLE Shopping_cart(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    buyers_mail VARCHAR(30) NOT NULL,
+);
+
 CREATE TABLE Receipts_detail(
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     receipt_id INTEGER UNIQUE REFERENCES Receipts(id),
@@ -24,12 +29,11 @@ CREATE TABLE Receipts_detail(
     total_amount INTEGER NOT NULL
 );
 
-CREATE TABLE ShoppingCart(
+CREATE TABLE Products_Cart(
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    buyers_mail VARCHAR(30) NOT NULL,
-    product_id INTEGER UNIQUE REFERENCES Products(id)
+    product_id INTEGER UNIQUE REFERENCES Products(id),
+    shopping_cart_id INTEGER UNIQUE REFERENCES Shopping_cart(id)
 );
-
 -- Alter tables 
 ALTER TABLE Receipts 
     ADD phone_number TEXT NOT NULL DEFAULT '000 0000-0000';
