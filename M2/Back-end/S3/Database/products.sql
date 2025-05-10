@@ -81,7 +81,7 @@ SELECT * FROM Products
 -- Obtenga todos los productos que tengan un precio mayor a 50000
 SELECT * FROM Products WHERE price >= 50000;
 -- Obtenga todas las compras de un mismo producto por id.
-SELECT * FROM Receipts_detail WHERE id = 1;
+SELECT * FROM Receipts_detail WHERE product_id = 1; -- Change the id
 -- Obtenga todas las compras agrupadas por producto, donde se muestre el total comprado entre todas las compras.
 SELECT 
     product_id,
@@ -92,6 +92,8 @@ FROM
 GROUP BY
     product_id
 -- Obtenga todas las facturas realizadas por el mismo comprador
-SELECT * FROM 
+SELECT * FROM Receipts WHERE buyers_mail = 'vusvapko@ajofluk.my';-- Change the mail
 -- Obtenga todas las facturas ordenadas por monto total de forma descendente
+SELECT * FROM Receipts ORDER BY total_amount DESC;
 -- Obtenga una sola factura por número de factura.
+SELECT * FROM Receipts WHERE number_receipt = '100004';
