@@ -136,10 +136,24 @@ Final
 All = {1,2,3,4,5,6,7,8,9,10}
 Even = {2,4,6,8,10}
 Odd = {1,3,5,7,9}
-
+Realice las siguientes operaciones:
+1. `Even U Odd` = {1,2,3,4,5,6,7,8,9,10}
+2. `Even **∩** Odd` = ∅
+3. `All - Odd` = {2,4,6,8,10}
+4. `C(Even)` = {1,3,5,7,9}
+5. `C(Odd-All)`= {1,2,3,4,5,6,7,8,9,10}
 
 ### Ejercicios de JOINs
 
 1. Investigue y busque documentación sobre el SELECT que explique cómo utilizar las funcionalidades de ORDER BY, LIMIT, GROUP BY y tres tipos de JOIN, y cree una tabla (informativa, no de SQL) a partir de sus descubrimientos.
 
-2. Ver el siguiente [archivo](/M2/Back-end/S4/library)
+| Función | Descripción | Ejemplo |
+| --- | --- | --- |
+| `ORDER BY` | Se utiliza para ordenar las filas según una expresión dada. Se pueden colocar varios criterios para ordenar las filas, los cuales se aplicarán de izquierda a derecha. Además, se puede colocar `ASC` o `DESC` para indicar si se ordena de forma ascendente o descendente. | `SELECT * FROM Products ORDER BY brand, price` |
+| `LIMIT` | Se utiliza para limitar la cantidad de filas que devuelve el `SELECT`. | `SELECT * FROM Products LIMIT 10` |
+| `GROUP BY` | Agrupa filas que tienen un valor en común, permitiendo usar funciones de agregación. | `SELECT * FROM Products GROUP BY brand` |
+| `INNER JOIN` | Retorna los valores que están en ambas tablas, según una condición definida después del `ON`. | `SELECT * FROM Products JOIN Suppliers ON Products.supplier_id = Suppliers.id` |
+| `LEFT JOIN` | Retorna los valores de la tabla izquierda y los que coinciden en la tabla derecha. Si no hay coincidencias, rellena con `NULL` los valores de la tabla derecha. | `SELECT * FROM Products LEFT JOIN Suppliers ON Products.supplier_id = Suppliers.id` |
+| `RIGHT JOIN` | Retorna los valores de la tabla derecha y los que coinciden en la tabla izquierda. Si no hay coincidencias, los valores de la tabla izquierda aparecen como `NULL`. | `SELECT * FROM Products RIGHT JOIN Suppliers ON Products.supplier_id = Suppliers.id` |
+
+2. Ver el siguiente [archivo](/M2/Back-end/S4/library.sql)
