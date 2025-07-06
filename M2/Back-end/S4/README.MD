@@ -1,6 +1,10 @@
-# Ejercicios
+# Module 2
 
-## Normalización
+## Week 4
+
+Esta semana es sobre normalizacion y JOIN'S
+
+### Ejercicio de Normalización
 
 1. Ordenes
 
@@ -41,7 +45,7 @@
 
 ---
 
-Final
+#### Final
 
 | **Order ID** | **Item ID** | **Quantity** | **Special Request ID** | **Delivery Time** | **Address ID** |
 | --- | --- | --- | --- | --- | --- |
@@ -126,8 +130,6 @@ Final
 | 102 | Bob | 987-654-3210 |
 | 103 | Claire | 555-123-4567 |
 | 104 | Dave | 111-222-3333 |
-
-## Teoría de Conjuntos
 
 ### Ejercicios Teoría de Conjuntos
 
