@@ -117,10 +117,10 @@ Each module contains its own weeks, and the weeks have their topics and README f
 
     - [Database](/M2/Back-end/S3/Database/)
 
-  - #### [Week 4](/M2/Back-end/S4/README.md)
+  - #### [Week 4](/M2/Back-end/S4/README.MD)
     
-    - [Normalization](/M2/Back-end/S4/README.md)
-    
+    - [Normalization](/M2/Back-end/S4/README.MD)
+
     - [SELECTS](/M2/Back-end/S4/library.sql)
 
 ---
