@@ -70,12 +70,12 @@ Esta semana es sobre normalizacion y JOIN'S
 | 002 | Bob | 987-654-3210 |
 | 003 | Claire | 555-123-4567 |
 
-| Address ID  | Address |
-| --- | --- |
-| 001 | 123 Main St |
-| 002 | 456 Elm St |
-| 003 | 789 Oak St |
-| 004 | 464 Georgia St |
+| Address ID | Custumer ID | Address |
+| --- | --- | --- |
+| 001 | 001 | 123 Main St |
+| 002 | 002 | 456 Elm St |
+| 003 | 003 | 789 Oak St |
+| 004 | 003 | 464 Georgia St |
 
 | **Item ID** | **Item Name** | Price |
 | --- | --- | --- |
