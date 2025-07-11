@@ -116,5 +116,12 @@ Each module contains its own weeks, and the weeks have their topics and README f
   - #### [Week 3](/M2/Back-end/S3/README.md)
 
     - [Database](/M2/Back-end/S3/Database/)
+
+  - #### [Week 4](/M2/Back-end/S4/README.MD)
+    
+    - [Normalization](/M2/Back-end/S4/README.MD)
+
+    - [SELECTS](/M2/Back-end/S4/library.sql)
+
 ---
 ![https://giphy.com/gifs/cbs-hacker-h50-26Ff8qu2JXRWKtppm/](https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExdmhwaGtsdzAzdHlxYmt2dHFra3RhY3V6OThjNTk4Z2gzaHdjNm1iaiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/26Ff8qu2JXRWKtppm/giphy.gif)
