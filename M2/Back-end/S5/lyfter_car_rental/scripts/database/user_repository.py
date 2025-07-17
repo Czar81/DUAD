@@ -20,10 +20,10 @@ class UserRepository:
 
     def chage_user_state(self, user_id, new_state):
         try:
-            self.db_manager.excute_query(
+            self.db_manager.execute_query(
                 'UPDATE lyfter_car_rental."Users" SET state = %s WHERE id = %s',
                 new_state,
-                id,
+                user_id,
             )
         except Exception as e:
             print(f"Error: {e}")

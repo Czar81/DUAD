@@ -42,7 +42,7 @@ class CarRepository:
         try:
             self.db_manager.execute_query(
                 """UPDATE lyfter_car_rental."Cars" 
-                                        SET state = Unavailable 
+                                        SET state = 'Unavailable' 
                                         WHERE id = %s""",
                 car_id,
             )
