@@ -68,3 +68,6 @@ class CarRepository:
             return formatted_results
         except Exception as e:
             print(f"Error: {e}")
+
+    def get_all():
+        pass

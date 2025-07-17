@@ -15,13 +15,12 @@ if __name__ == "__main__":
         username="Darr123",
         password="Weber1984",
         birthday="1984-12-05",
-        state="Renting",
     )
     # b. Un script que agregue un automovil nuevo
     cars_repo = CarRepository(db_manager)
     cars_repo.create_car(make="BMW", model="M3 GTR", year=2005, state="Rented")
     # c. Un script que cambie el estado de un usuario
-    users_rep.chage_user_state(user_id=51, new_state="")
+    users_rep.chage_user_state(user_id=51, new_state="Inactive")
     # d. Un script que cambie el estado de un automovil
     cars_repo.chage_car_state(car_id=26, new_state="Available")
     # e. Un script que genere un alquiler nuevo con los datos de un usuario y un automovil
@@ -34,3 +33,4 @@ if __name__ == "__main__":
     # h. Un script que obtenga todos los automoviles alquilados, y otro que obtenga todos los disponibles.
     print(cars_repo.get_rented())
     print(cars_repo.get_available())
+    db_manager.close_connection()

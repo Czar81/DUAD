@@ -2,17 +2,16 @@ class UserRepository:
     def __init__(self, db_manager):
         self.db_manager = db_manager
 
-    def create_user(self, name, email, username, password, birthday, state):
+    def create_user(self, name, email, username, password, birthday):
         try:
             self.db_manager.execute_query(
                 """INSERT INTO lyfter_car_rental."Users"(name, email, username, password, birthday, state) 
-                                          VALUES(%s, %s, %s, %s, %s, %s)""",
+                                          VALUES(%s, %s, %s, %s, %s, 'Active')""",
                 name,
                 email,
                 username,
                 password,
-                birthday,
-                state,
+                birthday
             )
             print("User create successfully!")
         except Exception as e:
