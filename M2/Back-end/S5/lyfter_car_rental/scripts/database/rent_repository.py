@@ -13,7 +13,7 @@ class RentRepository:
                 rent_date,
                 state,
             )
-            print("User create successfully!")
+            print("Rent create successfully!")
         except Exception as e:
             print(f"Error: {e}")
 

@@ -22,29 +22,29 @@ class CarRepository:
                 year,
                 state,
             )
-            print("User create successfully!")
+            print("Car add successfully!")
         except Exception as e:
             print(f"Error: {e}")
 
-    def chage_car_state(self, id, new_state):
+    def chage_car_state(self, car_id, new_state):
         try:
             self.db_manager.execute_query(
                 """UPDATE lyfter_car_rental."Cars" 
                                         SET state = %s 
                                         WHERE id = %s""",
                 new_state,
-                id,
+                car_id,
             )
         except Exception as e:
             print(f"Error: {e}")
 
-    def put_disable_car(self, id):
+    def disable_car(self, car_id):
         try:
             self.db_manager.execute_query(
                 """UPDATE lyfter_car_rental."Cars" 
                                         SET state = Unavailable 
                                         WHERE id = %s""",
-                id,
+                car_id,
             )
         except Exception as e:
             print(f"Error: {e}")
