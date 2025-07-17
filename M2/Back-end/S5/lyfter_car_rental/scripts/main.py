@@ -5,7 +5,7 @@ from database.rent_repository import RentRepository
 
 if __name__ == "__main__":
     db_manager = PgManager(
-        db_name="postgres", user="postgres", password="Ian192007", host="localhost"
+        db_name="postgres", user="postgres", password="postgres", host="localhost"
     )
     # a. Un script que agregue un usuario nuevo
     users_rep = UserRepository(db_manager)
