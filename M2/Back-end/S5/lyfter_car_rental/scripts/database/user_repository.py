@@ -11,11 +11,11 @@ class UserRepository:
                 email,
                 username,
                 password,
-                birthday
+                birthday,
             )
-            print("User create successfully!")
-        except Exception as e:
-            print(f"Error: {e}")
+            return "User created successfully", 201
+        except Exception:
+            raise
 
     def chage_user_state(self, user_id, new_state):
         try:
@@ -24,5 +24,6 @@ class UserRepository:
                 new_state,
                 user_id,
             )
-        except Exception as e:
-            print(f"Error: {e}")
+            return "User state changed successfully", 200
+        except Exception:
+            raise

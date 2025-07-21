@@ -10,7 +10,6 @@ class PgManager:
         self.connection = self.__create_connection(db_name, user, password, host, port)
         if self.connection:
             self.cursor = self.connection.cursor()
-            print("Connection created succesfully")
 
     def __create_connection(self, db_name, user, password, host, port):
         try:
@@ -22,21 +21,26 @@ class PgManager:
                 port=port,
             )
             return connection
-        except Exception as error:
-            print("Error connecting to the database:", error)
-            return None
+        except Exception:
+            raise
 
     def execute_query(self, query, *args):
-        self.cursor.execute(query, args)
-        self.connection.commit()
+        try:
+            self.cursor.execute(query, args)
+            self.connection.commit()
 
-        if self.cursor.description:
-            results = self.cursor.fetchall()
-            return results
-        
+            if self.cursor.description:
+                results = self.cursor.fetchall()
+                return results
+        except Exception:
+            raise
+
     def close_connection(self):
-        if self.cursor:
-            self.cursor.close()
-        if self.connection:
-            self.connection.close()
-        print("Connection closed")
+        try:
+            if self.cursor:
+                self.cursor.close()
+            if self.connection:
+                self.connection.close()
+            return "Connection closed", 200
+        except Exception:
+            raise
