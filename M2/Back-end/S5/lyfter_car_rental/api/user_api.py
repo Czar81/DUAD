@@ -36,7 +36,7 @@ class UserView(View):
     def put(self, id):
         try:
             new_state = request.json['state']
-            self.user_repo.chage_user_state(id, new_state)
+            self.user_repo.change_user_state(id, new_state)
         except KeyError as e:
             return jsonify({"message":f"State key does not exist: {e}"}), 400
         except DataError as e:
@@ -47,5 +47,3 @@ class UserView(View):
             return jsonify({"message":f"Error trying to communicate with db: {e}"}), 500
         except Exception as e:
             return jsonify({"message":f"Unexpected error occurred: {e}"}), 500
-    
-    def get(self, id):

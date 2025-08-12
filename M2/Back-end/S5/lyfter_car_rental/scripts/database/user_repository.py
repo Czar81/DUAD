@@ -17,7 +17,7 @@ class UserRepository:
         except Exception:
             raise
 
-    def chage_user_state(self, user_id, new_state):
+    def change_user_state(self, user_id, new_state):
         try:
             self.db_manager.execute_query(
                 'UPDATE lyfter_car_rental."Users" SET state = %s WHERE id = %s',
