@@ -12,14 +12,14 @@ class UserView(View):
     def post(self):
         try:
             request_body = request.json
-            message, response = self.user_repo.create_user(
+            response = self.user_repo.create_user(
                 name=request_body["name"],
                 email=request_body["email"],
                 username=request_body["username"],
                 password=request_body["password"],
                 birthday=request_body["birthday"]
             )
-            return jsonify({"message":message}), response
+            return jsonify({"message":"User created successfully"}), response
         except KeyError as e:
             return jsonify({"message":f"Request key does not exist: {e}"}), 400
         except IntegrityError as e:
@@ -36,7 +36,8 @@ class UserView(View):
     def put(self, id):
         try:
             new_state = request.json['state']
-            self.user_repo.chage_user_state(id, new_state)
+            message, response = self.user_repo.chage_user_state(id, new_state)
+            return jsonify({"message": "User state changed successfully"}), response
         except KeyError as e:
             return jsonify({"message":f"State key does not exist: {e}"}), 400
         except DataError as e:
@@ -49,3 +50,30 @@ class UserView(View):
             return jsonify({"message":f"Unexpected error occurred: {e}"}), 500
     
     def get(self, id):
+        try:
+            request_body = dict(request.args)
+            if request_body["id"]:
+                pass
+            elif request_body["name"]:
+                pass
+            elif request_body["username"]:
+                pass
+            elif request_body["password"]:
+                pass
+            elif request_body["birthday"]:
+                pass
+            elif request_body is None:
+                results, response = self.user_repo.get_users()
+
+            return jsonify({"return":results}), response
+        except KeyError as e:
+            return jsonify({"message":f"Request keys do not exist: {e}"}), 400
+        except DataError as e:
+            return jsonify({"message":f"Invalid data format: {e}"}), 422 
+        except OperationalError as e:
+            return jsonify({"message":f"Database operation failed: {e}"}) , 503      
+        except InterfaceError as e:
+            return jsonify({"message":f"Error trying to communicate with db: {e}"}), 500
+        except Exception as e:
+            return jsonify({"message":f"Unexpected error occurred: {e}"}), 500
+        

@@ -13,7 +13,7 @@ class UserRepository:
                 password,
                 birthday,
             )
-            return "User created successfully", 201
+            return 201
         except Exception:
             raise
 
@@ -24,6 +24,15 @@ class UserRepository:
                 new_state,
                 user_id,
             )
-            return "User state changed successfully", 200
+            return 200
+        except Exception:
+            raise
+
+    def get_users(self):
+        try:
+            results = self.db_manager.execute_query(
+                'SELECT * FROM lyfter_car_rental."Users"'
+            )
+            return results, 200
         except Exception:
             raise
