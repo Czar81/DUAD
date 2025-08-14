@@ -18,14 +18,14 @@ if __name__ == "__main__":
     )
     # b. Un script que agregue un automovil nuevo
     cars_repo = CarRepository(db_manager)
-    cars_repo.create_car(make="BMW", model="M3 GTR", year=2005, state="Rented")
+    cars_repo.create(make="BMW", model="M3 GTR", year=2005, state="Rented")
     # c. Un script que cambie el estado de un usuario
-    users_rep.chage_user_state(user_id=51, new_state="Inactive")
+    users_rep.change_state(user_id=51, new_state="Inactive")
     # d. Un script que cambie el estado de un automovil
-    cars_repo.chage_car_state(car_id=26, new_state="Available")
+    cars_repo.change_state(car_id=26, new_state="Available")
     # e. Un script que genere un alquiler nuevo con los datos de un usuario y un automovil
     rents_repo = RentRepository(db_manager)
-    rents_repo.create_rent(fk_car_id=26, fk_user_id=51, state="Rented")
+    rents_repo.create(fk_car_id=26, fk_user_id=51, state="Rented")
     # f. Un script que confirme la devolución del auto al completar el alquiler, colocando el auto como disponible y completando el estado del alquiler
     rents_repo.car_returned(rent_id=26)
     # g. Un script que deshabilite un automovil del alquiler
