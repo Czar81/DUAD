@@ -27,7 +27,7 @@ class CarRepository:
         except Exception:
             raise
 
-    def chage_car_state(self, car_id, new_state):
+    def change_car_state(self, car_id, new_state):
         try:
             self.db_manager.execute_query(
                 """UPDATE lyfter_car_rental."Cars" 
@@ -48,7 +48,7 @@ class CarRepository:
         except Exception:
             raise
     
-    def get_car_by_filters(self, **filters):
+    def get_cars_by_filters(self, **filters):
         try:
             base_query = 'SELECT * FROM lyfter_car_rental."Cars"'
 
