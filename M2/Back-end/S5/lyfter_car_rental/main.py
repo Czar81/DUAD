@@ -7,7 +7,7 @@ from scripts.database.pg_manager import PgManager
 
 app = Flask(__name__)
 db_manager = PgManager(
-    db_name="postgres", user="postgres", password="Ian192007", host="localhost"
+    db_name="postgres", user="postgres", password="postgres", host="localhost"
 )
 user_repo = UserRepository(db_manager)
 car_repo = CarRepository(db_manager)
