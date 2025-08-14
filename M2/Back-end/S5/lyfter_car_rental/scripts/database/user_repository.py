@@ -37,7 +37,7 @@ class UserRepository:
             return 200
         except Exception:
             raise
-        
+
     def put_user_debtor(self, user_id):
         try:
             self.db_manager.execute_query(
@@ -51,7 +51,6 @@ class UserRepository:
     def get_all_users(self):
         try:
             results = self.db_manager.execute_query('SELECT * FROM lyfter_car_rental."Users"')
-            print
             formatted_results = list(map(self._format_user, results))
             return formatted_results, 200
         except Exception:

@@ -35,7 +35,10 @@ class UserView(MethodView):
     def put(self, id):
         try:
             new_state = request.json['state']
-            response = self.user_repo.change_user_state(id, new_state)
+            if new_state == "Debtor":
+                response=self.user_repo.put_user_debtor(id)
+            else:
+                response = self.user_repo.change_user_state(id, new_state)
             return jsonify({"message": "User state changed successfully"}), response
         except KeyError as e:
             return jsonify({"message":f"State key does not exist: {e}"}), 400

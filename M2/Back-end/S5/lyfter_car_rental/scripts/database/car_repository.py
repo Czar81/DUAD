@@ -22,9 +22,10 @@ class CarRepository:
                 year,
                 state,
             )
-            print("Car add successfully!")
-        except Exception as e:
-            print(f"Error: {e}")
+            return 201
+            # add to API print("Car add successfully!")
+        except Exception:
+            raise
 
     def chage_car_state(self, car_id, new_state):
         try:
@@ -35,39 +36,16 @@ class CarRepository:
                 new_state,
                 car_id,
             )
-        except Exception as e:
-            print(f"Error: {e}")
+            return 200
+        except Exception:
+            raise
 
-    def disable_car(self, car_id):
+    def get_all(self):
         try:
             self.db_manager.execute_query(
-                """UPDATE lyfter_car_rental."Cars" 
-                                        SET state = 'Unavailable' 
-                                        WHERE id = %s""",
-                car_id,
+                'SELECT  lyfter_car_rental."Cars"',
+        
             )
-        except Exception as e:
-            print(f"Error: {e}")
-
-    def get_rented(self):
-        try:
-            results = self.db_manager.execute_query(
-                """SELECT * FROM lyfter_car_rental."Cars" WHERE state = 'Rented'"""
-            )
-            formatted_results = list(map(self._format_car, results))
-            return formatted_results
-        except Exception as e:
-            print(f"Error: {e}")
-
-    def get_available(self):
-        try:
-            results = self.db_manager.execute_query(
-                """SELECT * FROM lyfter_car_rental."Cars" WHERE state = 'Available'"""
-            )
-            formatted_results = list(map(self._format_car, results))
-            return formatted_results
-        except Exception as e:
-            print(f"Error: {e}")
-
-    def get_all():
-        pass
+            return 200
+        except Exception:
+            raise
