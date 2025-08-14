@@ -3,8 +3,8 @@ SET search_path TO lyfter_car_rental;
 CREATE TABLE lyfter_car_rental."Users" (
     id integer NOT NULL GENERATED ALWAYS AS IDENTITY (INCREMENT 1),
     name character varying(30) NOT NULL,
-    email character varying(30) NOT NULL,
-    username character varying(20) NOT NULL,
+    email character varying(30) UNIQUE NOT NULL,
+    username character varying(20) UNIQUE NOT NULL,
     password character varying(30) NOT NULL,
     birthday DATE NOT NULL,
     state character varying(30) NOT NULL,
@@ -70,4 +70,4 @@ VALUES
     ('Genevra Trulocke', 'gtrulocke2@va.gov', 'gtrulocke2', 'zV2"oVmJixR', '2002-05-01','Debtor'),
     ('Selma Thwaites', 'sthwaites3@ibm.com', 'sthwaites3', 'kT0*PU,?NfVQ', '2005-05-05','Inactive'),
     ('Ashia Langton', 'alangton4@360.cn', 'alangton4', 'zG3`SCP0/Py', '2002-12-08','Active'),
-    ('Erica Dalrymple', 'edalrymple5@google.it', 'edalrymple5', 'aL9_b*,Wk', '1989-12-10','Active'),
+    ('Erica Dalrymple', 'edalrymple5@google.it', 'edalrymple5', 'aL9_b*,Wk', '1989-12-10','Active')
