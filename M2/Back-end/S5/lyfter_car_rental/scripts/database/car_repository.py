@@ -61,3 +61,34 @@ class CarRepository:
             return formatted_results, 200
         except Exception:
             raise
+        
+    def disable_car(self, car_id):
+        try:
+            self.db_manager.execute_query(
+                """UPDATE lyfter_car_rental."Cars" 
+                                        SET state = 'Unavailable' 
+                                        WHERE id = %s""",
+                car_id,
+            )
+        except Exception as e:
+            print(f"Error: {e}")
+
+    def get_rented(self):
+        try:
+            results = self.db_manager.execute_query(
+                """SELECT * FROM lyfter_car_rental."Cars" WHERE state = 'Rented'"""
+            )
+            formatted_results = list(map(self._format_car, results))
+            return formatted_results
+        except Exception as e:
+            print(f"Error: {e}")
+
+    def get_available(self):
+        try:
+            results = self.db_manager.execute_query(
+                """SELECT * FROM lyfter_car_rental."Cars" WHERE state = 'Available'"""
+            )
+            formatted_results = list(map(self._format_car, results))
+            return formatted_results
+        except Exception as e:
+            print(f"Error: {e}")
