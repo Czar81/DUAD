@@ -40,12 +40,25 @@ class CarRepository:
         except Exception:
             raise
 
-    def get_all(self):
+    def get_all_cars(self):
         try:
-            self.db_manager.execute_query(
-                'SELECT  lyfter_car_rental."Cars"',
-        
-            )
-            return 200
+            results = self.db_manager.execute_query('SELECT  lyfter_car_rental."Cars"')
+            formatted_results = list(map(self._format_car, results))
+            return formatted_results, 200
+        except Exception:
+            raise
+    
+    def get_car_by_filter(self, **filters):
+        try:
+            base_query = 'SELECT * FROM lyfter_car_rental."Cars"'
+
+            where_query = [f'"{key}"=%s' for key in filters.keys()]
+            params = list(filters.values())
+
+            query = base_query + " WHERE " + " AND ".join(where_query)
+            results = self.db_manager.execute_query(query, *params)
+
+            formatted_results = list(map(self._format_car, results))
+            return formatted_results, 200
         except Exception:
             raise
