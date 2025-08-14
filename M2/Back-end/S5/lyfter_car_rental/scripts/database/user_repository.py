@@ -1,6 +1,16 @@
 class UserRepository:
     def __init__(self, db_manager):
         self.db_manager = db_manager
+    
+    def _format_user(self, user_result):
+        return {
+            "id": user_result[0],
+            "name": user_result[1],
+            "email": user_result[2],
+            "username": user_result[3],
+            "password": user_result[4],
+            "birthday": user_result[5],
+        }
 
     def create_user(self, name, email, username, password, birthday):
         try:
@@ -27,24 +37,37 @@ class UserRepository:
             return 200
         except Exception:
             raise
+        
+    def put_user_debtor(self, user_id):
+        try:
+            self.db_manager.execute_query(
+                'UPDATE lyfter_car_rental."Users" SET state = "Debtor" WHERE id = %s',
+                user_id,
+            )
+            return 200
+        except Exception:
+            raise
 
     def get_all_users(self):
         try:
             results = self.db_manager.execute_query('SELECT * FROM lyfter_car_rental."Users"')
-            return results, 200
+            print
+            formatted_results = list(map(self._format_user, results))
+            return formatted_results, 200
         except Exception:
             raise
     
-    def get_users_by_filters(self, **filter):
+    def get_users_by_filters(self, **filters):
         try:
             base_query = 'SELECT * FROM lyfter_car_rental."Users"'
 
-            where_query = [f'"{key}"=%s' for key in filter.keys()]
-            params = list(filter.values())
+            where_query = [f'"{key}"=%s' for key in filters.keys()]
+            params = list(filters.values())
 
             query = base_query + " WHERE " + " AND ".join(where_query)
             results = self.db_manager.execute_query(query, *params)
 
-            return results, 200
+            formatted_results = list(map(self._format_user, results))
+            return formatted_results, 200
         except Exception:
             raise
