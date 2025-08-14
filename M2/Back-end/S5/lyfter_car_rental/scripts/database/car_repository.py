@@ -12,22 +12,21 @@ class CarRepository:
             "state": car_result[4],
         }
 
-    def create_car(self, make, model, year, state):
+    def create(self, request_body):
         try:
             self.db_manager.execute_query(
                 """INSERT INTO lyfter_car_rental."Cars"(make, model, year, state) 
                                         VALUES(%s,%s,%s,%s)""",
-                make,
-                model,
-                year,
-                state,
+                request_body["make"],
+                request_body["model"],
+                request_body["year"],
+                request_body["state"],
             )
             return 201
-            # add to API print("Car add successfully!")
         except Exception:
             raise
 
-    def change_car_state(self, car_id, new_state):
+    def change_state(self, car_id, new_state):
         try:
             self.db_manager.execute_query(
                 """UPDATE lyfter_car_rental."Cars" 
@@ -40,7 +39,7 @@ class CarRepository:
         except Exception:
             raise
 
-    def get_all_cars(self):
+    def get_all(self):
         try:
             results = self.db_manager.execute_query('SELECT * FROM lyfter_car_rental."Cars"')
             formatted_results = list(map(self._format_car, results))
@@ -48,7 +47,7 @@ class CarRepository:
         except Exception:
             raise
     
-    def get_cars_by_filters(self, **filters):
+    def get_by_filters(self, **filters):
         try:
             base_query = 'SELECT * FROM lyfter_car_rental."Cars"'
 

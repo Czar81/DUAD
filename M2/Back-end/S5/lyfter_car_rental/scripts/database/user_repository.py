@@ -1,4 +1,5 @@
 class UserRepository:
+
     def __init__(self, db_manager):
         self.db_manager = db_manager
     
@@ -12,22 +13,22 @@ class UserRepository:
             "birthday": user_result[5],
         }
 
-    def create_user(self, name, email, username, password, birthday):
+    def create(self, request_body):
         try:
             self.db_manager.execute_query(
                 """INSERT INTO lyfter_car_rental."Users"(name, email, username, password, birthday, state) 
                                           VALUES(%s, %s, %s, %s, %s, 'Active')""",
-                name,
-                email,
-                username,
-                password,
-                birthday,
+                request_body["name"],
+                request_body["email"],
+                request_body["username"],
+                request_body["password"],
+                request_body["birthday"],
             )
             return 201
         except Exception:
             raise
 
-    def change_user_state(self, user_id, new_state):
+    def change_state(self, user_id, new_state):
         try:
             self.db_manager.execute_query(
                 'UPDATE lyfter_car_rental."Users" SET state = %s WHERE id = %s',
@@ -48,7 +49,7 @@ class UserRepository:
         except Exception:
             raise
 
-    def get_all_users(self):
+    def get_all(self):
         try:
             results = self.db_manager.execute_query('SELECT * FROM lyfter_car_rental."Users"')
             formatted_results = list(map(self._format_user, results))
@@ -56,7 +57,7 @@ class UserRepository:
         except Exception:
             raise
     
-    def get_users_by_filters(self, **filters):
+    def get_by_filters(self, **filters):
         try:
             base_query = 'SELECT * FROM lyfter_car_rental."Users"'
 
