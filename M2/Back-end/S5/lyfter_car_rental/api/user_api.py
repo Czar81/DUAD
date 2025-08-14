@@ -1,10 +1,9 @@
 from flask import request, jsonify
-from flask.views import View
-from scripts.database.user_repository import UserRepository
+from flask.views import MethodView
 from psycopg2 import IntegrityError, DataError, OperationalError, InterfaceError
 
 
-class UserView(View):
+class UserView(MethodView):
 
     def __init__(self, user_repo):
         self.user_repo = user_repo
@@ -22,8 +21,8 @@ class UserView(View):
             return jsonify({"message":"User created successfully"}), response
         except KeyError as e:
             return jsonify({"message":f"Request key does not exist: {e}"}), 400
-        except IntegrityError as e:
-            return jsonify({"message":f"Username or email already exists: {e}"}), 409
+        except IntegrityError:
+            return jsonify({"message":f"Username or email already exists"}), 409
         except DataError as e:
             return jsonify({"message":f"Invalid data format: {e}"}), 422 
         except OperationalError as e:
@@ -36,7 +35,7 @@ class UserView(View):
     def put(self, id):
         try:
             new_state = request.json['state']
-            message, response = self.user_repo.chage_user_state(id, new_state)
+            response = self.user_repo.change_user_state(id, new_state)
             return jsonify({"message": "User state changed successfully"}), response
         except KeyError as e:
             return jsonify({"message":f"State key does not exist: {e}"}), 400
@@ -49,22 +48,13 @@ class UserView(View):
         except Exception as e:
             return jsonify({"message":f"Unexpected error occurred: {e}"}), 500
     
-    def get(self, id):
+    def get(self):
         try:
             request_body = dict(request.args)
-            if request_body["id"]:
-                pass
-            elif request_body["name"]:
-                pass
-            elif request_body["username"]:
-                pass
-            elif request_body["password"]:
-                pass
-            elif request_body["birthday"]:
-                pass
-            elif request_body is None:
-                results, response = self.user_repo.get_users()
-
+            if request_body != {}:
+                results, response = self.user_repo.get_users_by_filters(**request_body)
+            elif request_body == {}:
+                results, response = self.user_repo.get_all_users()
             return jsonify({"return":results}), response
         except KeyError as e:
             return jsonify({"message":f"Request keys do not exist: {e}"}), 400

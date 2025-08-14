@@ -28,11 +28,23 @@ class UserRepository:
         except Exception:
             raise
 
-    def get_users(self):
+    def get_all_users(self):
         try:
-            results = self.db_manager.execute_query(
-                'SELECT * FROM lyfter_car_rental."Users"'
-            )
+            results = self.db_manager.execute_query('SELECT * FROM lyfter_car_rental."Users"')
+            return results, 200
+        except Exception:
+            raise
+    
+    def get_users_by_filters(self, **filter):
+        try:
+            base_query = 'SELECT * FROM lyfter_car_rental."Users"'
+
+            where_query = [f'"{key}"=%s' for key in filter.keys()]
+            params = list(filter.values())
+
+            query = base_query + " WHERE " + " AND ".join(where_query)
+            results = self.db_manager.execute_query(query, *params)
+
             return results, 200
         except Exception:
             raise
