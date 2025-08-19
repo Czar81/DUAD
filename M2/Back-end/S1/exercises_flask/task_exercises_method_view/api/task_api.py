@@ -77,4 +77,5 @@ class TaskView(View):
 
 # Function to start the Flask application
 def start():
-    app.add_url_rule("/task/<int:id>",view_func=TaskView.root.as_view("task"))
+    app.run(debug=True, host="localhost", port=5000)
+    app.add_url_rule("/task/<int:id>",view_func=TaskView.as_view("task"))
