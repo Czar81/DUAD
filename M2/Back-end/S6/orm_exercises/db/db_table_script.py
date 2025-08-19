@@ -21,7 +21,7 @@ address_table = Table(
     "address",
     metadata_obj,
     Column("id", Integer(), primary_key=True),
-    Column("address", String(), nullable=False),
+    Column("long_address", String(), nullable=False),
     Column("user_id", ForeignKey("users.id"), nullable=False),
 )
 
