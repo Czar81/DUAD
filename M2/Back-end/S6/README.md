@@ -13,4 +13,6 @@ This week is about ORM and transactions
 3. Script to create tables [here](/M2/Back-end/S6/orm_exercises/db/db_table_script.py)
 
 4. Classes to data management:
-    - CRUD for users [here](/M2/Back-end/S6/orm_exercises/db/)
+    - CRUD for users [here](/M2/Back-end/S6/orm_exercises/db/managers_db/db_user_manager.py)
+    - CRUD fro cars [here](/M2/Back-end/S6/orm_exercises/db/managers_db/db_car_manager.py)
+    - CRUD fro address[here](/M2/Back-end/S6/orm_exercises/db/managers_db/db_address_manager.py)
