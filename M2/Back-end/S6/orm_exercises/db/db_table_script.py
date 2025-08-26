@@ -12,6 +12,7 @@ from sqlalchemy import update
 from sqlalchemy import delete
 from managers_db.db_user_manager import DbUserManager
 from managers_db.db_car_manager import DbCarManager
+from managers_db.db_address_manager import DbAddressManager
 
 db_url = "postgresql://postgres:Ian192007@localhost:5432/postgres"
 engine = create_engine(db_url, echo=True)
@@ -28,7 +29,7 @@ address_table = Table(
     "address",
     metadata_obj,
     Column("id", Integer(), primary_key=True),
-    Column("long_address", String(), nullable=False),
+    Column("address", String(), nullable=False),
     Column("user_id", ForeignKey("users.id"), nullable=False),
 )
 
@@ -55,9 +56,14 @@ metadata_obj.create_all(engine)
 #car_manager = DbCarManager(cars_table, engine, select, insert, update, delete)
 #result = car_manager.create_car(model="Mx5", user_id=1)
 #car_manager.update_car(id=1, model="Rx7", user_id="1")
+#car_manager.delete_car(id=1)
 
 # 3. Crear/Modificar/Eliminar una dirección nueva.
-
+address_manager = DbAddressManager(address_table, engine, select, insert, update, delete)
+result= address_manager.create_address(address="1234 Elmwood Avenue, Apartment 56B, Greenfield Heights, Springfield, Illinois, 62704, United States", user_id=1)
+print(result)
+address_manager.update_address(id=1, address="789 Maple Street, Floor 3, Suite 305, Downtown Business Center, Toronto, Ontario, M5H 2N2, Canada", user_id=1)
+#address_manager.delete_address(id=1)
 # 4. Asociar un automóvil a un usuario.
 #car_manager.update_user_for_car(id=1, user_id="1")
 
@@ -70,3 +76,5 @@ metadata_obj.create_all(engine)
 #print(result)
 
 # 7. Consultar todas las direcciones.
+result = address_manager.get_all_address()
+print(result)
