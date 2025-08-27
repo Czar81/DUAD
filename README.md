@@ -131,5 +131,7 @@ Each module contains its own weeks, and the weeks have their topics and README f
 
     - [ORM Exercises](/M2/Back-end/S6/README.md)
 
+    - [Transaction Excercises](/M2/Back-end/S6/README.md)
+
 ---
 ![https://giphy.com/gifs/cbs-hacker-h50-26Ff8qu2JXRWKtppm/](https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExdmhwaGtsdzAzdHlxYmt2dHFra3RhY3V6OThjNTk4Z2gzaHdjNm1iaiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/26Ff8qu2JXRWKtppm/giphy.gif)
