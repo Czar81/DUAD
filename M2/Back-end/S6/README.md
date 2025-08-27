@@ -6,6 +6,8 @@ This week is about ORM and transactions
 
 ### Exercises:
 
+#### ORM
+
 1. Screemshot version validation [here](/M2/Back-end/S6/orm_exercises/verify.png)
 
 2. Diagram E/R [here](/M2/Back-end/S6/orm_exercises/db/Basic_db_ER.png)
@@ -16,3 +18,11 @@ This week is about ORM and transactions
     - CRUD for users [here](/M2/Back-end/S6/orm_exercises/db/managers_db/db_user_manager.py)
     - CRUD fro cars [here](/M2/Back-end/S6/orm_exercises/db/managers_db/db_car_manager.py)
     - CRUD fro address[here](/M2/Back-end/S6/orm_exercises/db/managers_db/db_address_manager.py)
+
+#### Transaction 
+
+1. Create the db and its tables, user, products, receipt and receipt_detail [here](/M2/Back-end/S6/transactions/make_db.sql)
+
+2. Transaction to buy products [here](/M2/Back-end/S6/transactions/buy_products.sql)
+
+3. Transaction to return products [here](/M2/Back-end/S6/transactions/return_products.sql)
