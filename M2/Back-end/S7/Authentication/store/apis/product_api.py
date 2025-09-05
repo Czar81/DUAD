@@ -2,32 +2,47 @@ from flask import Flask
 from flask import jsonify, Response, request
 from db.db_product_manager import DbProductManager
 
-app = Flask("products")
-db_product_manager = DbProductManager
+app = Flask(__name__)
+db_product_manager = DbProductManager()
 
-@app.route('/products', methods=['POST'])
+
+@app.route("/products/register", methods=["POST"])
 def register_product():
     data = request.get_json()
     product_name = data.get("name")
     product_price = data.get("price")
-    product_entry_date=data.get("entry_date")
-    product_amount=data.get("amount")
-    if (name == None or product_price == None or product_entry_date == None or product_amount==None):
-        Response()
+    product_amount = data.get("amount")
+    if product_name == None or product_price == None or product_amount == None:
+        return jsonify({"message": "Missing fields in request"}), 400
     else:
-        result=db_product_manager.insert_product(product_name, product_price,product_entry_date, product_amount)
-        jsonify({"id":result}),201
+        id_returned = db_product_manager.insert_product(
+            product_name, product_price, product_amount
+        )
+        return jsonify({"id": str(id_returned)}), 201
 
-@app.route('/products', methods=['GET'])
+
+@app.route("/products", methods=["GET"])
 def get_products():
-    results=db_product_manager.get_products()
-    jsonify({"products":results}), 200
-    
+    results = db_product_manager.get_products()
+    return jsonify({"products": results}), 200
 
-@app.route('/products/<product_id>', methods=['PUT'])
+
+@app.route("/products/update/<product_id>", methods=["PUT"])
 def update_product(product_id):
-    pass
+    data = request.get_json()
+    new_name = data.get("name")
+    new_price = data.get("price")
+    new_amount = data.get("amount")
+    if new_name == None or new_price == None or new_amount == None:
+        return jsonify({"message": "Missing fields in request"}), 400
+    else:
+        db_product_manager.update_product(
+            int(product_id), new_name, new_price, new_amount
+        )
+        return jsonify({"message": "Product Updated"}), 200
 
-@app.route('/products/<product_id>', methods=['DELETE'])
+
+@app.route("/products/delete/<product_id>", methods=["DELETE"])
 def delete_product(product_id):
-    pass
+    db_product_manager.delete_product(product_id)
+    return jsonify({"message": "Product Deleted"}), 200
