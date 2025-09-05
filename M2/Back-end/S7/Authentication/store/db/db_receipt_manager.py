@@ -1,0 +1,84 @@
+from sqlalchemy import create_engine
+from sqlalchemy import MetaData
+from sqlalchemy import Table, Column, Integer, String, ForeignKey
+from sqlalchemy import insert, select, update
+from db_product_manager import product_table
+
+metadata_obj = MetaData()
+
+receipt_table = Table(
+    "receipt",
+    metadata_obj,
+    Column("id", Integer, primary_key=True),
+    Column("id_user", Integer, ForeignKey("user.id")),
+)
+
+receipt_details_table = Table(
+    "receipt_details",
+    metadata_obj,
+    Column("id", Integer, primary_key=True),
+    Column("id_receipt", Integer, ForeignKey("receipt.id")),
+    Column("id_product", Integer, ForeignKey("product.id")),
+    Column("amount", Integer),
+)
+
+
+class DbReceiptManager:
+    def __init__(self):
+        self.engine = create_engine(
+            "postgresql+psycopg2://postgres:Ian192007@localhost:5432/postgres"  # Cambiar password
+        )
+        metadata_obj.create_all(self.engine)
+
+    def create_receipt(self, id_user: int, id_product: int, amount: int):
+        with self.engine.connect() as conn:
+            new_amount = self.__verify_amount(id_product, amount)
+            if new_amount == None:
+                return 409
+
+            stmt_receipt = (
+                insert(receipt_table)
+                .returning(receipt_table.c.id)
+                .values(id_user=id_user)
+            )
+            receipt_id = conn.execute(stmt_receipt).scalar()
+
+            stmt_detail = (
+                insert(receipt_details_table)
+                .returning(receipt_details_table.c.id)
+                .values(id_receipt=receipt_id, id_product=id_product, amount=amount)
+            )
+            receipt_datails_id = conn.execute(stmt_detail).scalar()
+
+            stmt_product_reduce = (
+                update(product_table)
+                .where(product_table.c.id == id_product)
+                .values(amount=new_amount)
+            )
+            conn.execute(stmt_product_reduce)
+
+            conn.commit()
+            return receipt_id, receipt_datails_id
+
+    def get_receipt_by_user_id(self, id_user: int):
+        stmt = select(receipt_table).where(receipt_table.c.id_user == id_user)
+        with self.engine.connect() as conn:
+            results = conn.execute(stmt)
+            receipts = [dict(row) for row in results.mappings().all()]
+
+            if not receipts:
+                return None
+            else:
+                return receipts
+
+    def __verify_amount(self, id_product, amount):
+        with self.engine.connect() as conn:
+            stmt_product_get_amount = select(product_table.c.amount).where(
+                product_table.c.id == id_product
+            )
+            amount_product = conn.execute(stmt_product_get_amount).scalar
+            new_amount = amount_product - amount
+            if new_amount < 0:
+                return None
+            else:
+                return new_amount
