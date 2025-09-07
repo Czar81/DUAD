@@ -1,5 +1,5 @@
 from sqlalchemy import insert, select
-from tables_metadata import TablesManager
+from tables_manager import TablesManager
 
 user_table = TablesManager
 engine = TablesManager.engine
@@ -32,7 +32,18 @@ class DbUserManager:
                 return None
             else:
                 return users[0]
+            
+    def get_user_role_by_id(self):
+        stmt = (
+            select(user_table.c.role)
+            .where(user_table.c.id)
+        )
+        with self.engine.connect() as conn:
+            result = conn.execute(stmt)
+            role = result.scalar()
+            return role
 
+    @classmethod
     def get_user_by_id(self, id):
         stmt = select(user_table).where(user_table.c.id == id)
         with self.engine.connect() as conn:
