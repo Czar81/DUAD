@@ -1,10 +1,10 @@
 from flask import Flask
 from flask import jsonify, Response, request
-from db import DB_Manager
+from db.db_user_manager import DbUserManager
 from encoding import JWT_Manager
 
 app = Flask("user-service")
-db_manager = DB_Manager()
+db_user_manager = DbUserManager()
 jwt_manager =JWT_Manager("MyNameIsJeff","HS256")
 
 
@@ -18,7 +18,7 @@ def register():
     if(data.get('username') == None or data.get('password') == None):
         return Response(status=400)
     else:
-        result = db_manager.insert_user(data.get('username'), data.get('password'))
+        result = db_user_manager.insert_user(data.get('username'), data.get('password'))
         user_id = result[0]
 
         token = jwt_manager.encode({'id':user_id})
@@ -31,7 +31,7 @@ def login():
     if(data.get('username') == None or data.get('password') == None):
         return Response(status=400)
     else:
-        result = db_manager.get_user(data.get('username'), data.get('password'))
+        result = db_user_manager.get_user(data.get('username'), data.get('password'))
 
         if(result == None):
             return Response(status=403)
@@ -49,9 +49,13 @@ def me():
             token = token.replace("Bearer ","")
             decoded = jwt_manager.decode(token)
             user_id = decoded['id']
-            user = db_manager.get_user_by_id(user_id)
+            user = db_user_manager.get_user_by_id(user_id)
             return jsonify(id=user_id, username=user[1])
         else:
             return Response(status=403)
     except Exception as e:
         return Response(status=500)
+
+
+def start_user_api():
+    app.run(host="localhost",port=5002, debug=True)

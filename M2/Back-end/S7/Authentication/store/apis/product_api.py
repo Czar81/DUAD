@@ -46,3 +46,7 @@ def update_product(product_id):
 def delete_product(product_id):
     db_product_manager.delete_product(product_id)
     return jsonify({"message": "Product Deleted"}), 200
+
+
+def start_product_api():
+    app.run(host="localhost",port=5000, debug=True)

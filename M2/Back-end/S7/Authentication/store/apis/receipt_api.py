@@ -24,3 +24,7 @@ def get_user_receipt(token):
     token_decoded = db_receipt_manager.decode(token)
     receipts = db_receipt_manager.get_receipt_by_user_id(token_decoded)
     return jsonify({"receipts":receipts}),200
+
+
+def start_receipt_api():
+    app.run(host="localhost",port=5001, debug=True)
