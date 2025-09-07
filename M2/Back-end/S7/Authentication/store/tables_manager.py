@@ -20,6 +20,7 @@ class TablesManager:
         Column("id", Integer, primary_key=True),
         Column("username", String(30)),
         Column("password", String),
+        Column("role", String(10))
     )
     receipt_table = Table(
         "receipt",
