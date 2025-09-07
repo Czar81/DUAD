@@ -6,7 +6,7 @@ app = Flask(__name__)
 db_product_manager = DbProductManager()
 
 
-@app.route("/products/register", methods=["POST"])
+@app.route("/products", methods=["POST"])
 def register_product():
     data = request.get_json()
     product_name = data.get("name")
@@ -27,7 +27,7 @@ def get_products():
     return jsonify({"products": results}), 200
 
 
-@app.route("/products/update/<product_id>", methods=["PUT"])
+@app.route("/products/<product_id>", methods=["PUT"])
 def update_product(product_id):
     data = request.get_json()
     new_name = data.get("name")
@@ -42,7 +42,7 @@ def update_product(product_id):
         return jsonify({"message": "Product Updated"}), 200
 
 
-@app.route("/products/delete/<product_id>", methods=["DELETE"])
+@app.route("/products/<product_id>", methods=["DELETE"])
 def delete_product(product_id):
     db_product_manager.delete_product(product_id)
     return jsonify({"message": "Product Deleted"}), 200
