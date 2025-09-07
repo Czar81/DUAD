@@ -1,5 +1,10 @@
-from apis.product_api import app
+from apis.product_api import start_product_api
+from apis.receipt_api import start_receipt_api
+from apis.user_api import start_user_api
+from tables_metadata import TablesManager
 
 if __name__=="__main__":
-    app.run(host="localhost",port=5000, debug=True)
-    
+    TablesManager.create_tables()
+    start_user_api()
+    start_product_api()
+    start_receipt_api()
