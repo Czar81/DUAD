@@ -7,7 +7,7 @@ app = Flask(__name__)
 db_receipt_manager = DbReceiptManager()
 jwt_manager=JWT_Manager("MyNameIsJeff","HS256")
 
-@app.route("/sales", methods=["POST"])
+@app.route("/receipts", methods=["POST"])
 def register_receipt():
     data = request.get_json()
     id_user = data.get("id_user")
@@ -18,12 +18,6 @@ def register_receipt():
     else:
         db_receipt_manager.create_receipt(id_user, id_product, amount)
         return jsonify({"message":"Receipt created successfully"}),201
-
-@app.route("/sales/<token>/receipt", methods=["GET"])
-def get_user_receipt(token):
-    token_decoded = db_receipt_manager.decode(token)
-    receipts = db_receipt_manager.get_receipt_by_user_id(token_decoded)
-    return jsonify({"receipts":receipts}),200
 
 
 def start_receipt_api():

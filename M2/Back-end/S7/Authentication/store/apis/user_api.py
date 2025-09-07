@@ -1,10 +1,12 @@
 from flask import Flask
 from flask import jsonify, Response, request
 from db.db_user_manager import DbUserManager
+from db.db_receipt_manager import DbReceiptManager
 from encoding import JWT_Manager
 
 app = Flask("user-service")
 db_user_manager = DbUserManager()
+db_receipt_manager = DbReceiptManager()
 jwt_manager =JWT_Manager("MyNameIsJeff","HS256")
 
 
@@ -41,7 +43,7 @@ def login():
         
             return jsonify(token=token)
 
-@app.route('/me')
+@app.route('/me', methods=["GET"])
 def me():
     try:
         token = request.headers.get('Authorization')
@@ -56,6 +58,17 @@ def me():
     except Exception as e:
         return Response(status=500)
 
+@app.route("/me/receipts", methods=["GET"])
+def get_user_receipt():
+        token = request.headers.get('Authorization')
+        if(token is not None):
+            token = token.replace("Bearer ","")
+            decoded = jwt_manager.decode(token)
+            user_id = decoded['id']
+            receipts = db_receipt_manager.get_receipt_by_user_id(user_id)
+            return jsonify({"receipts":receipts}),200
+        else:
+            return Response(status=403)
 
 def start_user_api():
     app.run(host="localhost",port=5002, debug=True)
