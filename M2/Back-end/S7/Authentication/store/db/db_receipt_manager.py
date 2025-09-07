@@ -1,34 +1,15 @@
 from sqlalchemy import create_engine
-from sqlalchemy import MetaData
-from sqlalchemy import Table, Column, Integer, String, ForeignKey
 from sqlalchemy import insert, select, update
-from db_product_manager import product_table
+from db.db_product_manager import product_table
+from tables_metadata import TablesManager
 
-metadata_obj = MetaData()
 
-receipt_table = Table(
-    "receipt",
-    metadata_obj,
-    Column("id", Integer, primary_key=True),
-    Column("id_user", Integer, ForeignKey("user.id")),
-)
-
-receipt_details_table = Table(
-    "receipt_details",
-    metadata_obj,
-    Column("id", Integer, primary_key=True),
-    Column("id_receipt", Integer, ForeignKey("receipt.id")),
-    Column("id_product", Integer, ForeignKey("product.id")),
-    Column("amount", Integer),
-)
+receipt_table = TablesManager.receipt_table
+receipt_details_table = TablesManager.receipt_details_table
+engine = TablesManager.engine
 
 
 class DbReceiptManager:
-    def __init__(self):
-        self.engine = create_engine(
-            "postgresql+psycopg2://postgres:Ian192007@localhost:5432/postgres"  # Cambiar password
-        )
-        metadata_obj.create_all(self.engine)
 
     def create_receipt(self, id_user: int, id_product: int, amount: int):
         with self.engine.connect() as conn:
