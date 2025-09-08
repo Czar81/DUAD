@@ -18,8 +18,8 @@ def register(username, password):
     return jsonify(token=token),201
 
 
-@app.route("/login", methods=["POST"])
-@general_data_validation(["user","admin"], "username", "password")
+@app.route("/login", methods=["GET"])
+@require_fields("username", "password")
 def login(username, password):
     result = db_user_manager.get_user(username, password)
     if result == None:
