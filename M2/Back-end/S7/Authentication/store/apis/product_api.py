@@ -15,7 +15,6 @@ def register_product(name, price, amount):
 
 
 @app.route("/products", methods=["GET"])
-@role_required(["admin", "user"])
 def get_products():
     results = db_product_manager.get_products()
     return jsonify({"products": results}), 200

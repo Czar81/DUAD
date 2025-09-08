@@ -2,7 +2,7 @@ from flask import Flask
 from flask import jsonify
 from db.db_user_manager import DbUserManager
 from db.db_receipt_manager import DbReceiptManager
-from verify_input import general_data_validation, role_required
+from verify_input import general_data_validation, role_required, require_fields
 from encoding import JWT_Manager
 
 app = Flask("user-service")
@@ -10,7 +10,7 @@ db_user_manager = DbUserManager()
 db_receipt_manager = DbReceiptManager()
 
 @app.route("/register", methods=["POST"])
-@general_data_validation(["user","admin"], "username", "password")
+@require_fields("username", "password")
 def register(username, password):
     result = db_user_manager.insert_user(username, password)
     user_id = result[0]
