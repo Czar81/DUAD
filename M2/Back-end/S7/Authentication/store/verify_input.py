@@ -1,10 +1,11 @@
 from flask import request, jsonify
 from encoding import JWT_Manager
 from db.db_user_manager import DbUserManager
-
+from functools import wraps
 
 def role_required(allowed_roles):
     def decorator(func):
+        @wraps(func)
         def wrapper(*args, **kwargs):
             token = request.headers.get("Authorization")
             if not token:
@@ -25,6 +26,7 @@ def role_required(allowed_roles):
 
 def general_data_validation(allowed_roles, *required):
     def decorator(func):
+        @wraps(func)
         def wrapper(*args, **kwargs):
             token = request.headers.get("Authorization")
             data = request.get_json()
@@ -60,6 +62,7 @@ def general_data_validation(allowed_roles, *required):
 
 def require_fields(*required):
     def decorator(func):
+        @wraps(func)
         def wrapper(*args, **kwargs):
             data = request.get_json()
             if not data:
