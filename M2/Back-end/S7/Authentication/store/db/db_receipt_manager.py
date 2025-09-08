@@ -1,7 +1,7 @@
 from sqlalchemy import create_engine
 from sqlalchemy import insert, select, update
 from db.db_product_manager import product_table
-from tables_metadata import TablesManager
+from db.tables_manager import TablesManager
 
 
 receipt_table = TablesManager.receipt_table

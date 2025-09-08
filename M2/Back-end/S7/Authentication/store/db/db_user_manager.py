@@ -1,5 +1,5 @@
 from sqlalchemy import insert, select
-from tables_manager import TablesManager
+from db.tables_manager import TablesManager
 
 user_table = TablesManager
 engine = TablesManager.engine

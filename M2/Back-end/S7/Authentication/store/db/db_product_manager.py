@@ -1,5 +1,5 @@
 from sqlalchemy import insert, select, delete, update
-from tables_metadata import TablesManager
+from db.tables_manager import TablesManager
 
 product_table = TablesManager.product_table
 engine = TablesManager.engine
