@@ -1,7 +1,7 @@
 from sqlalchemy import insert, select
 from db.tables_manager import TablesManager
 
-user_table = TablesManager
+user_table = TablesManager.user_table
 engine = TablesManager.engine
 
 
@@ -13,7 +13,7 @@ class DbUserManager:
             .returning(user_table.c.id)
             .values(username=username, password=password)
         )
-        with self.engine.connect() as conn:
+        with engine.connect() as conn:
             result = conn.execute(stmt)
             conn.commit()
         return result.all()[0]
@@ -24,7 +24,7 @@ class DbUserManager:
             .where(user_table.c.username == username)
             .where(user_table.c.password == password)
         )
-        with self.engine.connect() as conn:
+        with engine.connect() as conn:
             result = conn.execute(stmt)
             users = result.all()
 
@@ -38,7 +38,7 @@ class DbUserManager:
             select(user_table.c.role)
             .where(user_table.c.id)
         )
-        with self.engine.connect() as conn:
+        with engine.connect() as conn:
             result = conn.execute(stmt)
             role = result.scalar()
             return role
@@ -46,7 +46,7 @@ class DbUserManager:
     @classmethod
     def get_user_by_id(self, id):
         stmt = select(user_table).where(user_table.c.id == id)
-        with self.engine.connect() as conn:
+        with engine.connect() as conn:
             result = conn.execute(stmt)
             users = result.all()
             if len(users) == 0:

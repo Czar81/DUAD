@@ -12,7 +12,7 @@ engine = TablesManager.engine
 class DbReceiptManager:
 
     def create_receipt(self, id_user: int, id_product: int, amount: int):
-        with self.engine.connect() as conn:
+        with engine.connect() as conn:
             new_amount = self.__verify_amount(id_product, amount)
             if new_amount == None:
                 return 409
@@ -43,7 +43,7 @@ class DbReceiptManager:
 
     def get_receipt_by_user_id(self, id_user: int):
         stmt = select(receipt_table).where(receipt_table.c.id_user == id_user)
-        with self.engine.connect() as conn:
+        with engine.connect() as conn:
             results = conn.execute(stmt)
             receipts = [dict(row) for row in results.mappings().all()]
 
@@ -53,7 +53,7 @@ class DbReceiptManager:
                 return receipts
 
     def __verify_amount(self, id_product, amount):
-        with self.engine.connect() as conn:
+        with engine.connect() as conn:
             stmt_product_get_amount = select(product_table.c.amount).where(
                 product_table.c.id == id_product
             )
