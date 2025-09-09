@@ -25,19 +25,11 @@ class DbUserManager:
             .where(user_table.c.password == password)
         )
         with engine.connect() as conn:
-            result = conn.execute(stmt)
-            users = result.all()
+            result = conn.execute(stmt).scalar()
+            return result
 
-            if len(users) == 0:
-                return None
-            else:
-                return users[0]
-            
-    def get_user_role_by_id(self):
-        stmt = (
-            select(user_table.c.role)
-            .where(user_table.c.id)
-        )
+    def get_user_role_by_id(self, id):
+        stmt = select(user_table.c.role).where(user_table.c.id == id)
         with engine.connect() as conn:
             result = conn.execute(stmt)
             role = result.scalar()
