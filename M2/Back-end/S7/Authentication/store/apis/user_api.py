@@ -2,31 +2,34 @@ from flask import Flask
 from flask import jsonify
 from db.db_user_manager import DbUserManager
 from db.db_receipt_manager import DbReceiptManager
-from verify_input import general_data_validation, role_required, require_fields
+from verify_input import role_required, require_fields
 from encoding import JWT_Manager
 
 app = Flask("user-service")
 db_user_manager = DbUserManager()
 db_receipt_manager = DbReceiptManager()
+jwt_manager = JWT_Manager("MyNameIsJeff", "HS256")
+
 
 @app.route("/register", methods=["POST"])
 @require_fields("username", "password")
 def register(username, password):
     result = db_user_manager.insert_user(username, password)
     user_id = result[0]
-    token = JWT_Manager.encode({"id": user_id})
+    token = jwt_manager.encode({"id": user_id})
     return jsonify(token=token),201
 
 
-@app.route("/login", methods=["GET"])
+@app.route("/login", methods=["POST"])
 @require_fields("username", "password")
 def login(username, password):
-    result = db_user_manager.get_user(username, password)
-    if result == None:
+    user_id = db_user_manager.get_user(username, password)
+    if user_id == None:
         return jsonify(message="User not exist"), 401
     else:
-        user_id = result[0]
-        token = JWT_Manager.encode({"id": user_id})
+        print("work1")
+        token = jwt_manager.encode({"id": user_id})
+        print(token)
         return jsonify(token=token),200
 
 
