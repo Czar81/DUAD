@@ -17,7 +17,7 @@ def register(username, password):
     result = db_user_manager.insert_user(username, password)
     user_id = result[0]
     token = jwt_manager.encode({"id": user_id})
-    return jsonify(token=token),201
+    return jsonify(token=token), 201
 
 
 @app.route("/login", methods=["POST"])
@@ -27,24 +27,22 @@ def login(username, password):
     if user_id == None:
         return jsonify(message="User not exist"), 401
     else:
-        print("work1")
         token = jwt_manager.encode({"id": user_id})
-        print(token)
-        return jsonify(token=token),200
+        return jsonify(token=token), 200
 
 
 @app.route("/me", methods=["GET"])
-@role_required(["user","admin"])
+@role_required(["user", "admin"])
 def me(user_id):
     user = db_user_manager.get_user_by_id(user_id)
     return jsonify(id=user_id, username=user[1])
 
 
 @app.route("/me/receipts", methods=["GET"])
-@role_required(["user","admin"])
+@role_required(["user", "admin"])
 def get_user_receipt(user_id):
     receipts = db_receipt_manager.get_receipt_by_user_id(user_id)
-    return jsonify(receipts = receipts), 200
+    return jsonify(receipts=receipts), 200
 
 
 def start_user_api():
