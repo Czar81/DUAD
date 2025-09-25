@@ -15,7 +15,7 @@ jwt_manager = JWT_Manager()
 def register(username, password):
     result = db_user_manager.insert_user(username, password)
     user_id = result[0]
-    token = JWT_Manager.encode({"id": user_id})
+    token = jwt_manager.encode({"id": user_id})
     return jsonify(token=token), 201
 
 
@@ -26,7 +26,7 @@ def login(username, password):
     if user_id == None:
         return jsonify(message="User not exist"), 401
     else:
-        token = JWT_Manager.encode({"id": user_id})
+        token = jwt_manager.encode({"id": user_id})
         return jsonify(token=token), 200
 
 

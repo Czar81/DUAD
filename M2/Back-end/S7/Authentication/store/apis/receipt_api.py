@@ -1,11 +1,9 @@
 from flask import jsonify, Blueprint
 from db.db_receipt_manager import DbReceiptManager
 from verify_input import general_data_validation
-from encoding import JWT_Manager
 
 receipt_bp = Blueprint("receipt", __name__)
 db_receipt_manager = DbReceiptManager()
-jwt_manager = JWT_Manager()
 
 
 @receipt_bp.route("/receipts", methods=["POST"])
