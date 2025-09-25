@@ -4,6 +4,7 @@ from apis.user_api import start_user_api
 from db.tables_manager import TablesManager
 
 if __name__=="__main__":
+    # Add trys except with HTTPs code
     TablesManager.create_tables()
     start_user_api()
     start_product_api()

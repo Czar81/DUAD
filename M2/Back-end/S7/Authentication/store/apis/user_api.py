@@ -8,15 +8,13 @@ from encoding import JWT_Manager
 app = Flask("user-service")
 db_user_manager = DbUserManager()
 db_receipt_manager = DbReceiptManager()
-jwt_manager = JWT_Manager("MyNameIsJeff", "HS256")
-
 
 @app.route("/register", methods=["POST"])
 @require_fields("username", "password")
 def register(username, password):
     result = db_user_manager.insert_user(username, password)
     user_id = result[0]
-    token = jwt_manager.encode({"id": user_id})
+    token = JWT_Manager.encode({"id": user_id})
     return jsonify(token=token), 201
 
 
@@ -27,7 +25,7 @@ def login(username, password):
     if user_id == None:
         return jsonify(message="User not exist"), 401
     else:
-        token = jwt_manager.encode({"id": user_id})
+        token = JWT_Manager.encode({"id": user_id})
         return jsonify(token=token), 200
 
 
