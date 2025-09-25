@@ -1,5 +1,6 @@
 from sqlalchemy import insert, select
 from db.tables_manager import TablesManager
+from api_exception import APIException
 
 user_table = TablesManager.user_table
 engine = TablesManager.engine
@@ -42,6 +43,6 @@ class DbUserManager:
             result = conn.execute(stmt)
             users = result.all()
             if len(users) == 0:
-                return None
+                raise APIException(f"User with id:{id} not exist", 404)
             else:
                 return users[0]

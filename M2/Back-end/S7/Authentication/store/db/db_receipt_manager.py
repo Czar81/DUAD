@@ -1,8 +1,7 @@
-from sqlalchemy import create_engine
 from sqlalchemy import insert, select, update
 from db.db_product_manager import product_table
 from db.tables_manager import TablesManager
-
+from api_exception import APIException
 
 receipt_table = TablesManager.receipt_table
 receipt_details_table = TablesManager.receipt_details_table
@@ -13,9 +12,11 @@ class DbReceiptManager:
 
     def create_receipt(self, id_user: int, id_product: int, amount: int):
         with engine.connect() as conn:
-            new_amount = self.__verify_amount(id_product, amount)
-            if new_amount == None:
-                return 409
+            valid, new_amount = self.__verify_amount(id_product, amount)
+            if valid == False:
+                raise APIException(
+                    f"Can not buy {amount} units, only {new_amount} available"
+                )
 
             stmt_receipt = (
                 insert(receipt_table)
@@ -46,11 +47,7 @@ class DbReceiptManager:
         with engine.connect() as conn:
             results = conn.execute(stmt)
             receipts = [dict(row) for row in results.mappings().all()]
-
-            if not receipts:
-                return None
-            else:
-                return receipts
+            return receipts
 
     def __verify_amount(self, id_product, amount):
         with engine.connect() as conn:
@@ -59,7 +56,7 @@ class DbReceiptManager:
             )
             amount_product = conn.execute(stmt_product_get_amount).scalar
             new_amount = amount_product - amount
-            if new_amount < 0:
-                return None
-            else:
-                return new_amount
+        if new_amount < 0:
+            return False, amount_product
+        else:
+            return new_amount

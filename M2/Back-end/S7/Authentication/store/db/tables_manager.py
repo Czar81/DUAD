@@ -2,8 +2,11 @@ from sqlalchemy import MetaData
 from sqlalchemy import create_engine
 from sqlalchemy import Table, Column, Integer, String, ForeignKey, DATE, func
 
+
 class TablesManager:
-    engine = create_engine('postgresql+psycopg2://postgres:Ian192007@localhost:5432/postgres')
+    engine = create_engine(
+        "postgresql+psycopg2://postgres:Ian192007@localhost:5432/postgres"
+    )
     metadata_obj = MetaData()
     product_table = Table(
         "products",
@@ -20,7 +23,7 @@ class TablesManager:
         Column("id", Integer, primary_key=True),
         Column("username", String(30)),
         Column("password", String),
-        Column("role", String(10), server_default="user")
+        Column("role", String(10), server_default="user"),
     )
     receipt_table = Table(
         "receipt",
@@ -36,7 +39,7 @@ class TablesManager:
         Column("id_product", Integer, ForeignKey("products.id")),
         Column("amount", Integer),
     )
+
     @classmethod
-    def create_tables(cls):   
+    def create_tables(cls):
         cls.metadata_obj.create_all(cls.engine)
-        
