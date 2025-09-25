@@ -6,7 +6,7 @@ from encoding import JWT_Manager
 
 app = Flask(__name__)
 db_receipt_manager = DbReceiptManager()
-jwt_manager = JWT_Manager("MyNameIsJeff", "HS256")
+jwt_manager = JWT_Manager()
 
 
 @app.route("/receipts", methods=["POST"])

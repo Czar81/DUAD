@@ -8,6 +8,7 @@ from encoding import JWT_Manager
 app = Flask("user-service")
 db_user_manager = DbUserManager()
 db_receipt_manager = DbReceiptManager()
+jwt_manager = JWT_Manager()
 
 @app.route("/register", methods=["POST"])
 @require_fields("username", "password")
