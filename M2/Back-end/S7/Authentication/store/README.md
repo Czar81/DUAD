@@ -36,16 +36,16 @@ This store has 3 entities with the next endpoints:
 
 - User_api endpoints:
     - register 
-        - Rute: /register
+        - Rute: /user/register
         - Method: POST
-        - Required fields: Username, Password
+        - Required fields: username, password
         - Required role: None
         - Ruturn: Dictionary with token
 
     - login
-        - Rute: /login
+        - Rute: /user/login
         - Method: POST
-        - Required fields: Username, Password
+        - Required fields: username, password
         - Required role: None
         - Ruturn: Dictionary with token
 
