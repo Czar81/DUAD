@@ -51,7 +51,7 @@ def login(username, password):
 def me(user_id):
     try:
         user = db_user_manager.get_user_by_id(user_id)
-        return jsonify(id=user_id, username=user[1])
+        return jsonify(id=user_id, username=user[1]), 200
     except SQLAlchemyError as e:
         jsonify(error=f"Internal database error: {e}"), 500
     except Exception as e:
