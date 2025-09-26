@@ -12,7 +12,7 @@ db_receipt_manager = DbReceiptManager()
 jwt_manager = JWT_Manager()
 
 
-@user_bp.route("/register", methods=["POST"])
+@user_bp.route("/user/register", methods=["POST"])
 @require_fields("username", "password")
 def register(username, password):
     try:
@@ -21,14 +21,14 @@ def register(username, password):
         token = jwt_manager.encode({"id": user_id})
         return jsonify(token=token), 201
     except SQLAlchemyError as e:
-        jsonify(error=f"Internal database error: {e}"), 500
+        return jsonify(error=f"Internal database error: {e}"), 500
     except Exception as e:
-        jsonify(error=f"An unexpected error occurred"), 500
+        return jsonify(error=f"An unexpected error occurred: {e}"), 500
     except APIException as e:
-        jsonify(error=e), e.status_code
+        return jsonify(error=e), e.status_code
 
 
-@user_bp.route("/login", methods=["POST"])
+@user_bp.route("/user/login", methods=["POST"])
 @require_fields("username", "password")
 def login(username, password):
     try:
@@ -39,11 +39,11 @@ def login(username, password):
             token = jwt_manager.encode({"id": user_id})
             return jsonify(token=token), 200
     except SQLAlchemyError as e:
-        jsonify(error=f"Internal database error: {e}"), 500
+        return jsonify(error=f"Internal database error: {e}"), 500
     except Exception as e:
-        jsonify(error=f"An unexpected error occurred"), 500
+        return jsonify(error=f"An unexpected error occurred: {e}"), 500
     except APIException as e:
-        jsonify(error=e), e.status_code
+        return jsonify(error=e), e.status_code
 
 
 @user_bp.route("/me", methods=["GET"])
@@ -53,11 +53,11 @@ def me(user_id):
         user = db_user_manager.get_user_by_id(user_id)
         return jsonify(id=user_id, username=user[1]), 200
     except SQLAlchemyError as e:
-        jsonify(error=f"Internal database error: {e}"), 500
+        return jsonify(error=f"Internal database error: {e}"), 500
     except Exception as e:
-        jsonify(error=f"An unexpected error occurred"), 500
+        return jsonify(error=f"An unexpected error occurred: {e}"), 500
     except APIException as e:
-        jsonify(error=e), e.status_code
+        return jsonify(error=e), e.status_code
 
 
 @user_bp.route("/me/receipts", methods=["GET"])
@@ -67,8 +67,8 @@ def get_user_receipt(user_id):
         receipts = db_receipt_manager.get_receipt_by_user_id(user_id)
         return jsonify(receipts=receipts), 200
     except SQLAlchemyError as e:
-        jsonify(error=f"Internal database error: {e}"), 500
+        return jsonify(error=f"Internal database error: {e}"), 500
     except Exception as e:
-        jsonify(error=f"An unexpected error occurred"), 500
+        return jsonify(error=f"An unexpected error occurred: {e}"), 500
     except APIException as e:
-        jsonify(error=e), e.status_code
+        return jsonify(error=e), e.status_code

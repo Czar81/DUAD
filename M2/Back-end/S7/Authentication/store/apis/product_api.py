@@ -15,11 +15,11 @@ def register_product(name, price, amount):
         id_returned = db_product_manager.insert_product(name, price, amount)
         return jsonify({"id": str(id_returned)}), 201
     except SQLAlchemyError as e:
-        jsonify(error=f"Internal database error: {e}"), 500
+        return jsonify(error=f"Internal database error: {e}"), 500
     except Exception as e:
-        jsonify(error=f"An unexpected error occurred"), 500
+        return jsonify(error=f"An unexpected error occurred: {e}"), 500
     except APIException as e:
-        jsonify(error=e), e.status_code
+        return jsonify(error=e), e.status_code
 
 
 @product_bp.route("/products", methods=["GET"])
@@ -28,11 +28,11 @@ def get_products():
         results = db_product_manager.get_products()
         return jsonify({"products": results}), 200
     except SQLAlchemyError as e:
-        jsonify(error=f"Internal database error: {e}"), 500
+        return jsonify(error=f"Internal database error: {e}"), 500
     except Exception as e:
-        jsonify(error=f"An unexpected error occurred"), 500
+        return jsonify(error=f"An unexpected error occurred: {e}"), 500
     except APIException as e:
-        jsonify(error=e), e.status_code
+        return jsonify(error=e), e.status_code
 
 
 @product_bp.route("/products/<product_id>", methods=["PUT"])
@@ -42,11 +42,11 @@ def update_product(product_id, name, price, amount):
         db_product_manager.update_product(int(product_id), name, price, amount)
         return jsonify({"message": "Product Updated"}), 200
     except SQLAlchemyError as e:
-        jsonify(error=f"Internal database error: {e}"), 500
+        return jsonify(error=f"Internal database error: {e}"), 500
     except Exception as e:
-        jsonify(error=f"An unexpected error occurred"), 500
+        return jsonify(error=f"An unexpected error occurred: {e}"), 500
     except APIException as e:
-        jsonify(error=e), e.status_code
+        return jsonify(error=e), e.status_code
 
 
 @product_bp.route("/products/<product_id>", methods=["DELETE"])
@@ -56,8 +56,8 @@ def delete_product(product_id):
         db_product_manager.delete_product(product_id)
         return jsonify({"message": "Product Deleted"}), 200
     except SQLAlchemyError as e:
-        jsonify(error=f"Internal database error: {e}"), 500
+        return jsonify(error=f"Internal database error: {e}"), 500
     except Exception as e:
-        jsonify(error=f"An unexpected error occurred"), 500
+        return jsonify(error=f"An unexpected error occurred: {e}"), 500
     except APIException as e:
-        jsonify(error=e), e.status_code
+        return jsonify(error=e), e.status_code

@@ -15,8 +15,8 @@ def register_receipt(id_user, id_product, amount):
         db_receipt_manager.create_receipt(id_user, id_product, amount)
         return jsonify(message="Receipt created successfully"), 201
     except SQLAlchemyError as e:
-        jsonify(error=f"Internal database error: {e}"), 500
+        return jsonify(error=f"Internal database error: {e}"), 500
     except Exception as e:
-        jsonify(error=f"An unexpected error occurred"), 500
+        return jsonify(error=f"An unexpected error occurred: {e}"), 500
     except APIException as e:
-        jsonify(error=e), e.status_code
+        return jsonify(error=e), e.status_code
