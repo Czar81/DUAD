@@ -1,5 +1,5 @@
 from flask import request, jsonify
-from encoding import JWT_Manager
+from jwt_coding.encoding import JWT_Manager
 from db.db_user_manager import DbUserManager
 from functools import wraps
 
@@ -15,11 +15,10 @@ def role_required(allowed_roles):
                 return jsonify(message="Missing token"), 401
             token = token.replace("Bearer ", "")
             id_decoded = jwt_manager.decode(token)
-
-            role = DbUserManager.get_user_role_by_id(id_decoded)
+            role = DbUserManager.get_user_role_by_id(id_decoded["id"])
             if role not in allowed_roles:
                 return jsonify(message="Unauthorized"), 403
-            kwargs["user_id"] = id_decoded
+            kwargs["user_id"] = id_decoded["id"]
             return func(*args, **kwargs)
 
         return wrapper
@@ -33,13 +32,12 @@ def general_data_validation(allowed_roles, *required):
         def wrapper(*args, **kwargs):
             token = request.headers.get("Authorization")
             data = request.get_json()
-
             if token == None:
                 return jsonify(message="Missing token"), 401
             token = token.replace("Bearer ", "")
             try:
                 id_decoded = jwt_manager.decode(token)
-                role = DbUserManager.get_user_role_by_id(id_decoded)
+                role = DbUserManager.get_user_role_by_id(id_decoded["id"])
             except Exception:
                 return jsonify(message="Invalid or expired token"), 401
 
@@ -55,7 +53,7 @@ def general_data_validation(allowed_roles, *required):
 
             for field in required:
                 kwargs[field] = data.get(field)
-            kwargs["user_id"] = id_decoded
+            kwargs["id_user"] = id_decoded["id"]
             return func(*args, **kwargs)
 
         return wrapper

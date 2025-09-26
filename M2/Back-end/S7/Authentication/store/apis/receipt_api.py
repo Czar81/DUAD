@@ -9,14 +9,14 @@ db_receipt_manager = DbReceiptManager()
 
 
 @receipt_bp.route("/receipts", methods=["POST"])
-@general_data_validation(["user", "admin"], "id_user", "id_product", "amount")
+@general_data_validation(["user", "admin"], "id_product", "amount")
 def register_receipt(id_user, id_product, amount):
     try:
         db_receipt_manager.create_receipt(id_user, id_product, amount)
         return jsonify(message="Receipt created successfully"), 201
     except SQLAlchemyError as e:
         return jsonify(error=f"Internal database error: {e}"), 500
+    except APIException as e:
+        return jsonify(error=str(e)), e.status_code
     except Exception as e:
         return jsonify(error=f"An unexpected error occurred: {e}"), 500
-    except APIException as e:
-        return jsonify(error=e), e.status_code

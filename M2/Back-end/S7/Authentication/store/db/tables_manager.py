@@ -5,7 +5,7 @@ from sqlalchemy import Table, Column, Integer, String, ForeignKey, DATE, func
 
 class TablesManager:
     engine = create_engine(
-        "postgresql+psycopg2://postgres:Ian192007@localhost:5432/postgres"
+        "postgresql+psycopg2://postgres:postgres@localhost:5432/postgres"
     )
     metadata_obj = MetaData()
     product_table = Table(

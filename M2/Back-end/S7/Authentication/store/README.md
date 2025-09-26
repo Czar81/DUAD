@@ -51,14 +51,14 @@ This store has 3 entities with the next endpoints:
 
     - me
         - Rute: /me
-        - Method: POST
-        - Required fields: Token in Authorization Header
+        - Method: GET
+        - Required fields: Token in Authorization Header 
         - Required role: Admin, User
         - Ruturn: Dictionary with user id and username
 
     - get_user_receipt
         - Rute: /me/receipts
-        - Method: POST
+        - Method: GET
         - Required fields: Token in Authorization Header
         - Required role: Admin, User
         - Ruturn: Dictionary with all receipt of the user
@@ -67,6 +67,6 @@ This store has 3 entities with the next endpoints:
     - register_receipt
         - Rute: /receipts
         - Method: POST
-        - Required fields: Id_user, id_product, Amount
+        - Required fields: Token in Authorization Header, id_product, Amount
         - Required role: Admin, User
         - Ruturn: Dictionary with a message

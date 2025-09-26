@@ -29,10 +29,13 @@ class DbUserManager:
             result = conn.execute(stmt).scalar()
             return result
 
+    @classmethod
     def get_user_role_by_id(self, id):
         stmt = select(user_table.c.role).where(user_table.c.id == id)
         with engine.connect() as conn:
             result = conn.execute(stmt)
+            if result == None:
+                raise APIException("Id not allowed", 404)
             role = result.scalar()
             return role
 
