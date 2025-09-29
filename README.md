@@ -101,12 +101,9 @@ Each module contains its own weeks, and the weeks have their topics and README f
   - #### [Week 1](/M2/Back-end/S1/README.md)
 
     - [Apis with Flask](/M2/Back-end/S1/exercises_flask/)
-    - [Apis with Flask](/M2/Back-end/S1/exercises_flask/)
 
       - [API of tasks](/M2/Back-end/S1/exercises_flask/task_exercises/)
-      - [API of tasks](/M2/Back-end/S1/exercises_flask/task_exercises/)
 
-      - [API of tasks with method view](/M2/Back-end/S1/exercises_flask/task_exercises_method_view/)
       - [API of tasks with method view](/M2/Back-end/S1/exercises_flask/task_exercises_method_view/)
 
   - #### [Week 2](/M2/Back-end/S2/README.md)
