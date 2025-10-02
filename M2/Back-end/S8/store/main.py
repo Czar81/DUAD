@@ -15,4 +15,4 @@ if __name__ == "__main__":
     app.register_blueprint(product_bp)  
     app.register_blueprint(user_bp)  
     app.register_blueprint(receipt_bp)  
-    app.run(host=os.environ.get("HOST"), port=os.environ.get("PORT_API"), debug=os.environ.get("DEBUG_MODE"))
+    app.run(host=os.environ.get("HOST_API"), port=os.environ.get("PORT_API"), debug=os.environ.get("DEBUG_MODE"))
