@@ -1,12 +1,12 @@
 from sqlalchemy import MetaData
 from sqlalchemy import create_engine
 from sqlalchemy import Table, Column, Integer, String, ForeignKey, DATE, func
-
+from dotenv import load_dotenv
+from os import environ
+load_dotenv()
 
 class TablesManager:
-    engine = create_engine(
-        "postgresql+psycopg2://postgres:postgres@localhost:5432/postgres"
-    )
+    engine = create_engine(os.environ.get("URL_POSTGRES"))
     metadata_obj = MetaData()
     product_table = Table(
         "products",
