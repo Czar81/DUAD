@@ -1,5 +1,5 @@
 from flask import request, jsonify
-from jwt_coding.encoding import JWT_Manager
+from encoding import JWT_Manager
 from db.db_user_manager import DbUserManager
 from functools import wraps
 

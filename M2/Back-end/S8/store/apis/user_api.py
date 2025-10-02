@@ -4,7 +4,7 @@ from db.db_receipt_manager import DbReceiptManager
 from verify_input import role_required, require_fields
 from sqlalchemy.exc import SQLAlchemyError
 from api_exception import APIException
-from jwt_coding.encoding import JWT_Manager
+from encoding import JWT_Manager
 
 user_bp = Blueprint("user", __name__)
 db_user_manager = DbUserManager()
