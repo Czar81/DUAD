@@ -1,8 +1,7 @@
 from flask import jsonify, Blueprint
 from db.db_product_manager import DbProductManager
-from verify_input import general_data_validation, role_required
 from sqlalchemy.exc import SQLAlchemyError
-from api_exception import APIException
+from utils import APIException, general_data_validation, role_required
 
 product_bp = Blueprint("product", __name__)
 db_product_manager = DbProductManager()
@@ -51,7 +50,7 @@ def update_product(id_user, product_id, name, price, amount):
 
 @product_bp.route("/products/<product_id>", methods=["DELETE"])
 @role_required(["admin"])
-def delete_product(id_user,product_id):
+def delete_product(id_user, product_id):
     try:
         db_product_manager.delete_product(product_id)
         return jsonify({"message": "Product Deleted"}), 200
