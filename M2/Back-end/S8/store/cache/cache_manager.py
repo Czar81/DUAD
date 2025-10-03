@@ -6,10 +6,12 @@ load_dotenv()
 
 
 class CacheManager:
-    def __init__(self,host: str, port: int, password: str):
-        self.host = host
-        self.port = port
-        self.password = password
+    def __init__(
+        self,
+    ):
+        self.host = environ.get("REDIS_HOST")
+        self.port = int(environ.get("REDIS_PORT"))
+        self.password = environ.get("REDIS_KEY")
         self.redis_client = Redis(
             host=self.host, port=self.port, password=self.password
         )
@@ -17,9 +19,9 @@ class CacheManager:
     def store_data(self, key: str, values: str, time_to_live: int = None):
         try:
             if time_to_live is None:
-                self.redis_client.set(key, values)
+                self.redis_client.hset(key, mapping=values)
             else:
-                self.redis_client.setex(key, time_to_live, values)
+                self.redis_client.hsetex(key, mapping=values, ex=time_to_live)
         except RedisError as error:
             print(f"An error ocurred while storing data in Redis: {error}")
 
@@ -35,11 +37,12 @@ class CacheManager:
             print(f"An error ocurred while checking a key in Redis: {error}")
             return False, None
 
-    def get_data(self,key: str):
+    def get_data(self, key: str):
         try:
-            output = self.redis_client.get(key)
+            output = self.redis_client.hgetall(key)
+
             if output is not None:
-                result = output.decode("utf-8")
+                result = {k.decode(): v.decode() for k, v in output.items()}
                 return result
             else:
                 return None
@@ -62,7 +65,6 @@ class CacheManager:
     def delete_data_with_pattern(self, pattern):
         try:
             for key in self.redis_client.scan_iter(match=pattern):
-                self.delete_data(key)
+                self.redis_client.delete(key)
         except RedisError as error:
             print(f"An error ocurred while deleting data from Redis: {error}")
-    
