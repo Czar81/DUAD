@@ -4,7 +4,8 @@ from db.tables_manager import TablesManager
 from apis.product_api import product_bp
 from apis.receipt_api import receipt_bp
 from apis.user_api import user_bp
-import os
+from os import environ
+
 load_dotenv()
 
 app = Flask("Store-service")
@@ -12,7 +13,11 @@ app = Flask("Store-service")
 if __name__ == "__main__":
     # Add trys except with HTTPs code
     TablesManager.create_tables()
-    app.register_blueprint(product_bp)  
-    app.register_blueprint(user_bp)  
-    app.register_blueprint(receipt_bp)  
-    app.run(host=os.environ.get("HOST_API"), port=os.environ.get("PORT_API"), debug=os.environ.get("DEBUG_MODE"))
+    app.register_blueprint(product_bp)
+    app.register_blueprint(user_bp)
+    app.register_blueprint(receipt_bp)
+    app.run(
+        host=environ.get("HOST_API"),
+        port=environ.get("PORT_API"),
+        debug=environ.get("DEBUG_MODE"),
+    )

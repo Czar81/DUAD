@@ -1,10 +1,8 @@
 from flask import jsonify, Blueprint
 from db.db_user_manager import DbUserManager
 from db.db_receipt_manager import DbReceiptManager
-from verify_input import role_required, require_fields
 from sqlalchemy.exc import SQLAlchemyError
-from api_exception import APIException
-from encoding import JWT_Manager
+from utils import JWT_Manager, APIException, role_required, require_fields
 
 user_bp = Blueprint("user", __name__)
 db_user_manager = DbUserManager()

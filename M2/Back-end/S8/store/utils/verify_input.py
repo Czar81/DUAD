@@ -1,5 +1,5 @@
 from flask import request, jsonify
-from encoding import JWT_Manager
+from .encoding import JWT_Manager
 from db.db_user_manager import DbUserManager
 from functools import wraps
 
@@ -67,7 +67,7 @@ def require_fields(*required):
         def wrapper(*args, **kwargs):
             data = request.get_json()
             if not data:
-                return jsonify(message="Missing body"), 400        
+                return jsonify(message="Missing body"), 400
             missing = [field for field in required if data.get(field) is None]
             if missing:
                 return jsonify(message=f"Missing fields: {', '.join(missing)}"), 400

@@ -3,10 +3,12 @@ from sqlalchemy import create_engine
 from sqlalchemy import Table, Column, Integer, String, ForeignKey, DATE, func
 from dotenv import load_dotenv
 from os import environ
+
 load_dotenv()
 
+
 class TablesManager:
-    engine = create_engine(os.environ.get("URL_POSTGRES"))
+    engine = create_engine(environ.get("URL_POSTGRES"))
     metadata_obj = MetaData()
     product_table = Table(
         "products",
