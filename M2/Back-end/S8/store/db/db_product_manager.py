@@ -29,12 +29,11 @@ class DbProductManager:
     def get_product_by_id(self, id: int):
         stmt = select(product_table).where(product_table.c.id == id)
         with engine.connect() as conn:
-            result = conn.execute(stmt)
-            product = result.all()
-            if len(product) == 0:
-                raise APIException(f"Product id:{str(id)} does not exist", 404)
+            result = conn.execute(stmt).mappings().first()
+            if result is not None:
+                return dict(result)
             else:
-                return dict(product)
+                raise APIException(f"Product id:{str(id)} does not exist", 404)
 
     def update_product(self, id: int, name: str, price: int, amount: int):
         stmt = (

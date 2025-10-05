@@ -76,7 +76,7 @@ def update_product(id_user, product_id, name, price, amount):
 
 @product_bp.route("/products/<product_id>", methods=["DELETE"])
 @role_required(["admin"])
-def delete_product(id_user, product_id):
+def delete_product(user_id, product_id):
     key = f"getProduct:{product_id}"
     try:
         db_product_manager.delete_product(product_id)
