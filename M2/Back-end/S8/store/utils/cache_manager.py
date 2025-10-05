@@ -1,7 +1,7 @@
 from redis import Redis, RedisError
-from utils import APIException
+from .api_exception import APIException
 from dotenv import load_dotenv
-from json import dumps
+from json import dumps, loads
 from os import environ
 
 load_dotenv()
@@ -43,6 +43,7 @@ class CacheManager:
 
             if output is not None:
                 result = output.decode("utf-8")
+                result = loads(result)
                 return result
             else:
                 return None

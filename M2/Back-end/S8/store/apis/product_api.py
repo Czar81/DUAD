@@ -12,9 +12,10 @@ cache_manager = CacheManager()
 @product_bp.route("/products", methods=["POST"])
 @general_data_validation(["admin"], "name", "price", "amount")
 def register_product(id_user, name, price, amount):
+    key = "getProducts-all"
     try:
         id_returned = db_product_manager.insert_product(name, price, amount)
-        __delete_if_exist("getProducts-all")
+        cache_manager.delete_data(key)
         return jsonify({"id": str(id_returned)}), 201
     except SQLAlchemyError as e:
         return jsonify(error=f"Internal database error: {e}"), 500
@@ -62,7 +63,7 @@ def update_product(id_user, product_id, name, price, amount):
     key = f"getProduct:{product_id}"
     try:
         db_product_manager.update_product(int(product_id), name, price, amount)
-        __delete_if_exist(key)
+        cache_manager.delete_data(key)
         return jsonify({"message": "Product Updated"}), 200
     except SQLAlchemyError as e:
         return jsonify(error=f"Internal database error: {e}"), 500
@@ -80,7 +81,7 @@ def delete_product(id_user, product_id):
     key = f"getProduct:{product_id}"
     try:
         db_product_manager.delete_product(product_id)
-        __delete_if_exist(key)
+        cache_manager.delete_data(key)
         return jsonify({"message": "Product Deleted"}), 200
     except SQLAlchemyError as e:
         return jsonify(error=f"Internal database error: {e}"), 500
@@ -90,18 +91,6 @@ def delete_product(id_user, product_id):
         return jsonify(errror=f"An unexpected error occurred with redis: {e}"), 500
     except Exception as e:
         return jsonify(error=f"An unexpected error occurred: {e}"), 500
-
-
-def __delete_if_exist(key):
-    exist = cache_manager.check_key(key)
-    if exist:
-        cache_manager.delete_data(key)
-
-
-def __delete_if_exist(key):
-    exist = cache_manager.check_key(key)
-    if exist:
-        cache_manager.delete_data(key)
 
 
 def __get_cache_if_exist(key, id=None, by_id=False):
