@@ -53,8 +53,6 @@ class CacheManager:
     def delete_data(self, key: str):
         try:
             output = self.redis_client.delete(key)
-            if output == 0:
-                raise APIException(f"Key '{key}' not found.", 404)
 
         except RedisError as e:
             raise RedisError(f"An error ocurred while deleting data from Redis: {e}")
