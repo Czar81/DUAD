@@ -27,18 +27,16 @@ class DbProductManager:
             return products
 
     def get_product_by_id(self, id: int):
-        # D a select for id
         stmt = select(product_table).where(product_table.c.id == id)
         with engine.connect() as conn:
             result = conn.execute(stmt)
-            products = result.all()
-            if len(products) == 0:
+            product = result.all()
+            if len(product) == 0:
                 raise APIException(f"Product id:{str(id)} does not exist", 404)
             else:
-                return products
+                return product
 
     def update_product(self, id: int, name: str, price: int, amount: int):
-        # Do a select for id
         stmt = (
             update(product_table)
             .where(product_table.c.id == id)
@@ -48,17 +46,16 @@ class DbProductManager:
             result = conn.execute(stmt)
             rows_created = result.rowcount
             if rows_created == 0:
-                raise APIException(f"Could not update product id:{str(id)}", 403)
+                raise APIException(f"Product id:{str(id)} not exist", 404)
             else:
                 conn.commit()
 
     def delete_product(self, id: int):
-        # Do a select for id
         stmt = delete(product_table).where(product_table.c.id == id)
         with engine.connect() as conn:
             result = conn.execute(stmt)
             rows_deleted = result.rowcount
             if rows_deleted == 0:
-                raise APIException(f"Could not delete product id:{str(id)}", 403)
+                raise APIException(f"Product id:{str(id)} not exist", 403)
             else:
                 conn.commit()
