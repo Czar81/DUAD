@@ -7,15 +7,14 @@ from utils import APIException, general_data_validation, role_required, CacheMan
 product_bp = Blueprint("product", __name__)
 db_product_manager = DbProductManager()
 cache_manager = CacheManager()
-
+key_global = "getProducts-all"
 
 @product_bp.route("/products", methods=["POST"])
 @general_data_validation(["admin"], "name", "price", "amount")
 def register_product(id_user, name, price, amount):
-    key = "getProducts-all"
     try:
         id_returned = db_product_manager.insert_product(name, price, amount)
-        cache_manager.delete_data(key)
+        cache_manager.delete_data(key_global)
         return jsonify({"id": str(id_returned)}), 201
     except SQLAlchemyError as e:
         return jsonify(error=f"Internal database error: {e}"), 500
@@ -27,9 +26,8 @@ def register_product(id_user, name, price, amount):
 
 @product_bp.route("/products", methods=["GET"])
 def get_products():
-    key = "getProducts-all"
     try:
-        result = __get_cache_if_exist(key)
+        result = __get_cache_if_exist(key_global)
         return jsonify({"products": result}), 200
     except SQLAlchemyError as e:
         return jsonify(error=f"Internal database error: {e}"), 500
@@ -64,6 +62,7 @@ def update_product(id_user, product_id, name, price, amount):
     try:
         db_product_manager.update_product(int(product_id), name, price, amount)
         cache_manager.delete_data(key)
+        cache_manager.delete_data(key_global)
         return jsonify({"message": "Product Updated"}), 200
     except SQLAlchemyError as e:
         return jsonify(error=f"Internal database error: {e}"), 500
@@ -82,6 +81,7 @@ def delete_product(id_user, product_id):
     try:
         db_product_manager.delete_product(product_id)
         cache_manager.delete_data(key)
+        cache_manager.delete_data(key_global)
         return jsonify({"message": "Product Deleted"}), 200
     except SQLAlchemyError as e:
         return jsonify(error=f"Internal database error: {e}"), 500
