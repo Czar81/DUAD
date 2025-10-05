@@ -1,6 +1,6 @@
 from sqlalchemy import insert, select
 from db.tables_manager import TablesManager
-from api_exception import APIException
+from utils.api_exception import APIException
 
 user_table = TablesManager.user_table
 engine = TablesManager.engine

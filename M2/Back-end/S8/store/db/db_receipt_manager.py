@@ -1,7 +1,7 @@
 from sqlalchemy import insert, select, update
 from db.db_product_manager import product_table
 from db.tables_manager import TablesManager
-from api_exception import APIException
+from utils.api_exception import APIException
 
 receipt_table = TablesManager.receipt_table
 receipt_details_table = TablesManager.receipt_details_table

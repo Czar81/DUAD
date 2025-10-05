@@ -1,7 +1,8 @@
 from sqlalchemy import MetaData
 from sqlalchemy import create_engine
-from sqlalchemy import Table, Column, Integer, String, ForeignKey, DATE, func
+from sqlalchemy import Table, Column, Integer, String, ForeignKey
 from dotenv import load_dotenv
+from datetime import date
 from os import environ
 
 load_dotenv()
@@ -16,7 +17,7 @@ class TablesManager:
         Column("id", Integer, primary_key=True),
         Column("name", String(30)),
         Column("price", Integer()),
-        Column("entry_date", DATE, server_default=func.now()),
+        Column("entry_date", String(10), server_default=str(date.today())),
         Column("amount", Integer()),
     )
     user_table = Table(

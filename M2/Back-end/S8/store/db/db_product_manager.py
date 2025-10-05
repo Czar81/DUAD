@@ -1,6 +1,6 @@
 from sqlalchemy import insert, select, delete, update
 from db.tables_manager import TablesManager
-from api_exception import APIException
+from utils.api_exception import APIException
 
 product_table = TablesManager.product_table
 engine = TablesManager.engine
