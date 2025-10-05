@@ -45,7 +45,7 @@ def get_products():
 def get_product_by_id(product_id):
     key = f"getProduct:{product_id}"
     try:
-        results = __get_cache_if_exist(key, product_id, by_id=True)
+        result = __get_cache_if_exist(key, product_id, by_id=True)
         return jsonify({"product": result}), 200
     except SQLAlchemyError as e:
         return jsonify(error=f"Internal database error: {e}"), 500
@@ -94,10 +94,8 @@ def delete_product(id_user, product_id):
 
 
 def __get_cache_if_exist(key, id=None, by_id=False):
-    exist = cache_manager.check_key(key)
-    if exist:
-        result = cache_manager.get_data(key)
-    else:
+    result = cache_manager.get_data(key)
+    if result is None:
         if by_id and id is not None:
             result = db_product_manager.get_product_by_id(id)
         else:

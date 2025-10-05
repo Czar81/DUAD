@@ -34,7 +34,7 @@ class DbProductManager:
             if len(product) == 0:
                 raise APIException(f"Product id:{str(id)} does not exist", 404)
             else:
-                return product
+                return dict(product)
 
     def update_product(self, id: int, name: str, price: int, amount: int):
         stmt = (
