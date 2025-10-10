@@ -14,8 +14,6 @@ jwt_manager = JWT_Manager()
 @require_fields("username", "password")
 def register(username, password):
     try:
-        print(username)
-        print(password)
         result = db_user_manager.insert_user(username, password)
         user_id = result[0]
         token = jwt_manager.encode({"id": user_id})
