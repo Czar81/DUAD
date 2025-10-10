@@ -1,7 +1,7 @@
 from flask import jsonify, Blueprint
 from db.db_receipt_manager import DbReceiptManager
 from sqlalchemy.exc import SQLAlchemyError
-from utils import APIException, general_data_validation, cache_manager
+from utils import APIException, general_data_validation, CacheManager
 
 receipt_bp = Blueprint("receipt", __name__)
 db_receipt_manager = DbReceiptManager()

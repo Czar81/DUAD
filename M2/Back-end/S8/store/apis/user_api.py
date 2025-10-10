@@ -63,7 +63,7 @@ def me(user_id):
 @role_required(["user", "admin"])
 def get_user_receipt(user_id):
     try:
-        receipts = __get_cache_if_exist(f"getReceipt:{id_user}", user_id)
+        receipts = __get_cache_if_exist(f"getReceipt:{user_id}", user_id)
         return jsonify(receipts=receipts), 200
     except SQLAlchemyError as e:
         return jsonify(error=f"Internal database error: {e}"), 500
