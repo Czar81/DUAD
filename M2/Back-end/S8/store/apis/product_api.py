@@ -96,7 +96,7 @@ def delete_product(user_id, product_id):
 def __get_cache_if_exist(key, id=None, by_id=False):
     result = cache_manager.get_data(key)
     if result is None:
-        if by_id and id is not None:
+        if by_id is not None and id is not None:
             result = db_product_manager.get_product_by_id(id)
         else:
             result = db_product_manager.get_products()
