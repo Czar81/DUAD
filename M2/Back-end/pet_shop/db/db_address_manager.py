@@ -6,7 +6,7 @@ address_table = TablesManager.address_table
 engine = TablesManager.engine
 
 
-class DbUserManager:
+class DbAddressManager:
 
     def insert_address(self, id_user: str, location: str):
         stmt = (
@@ -48,9 +48,34 @@ class DbUserManager:
                 raise APIException(f"Address id:{str(id)} not exist", 404)
             else:
                 conn.commit()
+    def update_address(self, id: int, id_user: str, location: str):
+        stmt = (
+            update(address_table)
+            .where(address_table.c.id == id, product_table.c.id_user==id_user)
+            .values(location=location)
+        )
+        with engine.connect() as conn:
+            result = conn.execute(stmt)
+            rows_created = result.rowcount
+            if rows_created == 0:
+                raise APIException(f"Address id:{str(id)} not exist", 404)
+            else:
+                conn.commit()
 
     def delete_address(self, id: int):
         stmt = delete(address_table).where(address_table.c.id == id)
+        with engine.connect() as conn:
+            result = conn.execute(stmt)
+            rows_deleted = result.rowcount
+            if rows_deleted == 0:
+                raise APIException(f"Address id:{str(id)} not exist", 404)
+            else:
+                conn.commit()
+
+    def delete_own_address(self, id: int, id_user: int):
+        stmt = delete(address_table).where(
+            address_table.c.id == id, address_table.c.id_user == id_user
+        )
         with engine.connect() as conn:
             result = conn.execute(stmt)
             rows_deleted = result.rowcount
