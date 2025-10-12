@@ -23,15 +23,14 @@ class DbAddressManager:
         stmt = select(address_table)
         with engine.connect() as conn:
             result = conn.execute(stmt)
-            addresss = [dict(row) for row in result.mappings().all()]
-            return addresss
+            return [dict(row) for row in result.mappings().all()]
 
     def get_address_by_user_id(self, id_user: int):
         stmt = select(address_table).where(address_table.c.id_user == id_user)
         with engine.connect() as conn:
             result = conn.execute(stmt).mappings().first()
             if result is not None:
-                return dict(result)
+                return [dict(row) for row in result.mappings().all()]
             else:
                 raise APIException(f"User id:{str(id)} does not have any address", 404)
 

@@ -23,8 +23,7 @@ class DbProductManager:
         stmt = select(product_table)
         with engine.connect() as conn:
             result = conn.execute(stmt)
-            products = [dict(row) for row in result.mappings().all()]
-            return products
+            return [dict(row) for row in result.mappings().all()]
 
     def get_product_by_id(self, id: int):
         stmt = select(product_table).where(product_table.c.id == id)
