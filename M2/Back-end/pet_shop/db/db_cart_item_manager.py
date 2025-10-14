@@ -24,11 +24,11 @@ class DbCartItemsManager:
     def get_cart_item(self, id: int | None = None, id_user: int | None = None):
         conditions = []
         if id is not None:
-            conditions.append(cart_table.c.id == id)
+            conditions.append(cart_item_table.c.id == id)
         if id_user is not None:
-            conditions.append(cart_table.c.id_user == id_user)
+            conditions.append(cart_item_table.c.id_user == id_user)
 
-        stmt = select(cart_table).where(*conditions)
+        stmt = select(cart_item_table).where(*conditions)
         with engine.connect() as conn:
             result = conn.execute(stmt).mappings().all()
             return result
