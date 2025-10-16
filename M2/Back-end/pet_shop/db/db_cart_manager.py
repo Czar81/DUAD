@@ -16,7 +16,7 @@ class DbCartManager:
             result = conn.execute(stmt)
             conn.commit()
             return result.scalar()
-
+    
     def get_cart(self, id: int | None = None, id_user: int | None = None):
         conditions = []
         if id is not None:
@@ -37,7 +37,7 @@ class DbCartManager:
         with engine.connect() as conn:
             result = conn.execute(stmt)
             rows_created = result.rowcount
-            if rows_created == 0:
+           if rows_created == 0:
                 raise APIException(
                     (
                         f"Cart id:{str(id)} not exist or not owned by user id:{id_user}"
@@ -46,8 +46,7 @@ class DbCartManager:
                     ),
                     404,
                 )
-            else:
-                conn.commit()
+            conn.commit()
 
     def delete_cart(self, id: int, id_user: int | None = None):
         conditions = [cart_table.c.id == id]

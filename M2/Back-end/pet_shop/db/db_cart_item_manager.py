@@ -31,8 +31,11 @@ class DbCartItemsManager:
         stmt = select(cart_item_table).where(*conditions)
         with engine.connect() as conn:
             result = conn.execute(stmt).mappings().all()
-            return result
-        pass
+            if result is not None:
+                return [dict(row) for row in result.mappings().all()]
+            else:
+                raise APIException(f"User id:{str(id)} does not have any address", 404)
+
 
     def update_cart_item(self, id: int, id_user: int, amount: int):
         stmt = (
