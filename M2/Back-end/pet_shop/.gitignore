@@ -1,0 +1,8 @@
+# Environment
+.env
+.venv
+
+# Python
+*.pyc
+__pycache__/
+*.so
