@@ -1,5 +1,5 @@
 from sqlalchemy import insert, select, delete, update, and_
-from db.tables_manager import TablesManager
+from db.utils_db.tables_manager import TablesManager
 from utils.api_exception import APIException
 from utils.helpers import filter_locals
 

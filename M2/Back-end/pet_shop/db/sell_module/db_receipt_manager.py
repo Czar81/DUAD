@@ -1,7 +1,7 @@
 from sqlalchemy import insert, select, delete, update
-from db.tables_manager import TablesManager
+from db.utils_db.tables_manager import TablesManager
 from utils.api_exception import APIException
-from utils.helpers import filter_locals, verify_user_own_cart
+from utils_db.helpers import filter_locals, verify_user_own_cart
 from datetime import datetime
 
 receipt_table = TablesManager.receipt_table

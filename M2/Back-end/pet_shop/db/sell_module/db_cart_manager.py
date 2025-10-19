@@ -1,7 +1,7 @@
 from sqlalchemy import insert, select, delete, update, and_
-from .tables_manager import TablesManager
+from db.utils_db.tables_manager import TablesManager
 from utils.api_exception import APIException
-from utils.helpers import filter_locals 
+from utils_db.helpers import filter_locals 
 
 cart_table = TablesManager.cart_table
 engine = TablesManager.engine
