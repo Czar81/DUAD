@@ -1,12 +1,14 @@
-from sqlalchemy import insert, select, delete, update
+from sqlalchemy import insert, select, delete, update, and_
 from .tables_manager import TablesManager
 from utils.api_exception import APIException
+from utils.helpers import filter_locals 
 
 cart_table = TablesManager.cart_table
 engine = TablesManager.engine
 
 
 class DbCartManager:
+
     def create_cart(self, id_user: int, state: str | None = None):
         values = {"id_user": id_user}
         if state is not None:
@@ -16,15 +18,16 @@ class DbCartManager:
             result = conn.execute(stmt)
             conn.commit()
             return result.scalar()
-    
+        
     def get_cart(self, id: int | None = None, id_user: int | None = None):
+        params = filter_locals(locals(), ("self","id",))
         conditions = []
-        if id is not None:
-            conditions.append(cart_table.c.id == id)
-        if id_user is not None:
-            conditions.append(cart_table.c.id_user == id_user)
-
-        stmt = select(cart_table).where(*conditions)
+        for key, value in params.items():
+            if value is not None:
+                conditions.append(getattr(cart_table.c, key) == value)
+        stmt = select(cart_table)
+        if conditions:
+            stmt = stmt.where(and_(*conditions))
         with engine.connect() as conn:
             result = conn.execute(stmt).mappings().all()
             return result
@@ -34,10 +37,11 @@ class DbCartManager:
         if id_user is not None:
             conditions.append(cart_table.c.id_user == id_user)
         stmt = update(cart_table).where(*conditions).values(state=state)
+        #Agregar una verificacion  para que siempre haya solo uno en active
         with engine.connect() as conn:
             result = conn.execute(stmt)
-            rows_created = result.rowcount
-           if rows_created == 0:
+            rows_updated = result.rowcount
+            if rows_updated == 0:
                 raise APIException(
                     (
                         f"Cart id:{str(id)} not exist or not owned by user id:{id_user}"
@@ -66,3 +70,9 @@ class DbCartManager:
                     404,
                 )
             conn.commit()
+
+    def verify_if_cart_are_active(self, id_user: int):
+        stmt=select(cart_table).where(and_(cart_table.c.id_user==id_user, cart_table.c.state=="active"))
+        with engine.connect() as conn:
+            result = conn.execute(stmt).fetchall()
+        return result is not None

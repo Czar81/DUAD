@@ -1,4 +1,4 @@
-from sqlalchemy import insert, select, delete, update
+from sqlalchemy import insert, select, delete, update, and_
 from .tables_manager import TablesManager
 from utils.api_exception import APIException
 
@@ -8,26 +8,41 @@ engine = TablesManager.engine
 
 class DbUserManager:
 
-    def insert_user(self, name: str, password: str):
+    def insert_user(self, name: str, password: str, role: str):
         stmt = (
             insert(user_table)
             .returning(user_table.c.id)
-            .values(name=name, password=password)
+            .values(name=name, password=password, role=role)
         )
         with engine.connect() as conn:
             result = conn.execute(stmt)
             conn.commit()
         return result.all()[0]
 
-    def get_user(self, name, password):
-        stmt = (
-            select(user_table)
-            .where(user_table.c.name == name)
-            .where(user_table.c.password == password)
+    def get_user(
+        self,
+        id: int | None = None,
+        name: str | None = None,
+        password: str | None = None,
+        role: str | None = None,
+    ):
+        params = filter_locals(
+            locals(),
+            (
+                "self",
+                "password",
+            ),
         )
+        conditions = []
+        for key, value in params.items():
+            if value is not None:
+                conditions.append(getattr(user_table.c, key) == value)
+        stmt = select(user_table)
+        if conditions:
+            stmt = stmt.where(and_(*conditions))
         with engine.connect() as conn:
-            result = conn.execute(stmt).scalar()
-            return result
+            result = conn.execute(stmt)
+            return [dict(row) for row in result.mappings().all()]
 
     @classmethod
     def get_user_role_by_id(self, id):
@@ -39,23 +54,20 @@ class DbUserManager:
             role = result.scalar()
             return role
 
-    @classmethod
-    def get_user_by_id(self, id):
-        stmt = select(user_table).where(user_table.c.id == id)
-        with engine.connect() as conn:
-            result = conn.execute(stmt)
-            users = result.all()
-            if len(users) == 0:
-                raise APIException(f"User with id:{id} not exist", 404)
-            else:
-                return users[0]
-
-    def update_user(self, id: int, name: str, password: str, role: str):
-        stmt = (
-            update(user_table)
-            .where(user_table.c.id == id)
-            .values(name=name, password=password, role=role)
-        )
+    def update_user(
+        self,
+        id: int,
+        name: str | None = None,
+        password: str | None = None,
+        role: str | None = None,
+    ):
+        values = filter_locals(locals(), ("self", "id"))
+        
+        stmt = update(user_table).where(user_table.c.id == id)
+        if values:
+            stmt = stmt.values(**value)
+        else:
+            raise APIException("No provide any value", 400)
         with engine.connect() as conn:
             result = conn.execute(stmt)
             rows_created = result.rowcount

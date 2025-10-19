@@ -19,69 +19,74 @@ class DbPaymentManager:
             conn.commit()
             return result.scalar()
 
-    def get_payments(self):
+    def get_payments(
+        self,
+        id: int | None = None,
+        id_user: int | None = None,
+        type: str | None = None,
+        data: str | None = None,
+    ):
+        params = filter_locals(locals())
+
+        conditions = []
+        for key, value in params.items():
+            if value is not None:
+                conditions.append(getattr(payment_table.c, key) == value)
         stmt = select(payment_table)
+        if conditions:
+            stmt = stmt.where(and_(*conditions))
+        stmt = select(payment_table).where(*conditions)
         with engine.connect() as conn:
             result = conn.execute(stmt)
-            return [dict(row) for row in result.mappings().all()]
-
-    def get_payment_by_user_id(self, id_user: int):
-        stmt = select(payment_table).where(payment_table.c.id_user == id_user)
-        with engine.connect() as conn:
-            result = conn.execute(stmt).mappings().first()
             if result is not None:
                 return [dict(row) for row in result.mappings().all()]
-            else:
-                raise APIException(
-                    f"User id:{str(id)} does not have any payment methods", 404
-                )
+            raise APIException(
+                (
+                    f"Payment method id:{str(id)} not exist or not owned by user id:{id_user}"
+                    if id_user
+                    else f"Payment method id:{str(id)} not exist"
+                ),
+                404,
+            )
 
-    def update_payment(self, id: int, id_user: int, type: str, data: str):
+    def update_payment(self, id: int, type: str, data: str, id_user: str | None = None):
+        conditions = [payment_table.c.id == id]
+        if id_user is not None:
+            conditions.append(payment_table.c.id_user == id_user)
         stmt = (
             update(payment_table)
-            .where(payment_table.c.id == id)
-            .values(id_user=id_user, type=type, data=data)
-        )
-        with engine.connect() as conn:
-            result = conn.execute(stmt)
-            rows_created = result.rowcount
-            if rows_created == 0:
-                raise APIException(f"Payment id:{str(id)} not exist", 404)
-            else:
-                conn.commit()
-
-    def update_own_payment(self, id: int, id_user: int, type: str, data: str):
-        stmt = (
-            update(payment_table)
-            .where(payment_table.c.id == id, payment_table.c.id_user == id_user)
+            .where(*conditions)
             .values(type=type, data=data)
         )
         with engine.connect() as conn:
             result = conn.execute(stmt)
-            rows_created = result.rowcount
-            if rows_created == 0:
-                raise APIException(f"Payment id:{str(id)} not exist", 404)
-            else:
+            rows_updated = result.rowcount
+            if rows_updated != 0:
                 conn.commit()
+            raise APIException(
+                (
+                    f"Payment method id:{str(id)} not exist or not owned by user id:{id_user}"
+                    if id_user
+                    else f"Payment method id:{str(id)} not exist"
+                ),                    
+                404,
+            )
 
-    def delete_payment(self, id: int):
+    def delete_payment(self, id: int, id_user: int | None = None):
+        conditions = [payment_table.c.id == id]
+        if id_user is not None:
+            conditions.append(payment_table.c.id_user == id_user)
         stmt = delete(payment_table).where(payment_table.c.id == id)
         with engine.connect() as conn:
             result = conn.execute(stmt)
             rows_deleted = result.rowcount
-            if rows_deleted == 0:
-                raise APIException(f"Payment id:{str(id)} not exist", 404)
-            else:
+            if rows_deleted != 0:
                 conn.commit()
-
-    def delete_own_payment(self, id: int, id_user: int):
-        stmt = delete(payment_table).where(
-            payment_table.c.id == id, payment_table.c.id_user == id_user
-        )
-        with engine.connect() as conn:
-            result = conn.execute(stmt)
-            rows_deleted = result.rowcount
-            if rows_deleted == 0:
-                raise APIException(f"Payment id:{str(id)} not exist", 404)
-            else:
-                conn.commit()
+            raise APIException(
+                (
+                    f"Payment method id:{str(id)} not exist or not owned by user id:{id_user}"
+                    if id_user
+                    else f"Payment method id:{str(id)} not exist"
+                ),                    
+                404,
+            )
