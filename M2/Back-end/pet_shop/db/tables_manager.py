@@ -55,7 +55,7 @@ class TablesManager:
         metadata_obj,
         Column("id", Integer, primary_key=True),
         Column("id_cart", Integer, ForeignKey("cart.id")),
-        Column("id_product", Integer, ForeignKey("cart.id")),
+        Column("id_product", Integer, ForeignKey("product.id")),
         Column("amount", Integer, nullable=False),
     )
     receipt_table = Table(

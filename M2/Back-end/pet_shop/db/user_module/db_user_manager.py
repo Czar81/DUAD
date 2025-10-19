@@ -1,5 +1,5 @@
 from sqlalchemy import insert, select, delete, update, and_
-from .tables_manager import TablesManager
+from db.tables_manager import TablesManager
 from utils.api_exception import APIException
 
 user_table = TablesManager.user_table

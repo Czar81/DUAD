@@ -1,5 +1,5 @@
 from sqlalchemy import insert, select, delete, update
-from .tables_manager import TablesManager
+from db.tables_manager import TablesManager
 from utils.api_exception import APIException
 
 payment_table = TablesManager.payment_table
