@@ -1,5 +1,6 @@
 from sqlalchemy import insert, select, delete, update
 from db.utils_db.tables_manager import TablesManager
+from db.utils_db.helpers import filter_locals
 from utils.api_exception import APIException
 
 payment_table = TablesManager.payment_table
@@ -8,7 +9,7 @@ engine = TablesManager.engine
 
 class DbPaymentManager:
 
-    def insert_payment(self, id_user: str, type: str, data: str):
+    def insert(self, id_user: str, type: str, data: str):
         stmt = (
             insert(payment_table)
             .returning(payment_table.c.id)
@@ -19,7 +20,7 @@ class DbPaymentManager:
             conn.commit()
             return result.scalar()
 
-    def get_payments(
+    def get(
         self,
         id: int | None = None,
         id_user: int | None = None,
@@ -49,7 +50,7 @@ class DbPaymentManager:
                 404,
             )
 
-    def update_payment(self, id: int, type: str, data: str, id_user: str | None = None):
+    def update(self, id: int, type: str, data: str, id_user: str | None = None):
         conditions = [payment_table.c.id == id]
         if id_user is not None:
             conditions.append(payment_table.c.id_user == id_user)
@@ -72,7 +73,7 @@ class DbPaymentManager:
                 404,
             )
 
-    def delete_payment(self, id: int, id_user: int | None = None):
+    def delete(self, id: int, id_user: int | None = None):
         conditions = [payment_table.c.id == id]
         if id_user is not None:
             conditions.append(payment_table.c.id_user == id_user)

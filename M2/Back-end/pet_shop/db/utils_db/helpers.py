@@ -1,4 +1,4 @@
-from db.tables_manager import TablesManager
+from .tables_manager import TablesManager
 
 cart_table = TablesManager.cart_table
 

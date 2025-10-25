@@ -1,5 +1,6 @@
 from sqlalchemy import insert, select, delete, update, and_
 from db.utils_db.tables_manager import TablesManager
+from db.utils_db.helpers import filter_locals
 from utils.api_exception import APIException
 
 user_table = TablesManager.user_table
@@ -8,7 +9,7 @@ engine = TablesManager.engine
 
 class DbUserManager:
 
-    def insert_user(self, name: str, password: str, role: str):
+    def insert(self, name: str, password: str, role: str):
         stmt = (
             insert(user_table)
             .returning(user_table.c.id)
@@ -19,7 +20,7 @@ class DbUserManager:
             conn.commit()
         return result.all()[0]
 
-    def get_user(
+    def get(
         self,
         id: int | None = None,
         name: str | None = None,
@@ -45,7 +46,7 @@ class DbUserManager:
             return [dict(row) for row in result.mappings().all()]
 
     @classmethod
-    def get_user_role_by_id(self, id):
+    def get_role_by_id(self, id):
         stmt = select(user_table.c.role).where(user_table.c.id == id)
         with engine.connect() as conn:
             result = conn.execute(stmt)
@@ -54,7 +55,7 @@ class DbUserManager:
             role = result.scalar()
             return role
 
-    def update_user(
+    def update(
         self,
         id: int,
         name: str | None = None,
@@ -76,7 +77,7 @@ class DbUserManager:
             else:
                 conn.commit()
 
-    def delete_user(self, id: int):
+    def delete(self, id: int):
         stmt = delete(user_table).where(user_table.c.id == id)
         with engine.connect() as conn:
             result = conn.execute(stmt)

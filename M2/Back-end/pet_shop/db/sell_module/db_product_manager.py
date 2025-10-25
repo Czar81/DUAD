@@ -1,7 +1,7 @@
 from sqlalchemy import insert, select, delete, update, and_
-from db.utils_db.tables_manager import TablesManager
 from utils.api_exception import APIException
-from utils.helpers import filter_locals
+from db.utils_db.tables_manager import TablesManager
+from db.utils_db.helpers import filter_locals
 
 product_table = TablesManager.product_table
 engine = TablesManager.engine
@@ -9,7 +9,7 @@ engine = TablesManager.engine
 
 class DbProductManager:
 
-    def insert_product(self, sku: str, name: str, price: int, amount: int):
+    def insert(self, sku: str, name: str, price: int, amount: int):
         stmt = (
             insert(product_table)
             .returning(product_table.c.id)
@@ -20,7 +20,7 @@ class DbProductManager:
             conn.commit()
         return result.scalar()
 
-    def get_products(
+    def get(
         self,
         id: int | None = None,
         sku: str | None = None,
@@ -41,7 +41,7 @@ class DbProductManager:
             result = conn.execute(stmt)
         return [dict(row) for row in result.mappings().all()]
 
-    def update_product(
+    def update(
         self,
         id: int,
         sku: str | None = None,
@@ -63,7 +63,7 @@ class DbProductManager:
             raise APIException(f"Product id:{str(id)} not exist", 404)
         conn.commit()
 
-    def delete_product(self, id: int, id: int | None = None):
+    def delete(self, id: int | None = None):
         conditions = [product_table.c.id == id]
         if id_user is not None:
             conditions.append(product_table.c.id_user == id_user)

@@ -1,7 +1,7 @@
 from sqlalchemy import insert, select, delete, update
 from db.utils_db.tables_manager import TablesManager
+from db.utils_db.helpers import filter_locals
 from utils.api_exception import APIException
-from utils_db.helpers import filter_locals
 
 address_table = TablesManager.address_table
 engine = TablesManager.engine
@@ -9,7 +9,7 @@ engine = TablesManager.engine
 
 class DbAddressManager:
 
-    def insert_address(self, id_user: str, location: str):
+    def insert(self, id_user: str, location: str):
         stmt = (
             insert(address_table)
             .returning(address_table.c.id)
@@ -20,7 +20,7 @@ class DbAddressManager:
             conn.commit()
             return result.scalar()
 
-    def get_addresss(
+    def get(
         self,
         id: int | None = None,
         id_user: int | None = None,
@@ -28,7 +28,7 @@ class DbAddressManager:
     ):
         params = filter_locals(locals())
         conditions = []
-        for key, value in filters.items():
+        for key, value in params.items():
             if value is not None:
                 conditions.append(getattr(address_table.c, key) == value)
         stmt = select(address_table)
@@ -48,7 +48,7 @@ class DbAddressManager:
                 404,
             )
 
-    def update_address(self, id: int, location: str, id_user: str | None = None):
+    def update(self, id: int, location: str, id_user: str | None = None):
         conditions = [address_table.c.id == id]
         if id_user is not None:
             conditions.append(address_table.c.id_user == id_user)
@@ -67,7 +67,7 @@ class DbAddressManager:
                 404,
             )
 
-    def delete_address(self, id: int, id_user: int | None = None):
+    def delete(self, id: int, id_user: int | None = None):
         conditions = [address_table.c.id == id]
         if id_user is not None:
             conditions.append(address_table.c.id_user == id_user)

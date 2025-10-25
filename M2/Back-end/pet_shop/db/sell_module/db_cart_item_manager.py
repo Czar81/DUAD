@@ -1,7 +1,7 @@
-from sqlalchemy import insert, select, delete, update
+from sqlalchemy import insert, select, delete, update, and_
 from db.utils_db.tables_manager import TablesManager
+from db.utils_db.helpers import filter_locals, verify_user_own_cart
 from utils.api_exception import APIException
-from utils_db.helpers import filter_locals, verify_user_own_cart
 
 cart_item_table = TablesManager.cart_item_table
 engine = TablesManager.engine
@@ -9,7 +9,7 @@ engine = TablesManager.engine
 
 class DbCartItemsManager:
 
-    def add_cart_item(self, id_cart: int, id_product: int, amount: int):
+    def insert(self, id_cart: int, id_product: int, amount: int):
         stmt = (
             insert(cart_item_table)
             .returning(cart_item_table.c.id)
@@ -20,7 +20,7 @@ class DbCartItemsManager:
             conn.commit()
             return result.scalar()
 
-    def get_cart_item(
+    def get(
         self,
         id: int | None = None,
         id_cart: int | None = None,
@@ -37,7 +37,7 @@ class DbCartItemsManager:
         if conditions:
             stmt = stmt.where(and_(*conditions))
         with engine.connect() as conn:
-            result = conn.execute(stmt).mappings().all()
+            result = conn.execute(stmt)
             if result is None:
                 raise APIException(
                     (
@@ -49,7 +49,7 @@ class DbCartItemsManager:
                 )
             return [dict(row) for row in result.mappings().all()]
 
-    def update_cart_item(
+    def update(
         self,
         id: int,
         amount: int,
@@ -80,7 +80,7 @@ class DbCartItemsManager:
                 )
             conn.commit()
 
-    def delete_cart_item(
+    def delete(
         self, id: int, id_user: int | None = None, id_cart: int | None = None
     ):
         conditions = [cart_item_table.c.id == id]

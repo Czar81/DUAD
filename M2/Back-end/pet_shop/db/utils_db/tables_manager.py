@@ -33,7 +33,7 @@ class TablesManager:
         metadata_obj,
         Column("id", Integer, primary_key=True),
         Column("id_user", Integer, ForeignKey("user.id")),
-        Column("state", Integer, server_default="active"),
+        Column("state", String(10), server_default="active"),
     )
     address_table = Table(
         "address",

@@ -1,7 +1,7 @@
-from sqlalchemy import insert, select, delete, update
+from sqlalchemy import insert, select, delete, update, and_
 from db.utils_db.tables_manager import TablesManager
+from db.utils_db.helpers import filter_locals, verify_user_own_cart
 from utils.api_exception import APIException
-from utils_db.helpers import filter_locals, verify_user_own_cart
 from datetime import datetime
 
 receipt_table = TablesManager.receipt_table
@@ -10,11 +10,11 @@ engine = TablesManager.engine
 
 class DbReceiptManager:
 
-    def create_receipt(self, id_cart: int, id_address: int, id_payment: int):
+    def insert(self, id_cart: int, id_address: int, id_payment: int, state: str | None = None):
         stmt = (
             insert(receipt_table)
             .returning(receipt_table.c.id)
-            .values(id_cart=id_cart, id_address=id_address, id_payment=id_payment)
+            .values(id_cart=id_cart, id_address=id_address, id_payment=id_payment, state=state)
         )
 
         with engine.connect() as conn:
@@ -22,13 +22,13 @@ class DbReceiptManager:
             conn.commit()
         return result.scalar()
 
-    def get_receipt(
+    def get(
         self,
         id: int | None = None,
         id_user: int | None = None,
         id_cart: int | None = None,
         id_address: int | None = None,
-        id_product: int | None = None,
+        id_payment: int | None = None,
         entry_date: str | None = None,
         state: str | None = None,
     ):
@@ -48,7 +48,7 @@ class DbReceiptManager:
                     f"Receipt id:{id} not owned by user id:{id_user}", 403
                 )
             if entry_date is not None:
-                __validate_date_str(entry_date, "Entry date in receipt is not valid")
+                self.__validate_date_str(entry_date, "Entry date in receipt is not valid")
             for key, value in filters.items():
                 if value is not None:
                     conditions.append(getattr(receipt_table.c, key) == value)
@@ -58,18 +58,18 @@ class DbReceiptManager:
             result = conn.execute(stmt).mappings().all()
         return result
 
-    def update_receipt(
+    def update(
         self,
         id: int,
         id_user: int | None = None,
         id_cart: int | None = None,
         id_address: int | None = None,
-        id_product: int | None = None,
+        id_payment: int | None = None,
         entry_date: str | None = None,
         state: str | None = None,
     ):
         if entry_date:
-            __validate_date_str(entry_date, "Entry date in receipt is not valid")
+            self.__validate_date_str(entry_date, "Entry date in receipt is not valid")
         values = filter_locals(locals(), ("self", "id", "id_user"))
 
         stmt = update(receipt_table).where(receipt_table.c.id == id)
@@ -90,7 +90,7 @@ class DbReceiptManager:
             )
         conn.commit()
 
-    def delete_receipt(self, id: int):
+    def delete(self, id: int):
         stmt = delete(receipt_table).where(receipt_table.c.id == id)
         with engine.connect() as conn:
             result = conn.execute(stmt)

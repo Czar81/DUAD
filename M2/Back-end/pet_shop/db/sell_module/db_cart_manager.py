@@ -1,7 +1,7 @@
 from sqlalchemy import insert, select, delete, update, and_
 from db.utils_db.tables_manager import TablesManager
+from db.utils_db.helpers import filter_locals 
 from utils.api_exception import APIException
-from utils_db.helpers import filter_locals 
 
 cart_table = TablesManager.cart_table
 engine = TablesManager.engine
@@ -9,8 +9,10 @@ engine = TablesManager.engine
 
 class DbCartManager:
 
-    def create_cart(self, id_user: int, state: str | None = None):
+    def insert(self, id_user: int, state: str | None = None):
         values = {"id_user": id_user}
+        if self.__verify_if_cart_is_active(id_user):
+            raise APIException(f"User id: {id_user} already have an active cart", 400)
         if state is not None:
             values["state"] = state
         stmt = insert(cart_table).returning(cart_table.c.id).values(**values)
@@ -19,7 +21,7 @@ class DbCartManager:
             conn.commit()
             return result.scalar()
         
-    def get_cart(self, id: int | None = None, id_user: int | None = None):
+    def get(self, id: int | None = None, id_user: int | None = None, state: str | None = None):
         params = filter_locals(locals(), ("self","id",))
         conditions = []
         for key, value in params.items():
@@ -32,8 +34,10 @@ class DbCartManager:
             result = conn.execute(stmt).mappings().all()
             return result
 
-    def update_cart(self, id: int, state: str, id_user: int | None = None):
+    def update(self, id: int, state: str, id_user: int | None = None):
         conditions = [cart_table.c.id == id]
+        if __verify_if_cart_is_active(id_user) is not None:
+            raise APIException(f"User id: {id_user} already have an active cart", 400)
         if id_user is not None:
             conditions.append(cart_table.c.id_user == id_user)
         stmt = update(cart_table).where(*conditions).values(state=state)
@@ -52,7 +56,7 @@ class DbCartManager:
                 )
             conn.commit()
 
-    def delete_cart(self, id: int, id_user: int | None = None):
+    def delete(self, id: int, id_user: int | None = None):
         conditions = [cart_table.c.id == id]
         if id_user is not None:
             conditions.append(cart_table.c.id_user == id_user)
@@ -71,8 +75,8 @@ class DbCartManager:
                 )
             conn.commit()
 
-    def verify_if_cart_are_active(self, id_user: int):
+    def __verify_if_cart_is_active(self, id_user: int):
         stmt=select(cart_table).where(and_(cart_table.c.id_user==id_user, cart_table.c.state=="active"))
         with engine.connect() as conn:
             result = conn.execute(stmt).fetchall()
-        return result is not None
+        return bool(result)
