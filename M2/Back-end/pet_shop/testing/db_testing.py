@@ -82,33 +82,33 @@ class DbTestingManager:
     def get_input_for_entity(self, entity_name):
         data = {}
         if entity_name == "User":
-            data["name"] = input("Name: ")
-            data["password"] = input("Password: ")
-            data["role"] = input("Role: ")
+            data["name"] = self.__get_input("Name: ")
+            data["password"] = self.__get_input("Password: ")
+            data["role"] = self.__get_input("Role: ")
         elif entity_name == "Product":
-            data["sku"] = input("SKU: ")
-            data["name"] = input("Name: ")
-            data["price"] = int(input("Price: "))
-            data["amount"] = int(input("Amount: "))
+            data["sku"] = self.__get_input("SKU: ")
+            data["name"] = self.__get_input("Name: ")
+            data["price"] = self.__get_input("Price: ", int)
+            data["amount"] = self.__get_input("Amount: ", int)
         elif entity_name == "Address":
-            data["id_user"] = int(input("User id: "))
-            data["location"] = input("Location: ")
+            data["id_user"] = self.__get_input("User id: ", int)
+            data["location"] = self.__get_input("Location: ")
         elif entity_name == "Payment":
-            data["id_user"] = int(input("User id: "))
-            data["type"] = input("Type: ")
-            data["data"] = input("Data: ")
+            data["id_user"] = self.__get_input("User id: ", int)
+            data["type"] = self.__get_input("Type: ")
+            data["data"] = self.__get_input("Data: ")
         elif entity_name == "Cart":
-            data["id_user"] = int(input("User id: "))
-            data["state"] = input("State: ")
+            data["id_user"] = self.__get_input("User id: ", int)
+            data["state"] = self.__get_input("State: ")
         elif entity_name == "Cart Item":
-            data["id_cart"] = int(input("Cart id: "))
-            data["id_product"] = int(input("Product id: "))
-            data["amount"] = int(input("Amount: "))
+            data["id_cart"] = self.__get_input("Cart id: ", int)
+            data["id_product"] = self.__get_input("Product id: ", int)
+            data["amount"] = self.__get_input("Amount: ", int)
         elif entity_name == "Receipt":
-            data["id_cart"] = int(input("Cart id: "))
-            data["id_address"] = int(input("Address id: "))
-            data["id_payment"] = int(input("Payment id: "))
-            data["state"] = input("State: ")
+            data["id_cart"] = self.__get_input("Cart id: ", int)
+            data["id_address"] = self.__get_input("Address id: ", int)
+            data["id_payment"] = self.__get_input("Payment id: ", int)
+            data["state"] = self.__get_input("State: ")
         else:
             print(f"No input defined for {entity_name}")
         return data
@@ -123,9 +123,23 @@ class DbTestingManager:
         try:
             func = actions.get(action)
             if func:
-                func(**data)
-                print("Action completed successfully!")
+                if action == 2:
+                    result=func(**data)
+                    print(result)
+                else:
+                    func(**data)
+                    print("Action completed successfully!")
             else:
                 print("Invalid action")
         except Exception as e:
             print(f"Error performing action: {e}")
+
+    def __get_input(self, prompt, cast=str):
+        value = input(prompt).strip()
+        if value == "":
+            return None
+        try:
+            return cast(value)
+        except ValueError:
+            print(f"Invalid value for {prompt.strip(': ')}. Using None.")
+            return None
