@@ -1,0 +1,1 @@
+En el endpoint de borrar user, borrar todas las relaciones, o ver que es lo mejor 

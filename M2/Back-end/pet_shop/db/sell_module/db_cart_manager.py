@@ -11,7 +11,7 @@ class DbCartManager:
 
     def insert_data(self, id_user: int, state: str | None = None):
         values = {"id_user": id_user}
-        if self.__verify_if_cart_is_active(id_user) and (state=="active"or state is None):
+        if not self.__verify_if_cart_is_active(id_user) and (state=="active"or state is None):
             raise APIException(f"User id: {id_user} already have an active cart", 400)
         if state is not None:
             values["state"] = state
@@ -31,15 +31,13 @@ class DbCartManager:
             return result
 
     def update_data(self, id_cart: int, state: str, id_user: int | None = None):
-        conditions = [cart_table.c.id == id_cart]
         with engine.connect() as conn:
             if id_user is not None:
-                conditions.append(cart_table.c.id_user == id_user)
-                if not _verify_user_own_cart(conn,id_cart, id_user):
+                if not _verify_user_own_cart(conn,id_user, id_cart):
                     raise APIException(f"User id:{id_user} does not own cart id:{id_cart}", 401)
                 if self.__verify_if_cart_is_active(id_user) and state == "active":
                     raise APIException(f"User id: {id_user} already has an active cart", 400)
-            stmt = update(cart_table).where(and_(*conditions)).values(state=state)
+            stmt = update(cart_table).where(cart_table.c.id == id_cart).values(state=state)
             result = conn.execute(stmt)
             rows_updated = result.rowcount
             if rows_updated == 0:
@@ -47,18 +45,20 @@ class DbCartManager:
             conn.commit()
 
     def delete_data(self, id_cart: int, id_user: int | None = None):
-        conditions = [cart_table.c.id == id_cart]
-        if id_user is not None:
-            conditions.append(cart_table.c.id_user == id_user)
-        stmt = delete(cart_table).where(*conditions)
+        stmt = delete(cart_table).where(cart_table.c.id == id_cart)
         with engine.connect() as conn:
+            if id_user is not None:
+                if not _verify_user_own_cart(conn=conn, id_user=id_user, id_cart=id_cart):
+                    raise APIException(f"User id:{id_user} does not own cart id:{id_cart}", 401)
             result = conn.execute(stmt)
             rows_deleted = result.rowcount
             if rows_deleted == 0:
-                raise APIException((f"Cart id:{str(id_cart)} not exist"),404)
+                raise APIException((f"Cart id:{id_cart} not exist", 404)
             conn.commit()
 
-    def __verify_if_cart_is_active(self, id_user: int):
+    def __verify_if_cart_is_active(self, id_user: int|None):
+        if id_user is None:
+            return False   
         stmt=select(cart_table).where(and_(cart_table.c.id_user==id_user, cart_table.c.state=="active"))
         with engine.connect() as conn:
             result = conn.execute(stmt).fetchall()

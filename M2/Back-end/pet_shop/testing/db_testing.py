@@ -82,40 +82,40 @@ class DbTestingManager:
     def get_input_for_entity(self, entity_name):
         data = {}
         if entity_name == "User":
-            data["id"] = self.__get_input("Id: ", int)
-            data["name"] = self.__get_input("Name: ")
-            data["password"] = self.__get_input("Password: ")
-            data["role"] = self.__get_input("Role: ")
+            data["id_user"] = self.__get_input("Id: ", int)
+            #data["name"] = self.__get_input("Name: ")
+            #data["password"] = self.__get_input("Password: ")
+            #data["role"] = self.__get_input("Role: ")
         elif entity_name == "Product":
-            data["id"] = self.__get_input("Id: ", int)
-            data["sku"] = self.__get_input("SKU: ")
-            data["name"] = self.__get_input("Name: ")
-            data["price"] = self.__get_input("Price: ", int)
-            data["amount"] = self.__get_input("Amount: ", int)
+            data["id_product"] = self.__get_input("Id: ", int)
+            #data["sku"] = self.__get_input("SKU: ")
+            #data["name"] = self.__get_input("Name: ")
+            #data["price"] = self.__get_input("Price: ", int)
+            #data["amount"] = self.__get_input("Amount: ", int)
         elif entity_name == "Address":
-            data["id"] = self.__get_input("Id: ", int)
+            data["id_address"] = self.__get_input("Id: ", int)
             data["id_user"] = self.__get_input("User id: ", int)
-            data["location"] = self.__get_input("Location: ")
+            #data["location"] = self.__get_input("Location: ")
         elif entity_name == "Payment":
-            data["id"] = self.__get_input("Id: ", int)
+            data["id_payment"] = self.__get_input("Id: ", int)
             data["id_user"] = self.__get_input("User id: ", int)
-            data["type"] = self.__get_input("Type: ")
-            data["data"] = self.__get_input("Data: ")
+            #data["type"] = self.__get_input("Type: ")
+            #data["data"] = self.__get_input("Data: ")
         elif entity_name == "Cart":
             data["id_cart"] = self.__get_input("Id: ", int)
             data["id_user"] = self.__get_input("User id: ", int)
-            data["state"] = self.__get_input("State: ")
+            #data["state"] = self.__get_input("State: ")
         elif entity_name == "Cart Item":
             data["id_item"] = self.__get_input("Id: ", int)
             data["id_user"] = self.__get_input("User id: ", int)
             data["id_cart"] = self.__get_input("Cart id: ", int)
-            data["amount"] = self.__get_input("Amount: ", int)
+            #data["amount"] = self.__get_input("Amount: ", int)
         elif entity_name == "Receipt":
             data["id_receipt"] = self.__get_input("Id: ", int)
             data["id_cart"] = self.__get_input("Cart id: ", int)
             data["id_user"]= self.__get_input("Id user: ", int)
-            data["entry_date"] = self.__get_input("Entry date: ")
-            data["state"] = self.__get_input("State: ")
+            #data["entry_date"] = self.__get_input("Entry date: ")
+            #data["state"] = self.__get_input("State: ")
         else:
             print(f"No input defined for {entity_name}")
         return data

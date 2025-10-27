@@ -75,7 +75,7 @@ class DbReceiptManager:
             stmt = stmt.values(**values)
         with engine.connect() as conn:
             if id_user is not None and not _verify_user_own_cart(
-                conn, id_user, id_cart
+                conn, id_user, id_cart=id_cart
             ):
                 raise APIException(
                     f"Receipt id:{id_receipt} not owned by user id:{id_user}", 403
@@ -93,22 +93,16 @@ class DbReceiptManager:
                 )
             conn.commit()
 
-    def delete_data(self, id: int, id_user:int):
-        stmt = delete(receipt_table).where(receipt_table.c.id == id)
+    def delete_data(self, id_receipt: int, id_user:int|None= None):
         with engine.connect() as conn:
             if id_user is not None and not _verify_user_own_cart(
-                conn, id, id_user, receipt_table
+                conn=conn, id_user=id_user, id_table=id_receipt, table=receipt_table
             ):
-                raise APIException(
-                    f"Receipt id:{id} not owned by user id:{id_user}", 403
-                )
+                raise APIException(f"Receipt id:{id_receipt} not owned by user id:{id_user}", 403)
+            stmt = delete(receipt_table).where(receipt_table.c.id == id_receipt)
             result = conn.execute(stmt)
-            rows_deleted = result.rowcount
-            if rows_deleted == 0:
-                raise APIException(
-                    (f"Recipt id:{str(id)} not exist"),
-                    404,
-                )
+            if rows_deleted.rowcount == 0:
+                raise APIException((f"Recipt id:{str(id_receipt)} not exist"),404)
             conn.commit()
 
     def __validate_date_str(date_str: str):
