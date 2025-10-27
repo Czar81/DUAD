@@ -1,7 +1,7 @@
 from sqlalchemy import insert, select, delete, update, and_
 from utils.api_exception import APIException
 from db.utils_db.tables_manager import TablesManager
-from db.utils_db.helpers import filter_locals
+from db.utils_db.helpers import _filter_locals, _filter_values
 
 product_table = TablesManager.product_table
 engine = TablesManager.engine
@@ -9,7 +9,7 @@ engine = TablesManager.engine
 
 class DbProductManager:
 
-    def insert(self, sku: str, name: str, price: int, amount: int):
+    def insert_data(self, sku: str, name: str, price: int, amount: int):
         stmt = (
             insert(product_table)
             .returning(product_table.c.id)
@@ -20,7 +20,7 @@ class DbProductManager:
             conn.commit()
         return result.scalar()
 
-    def get(
+    def get_data(
         self,
         id: int | None = None,
         sku: str | None = None,
@@ -28,12 +28,7 @@ class DbProductManager:
         price: int | None = None,
         amount: int | None = None,
     ):
-        params = filter_locals(locals())
-
-        conditions = []
-        for key, value in params.items():
-            if value is not None:
-                conditions.append(getattr(product_table.c, key) == value)
+        conditions = _filter_locals(product_table,locals())
         stmt = select(product_table)
         if conditions:
             stmt = stmt.where(and_(*conditions))
@@ -41,7 +36,7 @@ class DbProductManager:
             result = conn.execute(stmt)
         return [dict(row) for row in result.mappings().all()]
 
-    def update(
+    def update_data(
         self,
         id: int,
         sku: str | None = None,
@@ -49,21 +44,21 @@ class DbProductManager:
         price: int | None = None,
         amount: int | None = None,
     ):
-        values = filter_locals(locals(), ("self", "id"))
+        values = _filter_values(locals(), ("self", "id"))
         stmt = update(product_table).where(product_table.c.id == id)
         if values:
-            stmt = stmt.values(**value)
+            stmt = stmt.values(**values)
         else:
             raise APIException("No provide any value", 400)
 
         with engine.connect() as conn:
             result = conn.execute(stmt)
             rows_updated = result.rowcount
-        if rows_updated == 0:
-            raise APIException(f"Product id:{str(id)} not exist", 404)
-        conn.commit()
+            if rows_updated == 0:
+                raise APIException(f"Product id:{str(id)} not exist", 404)
+            conn.commit()
 
-    def delete(self, id: int | None = None):
+    def delete_data(self, id: int | None = None):
         conditions = [product_table.c.id == id]
         if id_user is not None:
             conditions.append(product_table.c.id_user == id_user)
@@ -71,6 +66,6 @@ class DbProductManager:
         with engine.connect() as conn:
             result = conn.execute(stmt)
             rows_deleted = result.rowcount
-        if rows_deleted != 0:
+            if rows_deleted == 0:
+                raise APIException(f"Product id:{str(id)} not exist", 404)
             conn.commit()
-        raise APIException(f"Product id:{str(id)} not exist", 404)

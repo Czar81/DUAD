@@ -9,7 +9,7 @@ product_table = TablesManager.product_table
 engine = TablesManager.engine
 
 
-class ReturnReceipt:
+class BuyManager:
     def return_receipt(self, id_receipt: int, id_user: int):
         with engine.connect() as conn:
             # Join cart with receipt

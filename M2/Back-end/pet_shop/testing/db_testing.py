@@ -82,32 +82,39 @@ class DbTestingManager:
     def get_input_for_entity(self, entity_name):
         data = {}
         if entity_name == "User":
+            data["id"] = self.__get_input("Id: ", int)
             data["name"] = self.__get_input("Name: ")
             data["password"] = self.__get_input("Password: ")
             data["role"] = self.__get_input("Role: ")
         elif entity_name == "Product":
+            data["id"] = self.__get_input("Id: ", int)
             data["sku"] = self.__get_input("SKU: ")
             data["name"] = self.__get_input("Name: ")
             data["price"] = self.__get_input("Price: ", int)
             data["amount"] = self.__get_input("Amount: ", int)
         elif entity_name == "Address":
+            data["id"] = self.__get_input("Id: ", int)
             data["id_user"] = self.__get_input("User id: ", int)
             data["location"] = self.__get_input("Location: ")
         elif entity_name == "Payment":
+            data["id"] = self.__get_input("Id: ", int)
             data["id_user"] = self.__get_input("User id: ", int)
             data["type"] = self.__get_input("Type: ")
             data["data"] = self.__get_input("Data: ")
         elif entity_name == "Cart":
+            data["id_cart"] = self.__get_input("Id: ", int)
             data["id_user"] = self.__get_input("User id: ", int)
             data["state"] = self.__get_input("State: ")
         elif entity_name == "Cart Item":
+            data["id_item"] = self.__get_input("Id: ", int)
+            data["id_user"] = self.__get_input("User id: ", int)
             data["id_cart"] = self.__get_input("Cart id: ", int)
-            data["id_product"] = self.__get_input("Product id: ", int)
             data["amount"] = self.__get_input("Amount: ", int)
         elif entity_name == "Receipt":
+            data["id_receipt"] = self.__get_input("Id: ", int)
             data["id_cart"] = self.__get_input("Cart id: ", int)
-            data["id_address"] = self.__get_input("Address id: ", int)
-            data["id_payment"] = self.__get_input("Payment id: ", int)
+            data["id_user"]= self.__get_input("Id user: ", int)
+            data["entry_date"] = self.__get_input("Entry date: ")
             data["state"] = self.__get_input("State: ")
         else:
             print(f"No input defined for {entity_name}")
@@ -115,10 +122,10 @@ class DbTestingManager:
 
     def perform_action(self, action, manager, data):
         actions = {
-            1: manager.insert,
-            2: manager.get,
-            3: manager.update,
-            4: manager.delete,
+            1: manager.insert_data,
+            2: manager.get_data,
+            3: manager.update_data,
+            4: manager.delete_data,
         }
         try:
             func = actions.get(action)

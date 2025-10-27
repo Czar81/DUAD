@@ -1,6 +1,6 @@
 from sqlalchemy import insert, select, delete, update, and_
 from db.utils_db.tables_manager import TablesManager
-from db.utils_db.helpers import filter_locals
+from db.utils_db.helpers import _filter_locals, _filter_values
 from utils.api_exception import APIException
 
 user_table = TablesManager.user_table
@@ -9,7 +9,7 @@ engine = TablesManager.engine
 
 class DbUserManager:
 
-    def insert(self, name: str, password: str, role: str):
+    def insert_data(self, name: str, password: str, role: str):
         stmt = (
             insert(user_table)
             .returning(user_table.c.id)
@@ -20,24 +20,21 @@ class DbUserManager:
             conn.commit()
         return result.all()[0]
 
-    def get(
+    def get_data(
         self,
         id: int | None = None,
         name: str | None = None,
         password: str | None = None,
         role: str | None = None,
     ):
-        params = filter_locals(
+        conditions = _filter_locals(
+            user_table,
             locals(),
             (
                 "self",
                 "password",
             ),
         )
-        conditions = []
-        for key, value in params.items():
-            if value is not None:
-                conditions.append(getattr(user_table.c, key) == value)
         stmt = select(user_table)
         if conditions:
             stmt = stmt.where(and_(*conditions))
@@ -55,18 +52,17 @@ class DbUserManager:
             role = result.scalar()
             return role
 
-    def update(
+    def update_data(
         self,
         id: int,
         name: str | None = None,
         password: str | None = None,
         role: str | None = None,
     ):
-        values = filter_locals(locals(), ("self", "id"))
-        
+        values= _filter_values(locals(), ("self", "id"))
         stmt = update(user_table).where(user_table.c.id == id)
         if values:
-            stmt = stmt.values(**value)
+            stmt = stmt.values(**values)
         else:
             raise APIException("No provide any value", 400)
         with engine.connect() as conn:
@@ -74,10 +70,9 @@ class DbUserManager:
             rows_created = result.rowcount
             if rows_created == 0:
                 raise APIException(f"User id:{str(id)} not exist", 404)
-            else:
-                conn.commit()
+            conn.commit()
 
-    def delete(self, id: int):
+    def delete_data(self, id: int):
         stmt = delete(user_table).where(user_table.c.id == id)
         with engine.connect() as conn:
             result = conn.execute(stmt)

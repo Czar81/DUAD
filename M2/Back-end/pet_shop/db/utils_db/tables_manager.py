@@ -48,7 +48,7 @@ class TablesManager:
         Column("id", Integer, primary_key=True),
         Column("id_user", Integer, ForeignKey("user.id")),
         Column("type", String(10), nullable=False),
-        Column("data", String(30), nullable=False)
+        Column("data", String(30))
     )
     cart_item_table = Table(
         "cart_item",
