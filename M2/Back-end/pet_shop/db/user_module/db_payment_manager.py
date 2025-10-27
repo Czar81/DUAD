@@ -22,7 +22,7 @@ class DbPaymentManager:
 
     def get_data(
         self,
-        id: int | None = None,
+        id_payment: int | None = None,
         id_user: int | None = None,
         type: str | None = None,
         data: str | None = None,
@@ -38,16 +38,16 @@ class DbPaymentManager:
                 return [dict(row) for row in rows]
             raise APIException(
                 (
-                    f"Payment method id:{str(id)} not exist or not owned by user id:{id_user}"
+                    f"Payment method id:{str(id_payment)} not exist or not owned by user id:{id_user}"
                     if id_user
-                    else f"Payment method id:{str(id)} not exist"
+                    else f"Payment method id:{str(id_payment)} not exist"
                 ),
                 404,
             )
 
-    def update_data(self, id: int, type: str, data: str, id_user: str | None = None):
+    def update_data(self, id_payment: int, type: str, data: str, id_user: str | None = None):
         values = _filter_values(locals(), ("self","id", "id_user"))
-        conditions = [payment_table.c.id == id]
+        conditions = [payment_table.c.id == id_payment]
         if id_user is not None:
             conditions.append(payment_table.c.id_user == id_user)
         stmt = (
@@ -61,16 +61,16 @@ class DbPaymentManager:
             if rows_updated == 0:
                 raise APIException(
                     (
-                        f"Payment method id:{str(id)} not exist or not owned by user id:{id_user}"
+                        f"Payment method id:{str(id_payment)} not exist or not owned by user id:{id_user}"
                         if id_user
-                        else f"Payment method id:{str(id)} not exist"
+                        else f"Payment method id:{str(id_payment)} not exist"
                     ),                    
                     404,
                 )
             conn.commit()    
 
-    def delete_data(self, id: int, id_user: int | None = None):
-        conditions = [payment_table.c.id == id]
+    def delete_data(self, id_payment: int, id_user: int | None = None):
+        conditions = [payment_table.c.id == id_payment]
         if id_user is not None:
             conditions.append(payment_table.c.id_user == id_user)
         stmt = delete(payment_table).where(*conditions)
@@ -80,9 +80,9 @@ class DbPaymentManager:
             if rows_deleted == 0:
                 raise APIException(
                     (
-                        f"Payment method id:{str(id)} not exist or not owned by user id:{id_user}"
+                        f"Payment method id:{str(id_payment)} not exist or not owned by user id:{id_user}"
                         if id_user
-                        else f"Payment method id:{str(id)} not exist"
+                        else f"Payment method id:{str(id_payment)} not exist"
                     ),                    
                     404,
                 )

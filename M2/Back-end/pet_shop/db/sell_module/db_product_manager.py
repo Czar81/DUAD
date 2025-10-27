@@ -58,8 +58,8 @@ class DbProductManager:
                 raise APIException(f"Product id:{str(id)} not exist", 404)
             conn.commit()
 
-    def delete_data(self, id: int | None = None):
-        conditions = [product_table.c.id == id]
+    def delete_data(self, id_product: int | None = None):
+        conditions = [product_table.c.id == id_product]
         if id_user is not None:
             conditions.append(product_table.c.id_user == id_user)
         stmt = delete(product_table).where(and_(*conditions))
@@ -67,5 +67,5 @@ class DbProductManager:
             result = conn.execute(stmt)
             rows_deleted = result.rowcount
             if rows_deleted == 0:
-                raise APIException(f"Product id:{str(id)} not exist", 404)
+                raise APIException(f"Product id:{str(id_product)} not exist", 404)
             conn.commit()

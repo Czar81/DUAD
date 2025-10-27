@@ -54,13 +54,13 @@ class DbUserManager:
 
     def update_data(
         self,
-        id: int,
+        id_user: int,
         name: str | None = None,
         password: str | None = None,
         role: str | None = None,
     ):
         values= _filter_values(locals(), ("self", "id"))
-        stmt = update(user_table).where(user_table.c.id == id)
+        stmt = update(user_table).where(user_table.c.id == id_user)
         if values:
             stmt = stmt.values(**values)
         else:
@@ -69,15 +69,15 @@ class DbUserManager:
             result = conn.execute(stmt)
             rows_created = result.rowcount
             if rows_created == 0:
-                raise APIException(f"User id:{str(id)} not exist", 404)
+                raise APIException(f"User id:{str(id_user)} not exist", 404)
             conn.commit()
 
-    def delete_data(self, id: int):
-        stmt = delete(user_table).where(user_table.c.id == id)
+    def delete_data(self, id_user: int):
+        stmt = delete(user_table).where(user_table.c.id == id_user)
         with engine.connect() as conn:
             result = conn.execute(stmt)
             rows_deleted = result.rowcount
             if rows_deleted == 0:
-                raise APIException(f"User id:{str(id)} not exist", 404)
+                raise APIException(f"User id:{str(id_user)} not exist", 404)
             else:
                 conn.commit()

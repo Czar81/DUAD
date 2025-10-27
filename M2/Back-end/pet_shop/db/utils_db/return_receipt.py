@@ -39,7 +39,7 @@ class BuyManager:
                 *[]
             )
             #Make a for to update products with restore stock
-            # Usar un query nuevo para actualizar los productos 
+            # Usar una clasee nueva para compras
             # Actualizar estado de receipt y ver como manejar cart.state
 
     def __dinamic_select(self, conn, table, condition=None):
