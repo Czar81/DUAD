@@ -33,6 +33,7 @@ class DbAddressManager:
 
         with engine.connect() as conn:
             result = conn.execute(stmt)
+            #Agregar verificacion de que el address pertenece al user
             if result is not None:
                 return [dict(row) for row in result.mappings().all()]
             raise APIException(
@@ -45,10 +46,10 @@ class DbAddressManager:
             )
 
     def update_data(self, id_address: int, location: str, id_user: str | None = None):
-        conditions = [address_table.c.id == id_address]
         if id_user is not None:
-            conditions.append(address_table.c.id_user == id_user)
-        stmt = update(address_table).where(*conditions).values(location=location)
+            #Agregar verificacion de que el address pertenece al user
+            pass
+        stmt = update(address_table).where(address_table.c.id == id_address).values(location=location)
         with engine.connect() as conn:
             result = conn.execute(stmt)
             rows_updated = result.rowcount
@@ -66,8 +67,9 @@ class DbAddressManager:
     def delete_data(self, id_address: int, id_user: int | None = None):
         conditions = [address_table.c.id == id_address]
         if id_user is not None:
+            #Agregar verificacion de que el address pertenece al user
             conditions.append(address_table.c.id_user == id_user)
-        stmt = delete(address_table).where(and_(*conditions))
+        stmt = delete(address_table).where(address_table.c.id == id_address)
         with engine.connect() as conn:
             result = conn.execute(stmt)
             rows_deleted = result.rowcount

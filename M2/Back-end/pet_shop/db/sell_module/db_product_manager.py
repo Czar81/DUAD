@@ -22,7 +22,7 @@ class DbProductManager:
 
     def get_data(
         self,
-        id: int | None = None,
+        id_product: int | None = None,
         sku: str | None = None,
         name: str | None = None,
         price: int | None = None,
@@ -38,34 +38,28 @@ class DbProductManager:
 
     def update_data(
         self,
-        id: int,
+        id_product: int,
         sku: str | None = None,
         name: str | None = None,
         price: int | None = None,
         amount: int | None = None,
     ):
-        values = _filter_values(locals(), ("self", "id"))
-        stmt = update(product_table).where(product_table.c.id == id)
-        if values:
-            stmt = stmt.values(**values)
-        else:
+        values = _filter_values(locals(), ("self", "id_product"))
+        if values is None:
             raise APIException("No provide any value", 400)
-
+        stmt = update(product_table).where(product_table.c.id == id_product).values(**values)
         with engine.connect() as conn:
             result = conn.execute(stmt)
             rows_updated = result.rowcount
             if rows_updated == 0:
-                raise APIException(f"Product id:{str(id)} not exist", 404)
+                raise APIException(f"Product id:{id_product} not exist", 404)
             conn.commit()
 
-    def delete_data(self, id_product: int | None = None):
-        conditions = [product_table.c.id == id_product]
-        if id_user is not None:
-            conditions.append(product_table.c.id_user == id_user)
-        stmt = delete(product_table).where(and_(*conditions))
+    def delete_data(self, id_product: int):
+        stmt = delete(product_table).where(product_table.c.id == id_product)
         with engine.connect() as conn:
             result = conn.execute(stmt)
             rows_deleted = result.rowcount
             if rows_deleted == 0:
-                raise APIException(f"Product id:{str(id_product)} not exist", 404)
+                raise APIException(f"Product id:{id_product)} not exist", 404)
             conn.commit()
