@@ -33,8 +33,10 @@ class DbProductManager:
         if conditions:
             stmt = stmt.where(and_(*conditions))
         with engine.connect() as conn:
-            result = conn.execute(stmt)
-        return [dict(row) for row in result.mappings().all()]
+            result = conn.execute(stmt).mappings().all()
+        if result:
+            return [dict(row) for row in result]
+        raise APIException(f"Product id:{id_item} not exist",404)
 
     def update_data(
         self,
@@ -50,8 +52,7 @@ class DbProductManager:
         stmt = update(product_table).where(product_table.c.id == id_product).values(**values)
         with engine.connect() as conn:
             result = conn.execute(stmt)
-            rows_updated = result.rowcount
-            if rows_updated == 0:
+            if result.rowcount == 0:
                 raise APIException(f"Product id:{id_product} not exist", 404)
             conn.commit()
 
@@ -59,7 +60,6 @@ class DbProductManager:
         stmt = delete(product_table).where(product_table.c.id == id_product)
         with engine.connect() as conn:
             result = conn.execute(stmt)
-            rows_deleted = result.rowcount
-            if rows_deleted == 0:
-                raise APIException(f"Product id:{id_product)} not exist", 404)
+            if result.rowcount == 0:
+                raise APIException(f"Product id:{id_product} not exist", 404)
             conn.commit()

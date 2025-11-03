@@ -34,17 +34,10 @@ class DbAddressManager:
         with engine.connect() as conn:
             if not _verify_user_own_address(conn, id_address, id_user):
                 raise APIException(f"Address id:{id_address} not exist", 404)
-            result = conn.execute(stmt)
-            if result is not None:
-                return [dict(row) for row in result.mappings().all()]
-            raise APIException(
-                (
-                    f"Address id:{str(id_address)} not exist or not owned by user id:{id_user}"
-                    if id_user
-                    else f"Address id:{str(id_address)} not exist"
-                ),
-                404,
-            )
+            result = conn.execute(stmt).mappings().all()
+            if result:
+                return [dict(row) for row in result]
+            raise APIException(f"Address id:{id_item} not exist",404)
 
     def update_data(self, id_address: int, location: str, id_user: str | None = None):
         with engine.connect() as conn:
@@ -53,14 +46,7 @@ class DbAddressManager:
             stmt = update(address_table).where(address_table.c.id == id_address).values(location=location)
             result = conn.execute(stmt)
             if result.rowcount == 0:
-                raise APIException(
-                    (
-                        f"Address id:{str(id_address)} not exist or not owned by user id:{id_user}"
-                        if id_user
-                        else f"Address id:{str(id_address)} not exist"
-                    ),                    
-                    404,
-                )
+                raise APIException(f"Address id:{str(id_address)} not exist",404)
             conn.commit()
 
     def delete_data(self, id_address: int, id_user: int | None = None):
@@ -70,12 +56,5 @@ class DbAddressManager:
             stmt = delete(address_table).where(address_table.c.id == id_address)
             result = conn.execute(stmt)
             if result.rowcount == 0:
-                raise APIException(
-                    (
-                        f"Address id:{str(id_address)} not exist or not owned by user id:{id_user}"
-                        if id_user
-                        else f"Address id:{str(id_address)} not exist"
-                    ),                    
-                    404,
-                )
+                raise APIException(f"Address id:{str(id_address)} not exist",404)
             conn.commit()

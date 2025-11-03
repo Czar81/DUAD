@@ -108,11 +108,11 @@ class DbTestingManager:
         elif entity_name == "Cart Item":
             data["id_item"] = self.__get_input("Id: ", int)
             data["id_user"] = self.__get_input("User id: ", int)
-            data["id_cart"] = self.__get_input("Cart id: ", int)
+            #data["id_cart"] = self.__get_input("Cart id: ", int)
             #data["amount"] = self.__get_input("Amount: ", int)
         elif entity_name == "Receipt":
             data["id_receipt"] = self.__get_input("Id: ", int)
-            data["id_cart"] = self.__get_input("Cart id: ", int)
+            #data["id_cart"] = self.__get_input("Cart id: ", int)
             data["id_user"]= self.__get_input("Id user: ", int)
             #data["entry_date"] = self.__get_input("Entry date: ")
             #data["state"] = self.__get_input("State: ")

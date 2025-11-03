@@ -67,8 +67,7 @@ class DbUserManager:
             raise APIException("No provide any value", 400)
         with engine.connect() as conn:
             result = conn.execute(stmt)
-            rows_created = result.rowcount
-            if rows_created == 0:
+            if result.rowcount == 0:
                 raise APIException(f"User id:{str(id_user)} not exist", 404)
             conn.commit()
 
@@ -76,8 +75,7 @@ class DbUserManager:
         stmt = delete(user_table).where(user_table.c.id == id_user)
         with engine.connect() as conn:
             result = conn.execute(stmt)
-            rows_deleted = result.rowcount
-            if rows_deleted == 0:
+            if result.rowcount == 0:
                 raise APIException(f"User id:{str(id_user)} not exist", 404)
             else:
                 conn.commit()

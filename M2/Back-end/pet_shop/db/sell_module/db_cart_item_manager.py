@@ -38,9 +38,9 @@ class DbCartItemsManager:
             if conditions:
                 stmt = stmt.where(and_(*conditions))
             result = conn.execute(stmt).mappings().all()
-            if result:
-                return [dict(row) for row in result]
-            raise APIException(f"Item cart id:{id_item} not exist",404)
+        if result:
+            return [dict(row) for row in result]
+        raise APIException(f"Item cart id:{id_item} not exist",404)
 
     def update_data(
         self,
@@ -50,7 +50,7 @@ class DbCartItemsManager:
     ):
         with engine.connect() as conn:
             if not _verify_user_own_cart(conn=conn, id_user=id_user, id_table=id_item, table=cart_item_table):
-                raise APIException(f"Cart not owned by user id:{id_user}", 403)
+                raise APIException(f"Iteam id:{id_item} not exist", 403)
             stmt = update(cart_item_table).where(cart_item_table.c.id_item == id_item).values(amount=amount)
             result = conn.execute(stmt)
             if result.rowcount == 0:
@@ -60,9 +60,9 @@ class DbCartItemsManager:
     def delete_data(self, id_item: int, id_user: int | None = None):
         with engine.connect() as conn:
             if not _verify_user_own_cart(conn=conn, id_user=id_user, id_table=id_item, table=cart_item_table):
-                raise APIException(f"Cart not owned by user id:{id_user}", 403)
+                raise APIException(f"Iteam id:{id_item} not exist", 403)
             stmt = delete(cart_item_table).where(cart_item_table.c.id == id_item)
             result = conn.execute(stmt)
             if result.rowcount == 0:
-                raise APIException(f"Iteam id:{str(id_item)} not exist",404)
+                raise APIException(f"Iteam id:{id_item} not exist",404)
             conn.commit()
