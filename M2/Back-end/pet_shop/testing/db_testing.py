@@ -9,7 +9,6 @@ from db.user_module.db_payment_manager import DbPaymentManager
 
 class DbTestingManager:
     def __init__(self):
-        # Crear instancias de todos los managers una sola vez
         self.managers = {
             1: ("User", DbUserManager()),
             2: ("Product", DbProductManager()),
@@ -70,8 +69,7 @@ class DbTestingManager:
                     print("Error, option does not exist")
                     continue
                 if choice == 8:
-                    return  # Regresa al menú principal
-
+                    return
                 entity_name, manager = self.managers[choice]
                 data = self.get_input_for_entity(entity_name)
                 self.perform_action(action, manager, data)
@@ -83,39 +81,39 @@ class DbTestingManager:
         data = {}
         if entity_name == "User":
             data["id_user"] = self.__get_input("Id: ", int)
-            #data["name"] = self.__get_input("Name: ")
-            #data["password"] = self.__get_input("Password: ")
-            #data["role"] = self.__get_input("Role: ")
+            data["name"] = self.__get_input("Name: ")
+            data["password"] = self.__get_input("Password: ")
+            data["role"] = self.__get_input("Role: ")
         elif entity_name == "Product":
             data["id_product"] = self.__get_input("Id: ", int)
-            #data["sku"] = self.__get_input("SKU: ")
-            #data["name"] = self.__get_input("Name: ")
-            #data["price"] = self.__get_input("Price: ", int)
-            #data["amount"] = self.__get_input("Amount: ", int)
+            data["sku"] = self.__get_input("SKU: ")
+            data["name"] = self.__get_input("Name: ")
+            data["price"] = self.__get_input("Price: ", int)
+            data["amount"] = self.__get_input("Amount: ", int)
         elif entity_name == "Address":
             data["id_address"] = self.__get_input("Id: ", int)
             data["id_user"] = self.__get_input("User id: ", int)
-            #data["location"] = self.__get_input("Location: ")
+            data["location"] = self.__get_input("Location: ")
         elif entity_name == "Payment":
             data["id_payment"] = self.__get_input("Id: ", int)
             data["id_user"] = self.__get_input("User id: ", int)
-            #data["type"] = self.__get_input("Type: ")
-            #data["data"] = self.__get_input("Data: ")
+            data["type"] = self.__get_input("Type: ")
+            data["data"] = self.__get_input("Data: ")
         elif entity_name == "Cart":
             data["id_cart"] = self.__get_input("Id: ", int)
             data["id_user"] = self.__get_input("User id: ", int)
-            #data["state"] = self.__get_input("State: ")
+            data["state"] = self.__get_input("State: ")
         elif entity_name == "Cart Item":
             data["id_item"] = self.__get_input("Id: ", int)
             data["id_user"] = self.__get_input("User id: ", int)
-            #data["id_cart"] = self.__get_input("Cart id: ", int)
-            #data["amount"] = self.__get_input("Amount: ", int)
+            data["id_cart"] = self.__get_input("Cart id: ", int)
+            data["amount"] = self.__get_input("Amount: ", int)
         elif entity_name == "Receipt":
             data["id_receipt"] = self.__get_input("Id: ", int)
-            #data["id_cart"] = self.__get_input("Cart id: ", int)
+            data["id_cart"] = self.__get_input("Cart id: ", int)
             data["id_user"]= self.__get_input("Id user: ", int)
-            #data["entry_date"] = self.__get_input("Entry date: ")
-            #data["state"] = self.__get_input("State: ")
+            data["entry_date"] = self.__get_input("Entry date: ")
+            data["state"] = self.__get_input("State: ")
         else:
             print(f"No input defined for {entity_name}")
         return data

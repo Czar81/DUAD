@@ -27,7 +27,7 @@ class DbPaymentManager:
         type: str | None = None,
         data: str | None = None,
     ):
-        conditions = _filter_locals(payment_table ,locals())
+        conditions = _filter_locals(payment_table, locals())
         stmt = select(payment_table)
         if conditions:
             stmt = stmt.where(and_(*conditions))
@@ -38,10 +38,12 @@ class DbPaymentManager:
             rows = result.mappings().all()
             if result:
                 return [dict(row) for row in result]
-            raise APIException(f"Address id:{id_item} not exist",404)
+            raise APIException(f"Address id:{id_item} not exist", 404)
 
-    def update_data(self, id_payment: int, type: str, data: str, id_user: str | None = None):
-        values = _filter_values(locals(), ("self","id", "id_user"))
+    def update_data(
+        self, id_payment: int, type: str, data: str, id_user: str | None = None
+    ):
+        values = _filter_values(locals(), ("self", "id", "id_user"))
         stmt = (
             update(payment_table)
             .where(payment_table.c.id == id_payment)
@@ -52,8 +54,10 @@ class DbPaymentManager:
                 raise APIException(f"Payment id:{id_payment} not exist", 404)
             result = conn.execute(stmt)
             if result.rowcount == 0:
-                raise APIException(f"Payment method id:{str(id_payment)} not exist", 404)
-            conn.commit()  
+                raise APIException(
+                    f"Payment method id:{str(id_payment)} not exist", 404
+                )
+            conn.commit()
 
     def delete_data(self, id_payment: int, id_user: int | None = None):
         stmt = delete(payment_table).where(payment_table.c.id == id_payment)

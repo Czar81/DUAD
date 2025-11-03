@@ -10,11 +10,18 @@ engine = TablesManager.engine
 
 class DbReceiptManager:
 
-    def insert_data(self, id_cart: int, id_address: int, id_payment: int, state: str | None = None):
+    def insert_data(
+        self, id_cart: int, id_address: int, id_payment: int, state: str | None = None
+    ):
         stmt = (
             insert(receipt_table)
             .returning(receipt_table.c.id)
-            .values(id_cart=id_cart, id_address=id_address, id_payment=id_payment, state=state)
+            .values(
+                id_cart=id_cart,
+                id_address=id_address,
+                id_payment=id_payment,
+                state=state,
+            )
         )
 
         with engine.connect() as conn:
@@ -32,7 +39,8 @@ class DbReceiptManager:
         entry_date: str | None = None,
         state: str | None = None,
     ):
-        filters = _filter_locals(receipt_table,
+        filters = _filter_locals(
+            receipt_table,
             locals(),
             (
                 "self",
@@ -44,9 +52,7 @@ class DbReceiptManager:
             if id_user is not None and not _verify_user_own_cart(
                 conn, id, id_user, receipt_table
             ):
-                raise APIException(
-                    f"Receipt id:{id_item} not exist", 403
-                )
+                raise APIException(f"Receipt id:{id_item} not exist", 403)
             if entry_date is not None:
                 self.__validate_date_str(entry_date)
             for key, value in filters.items():
@@ -58,7 +64,7 @@ class DbReceiptManager:
             result = conn.execute(stmt).mappings().all()
         if result:
             return [dict(row) for row in result]
-        raise APIException(f"Receipt id:{id_item} not exist",404)
+        raise APIException(f"Receipt id:{id_item} not exist", 404)
 
     def update_data(
         self,
@@ -82,10 +88,10 @@ class DbReceiptManager:
                 raise APIException(f"Recipt id:{id_receipt} not exist", 403)
             result = conn.execute(stmt)
             if result.rowcount == 0:
-                raise APIException((f"Recipt id:{id_receipt} not exist"),404)
+                raise APIException((f"Recipt id:{id_receipt} not exist"), 404)
             conn.commit()
 
-    def delete_data(self, id_receipt: int, id_user:int|None= None):
+    def delete_data(self, id_receipt: int, id_user: int | None = None):
         with engine.connect() as conn:
             if id_user is not None and not _verify_user_own_cart(
                 conn=conn, id_user=id_user, id_table=id_receipt, table=receipt_table
@@ -94,7 +100,7 @@ class DbReceiptManager:
             stmt = delete(receipt_table).where(receipt_table.c.id == id_receipt)
             result = conn.execute(stmt)
             if result.rowcount == 0:
-                raise APIException((f"Recipt id:{id_receipt} not exist"),404)
+                raise APIException((f"Recipt id:{id_receipt} not exist"), 404)
             conn.commit()
 
     def __validate_date_str(date_str: str):

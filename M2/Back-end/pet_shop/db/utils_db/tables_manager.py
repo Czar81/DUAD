@@ -40,7 +40,7 @@ class TablesManager:
         metadata_obj,
         Column("id", Integer, primary_key=True),
         Column("id_user", Integer, ForeignKey("user.id")),
-        Column("location", String(30), nullable=False)
+        Column("location", String(30), nullable=False),
     )
     payment_table = Table(
         "payment",
@@ -48,7 +48,7 @@ class TablesManager:
         Column("id", Integer, primary_key=True),
         Column("id_user", Integer, ForeignKey("user.id")),
         Column("type", String(10), nullable=False),
-        Column("data", String(30))
+        Column("data", String(30)),
     )
     cart_item_table = Table(
         "cart_item",
@@ -68,6 +68,7 @@ class TablesManager:
         Column("entry_date", String(10), server_default=str(date.today())),
         Column("state", String(10), server_default="bought"),
     )
+
     @classmethod
     def create_tables(cls):
         cls.metadata_obj.create_all(cls.engine)

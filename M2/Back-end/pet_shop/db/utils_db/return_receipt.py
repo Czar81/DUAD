@@ -35,10 +35,10 @@ class BuyManager:
                 returning=(),
                 right_table=cart_table,
                 left_table=receipt_table,
-                join_condition= "",
-                *[]
+                join_condition="",
+                *[],
             )
-            #Make a for to update products with restore stock
+            # Make a for to update products with restore stock
             # Usar una clasee nueva para compras
             # Actualizar estado de receipt y ver como manejar cart.state
 

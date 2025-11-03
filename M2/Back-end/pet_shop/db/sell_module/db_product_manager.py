@@ -28,7 +28,7 @@ class DbProductManager:
         price: int | None = None,
         amount: int | None = None,
     ):
-        conditions = _filter_locals(product_table,locals())
+        conditions = _filter_locals(product_table, locals())
         stmt = select(product_table)
         if conditions:
             stmt = stmt.where(and_(*conditions))
@@ -36,7 +36,7 @@ class DbProductManager:
             result = conn.execute(stmt).mappings().all()
         if result:
             return [dict(row) for row in result]
-        raise APIException(f"Product id:{id_item} not exist",404)
+        raise APIException(f"Product id:{id_item} not exist", 404)
 
     def update_data(
         self,
@@ -49,7 +49,11 @@ class DbProductManager:
         values = _filter_values(locals(), ("self", "id_product"))
         if values is None:
             raise APIException("No provide any value", 400)
-        stmt = update(product_table).where(product_table.c.id == id_product).values(**values)
+        stmt = (
+            update(product_table)
+            .where(product_table.c.id == id_product)
+            .values(**values)
+        )
         with engine.connect() as conn:
             result = conn.execute(stmt)
             if result.rowcount == 0:

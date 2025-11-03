@@ -59,7 +59,7 @@ class DbUserManager:
         password: str | None = None,
         role: str | None = None,
     ):
-        values= _filter_values(locals(), ("self", "id"))
+        values = _filter_values(locals(), ("self", "id"))
         stmt = update(user_table).where(user_table.c.id == id_user)
         if values:
             stmt = stmt.values(**values)
