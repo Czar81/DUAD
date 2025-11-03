@@ -1,6 +1,6 @@
 from sqlalchemy import insert, select, delete, update, and_
 from db.utils_db.tables_manager import TablesManager
-from db.utils_db.helpers import _filter_locals, _filter_values
+from db.utils_db.helpers import _filter_locals, _filter_values, _verify_user_own_payment
 from utils.api_exception import APIException
 
 payment_table = TablesManager.payment_table
@@ -32,6 +32,8 @@ class DbPaymentManager:
         if conditions:
             stmt = stmt.where(and_(*conditions))
         with engine.connect() as conn:
+            if not _verify_user_own_payment(conn, id_payment, id_user):
+                raise APIException(f"Payment id:{id_payment} not exist", 404)
             result = conn.execute(stmt)
             rows = result.mappings().all()
             if rows:
@@ -47,43 +49,25 @@ class DbPaymentManager:
 
     def update_data(self, id_payment: int, type: str, data: str, id_user: str | None = None):
         values = _filter_values(locals(), ("self","id", "id_user"))
-        if id_user is not None:
-            # Agregar verificacion de que el payment pertenece al user
-            pass
         stmt = (
             update(payment_table)
             .where(payment_table.c.id == id_payment)
             .values(**values)
         )
         with engine.connect() as conn:
+            if not _verify_user_own_payment(conn, id_payment, id_user):
+                raise APIException(f"Payment id:{id_payment} not exist", 404)
             result = conn.execute(stmt)
-            rows_updated = result.rowcount
-            if rows_updated == 0:
-                raise APIException(
-                    (
-                        f"Payment method id:{str(id_payment)} not exist or not owned by user id:{id_user}"
-                        if id_user
-                        else f"Payment method id:{str(id_payment)} not exist"
-                    ),                    
-                    404,
-                )
-            conn.commit()    
+            if result.rowcount == 0:
+                raise APIException(f"Payment method id:{str(id_payment)} not exist", 404)
+            conn.commit()  
 
     def delete_data(self, id_payment: int, id_user: int | None = None):
-        if id_user is not None:
-            pass
-            # Agregar verificacion de que el payment pertenece al user
         stmt = delete(payment_table).where(payment_table.c.id == id_payment)
         with engine.connect() as conn:
+            if not _verify_user_own_payment(conn, id_payment, id_user):
+                raise APIException(f"Payment id:{id_payment} not exist", 404)
             result = conn.execute(stmt)
-            rows_deleted = result.rowcount
-            if rows_deleted == 0:
-                raise APIException(
-                    (
-                        f"Payment method id:{str(id_payment)} not exist or not owned by user id:{id_user}"
-                        if id_user
-                        else f"Payment method id:{str(id_payment)} not exist"
-                    ),                    
-                    404,
-                )
+            if result.rowcount == 0:
+                raise APIException(f"Payment method id:{id_payment} not exist", 404)
             conn.commit()

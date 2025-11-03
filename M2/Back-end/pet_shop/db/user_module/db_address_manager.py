@@ -1,6 +1,6 @@
 from sqlalchemy import insert, select, delete, update, and_
 from db.utils_db.tables_manager import TablesManager
-from db.utils_db.helpers import _filter_locals
+from db.utils_db.helpers import _filter_locals, _verify_user_own_address
 from utils.api_exception import APIException
 
 address_table = TablesManager.address_table
@@ -32,8 +32,9 @@ class DbAddressManager:
             stmt = stmt.where(and_(*conditions))
 
         with engine.connect() as conn:
+            if not _verify_user_own_address(conn, id_address, id_user):
+                raise APIException(f"Address id:{id_address} not exist", 404)
             result = conn.execute(stmt)
-            #Agregar verificacion de que el address pertenece al user
             if result is not None:
                 return [dict(row) for row in result.mappings().all()]
             raise APIException(
@@ -46,14 +47,12 @@ class DbAddressManager:
             )
 
     def update_data(self, id_address: int, location: str, id_user: str | None = None):
-        if id_user is not None:
-            #Agregar verificacion de que el address pertenece al user
-            pass
-        stmt = update(address_table).where(address_table.c.id == id_address).values(location=location)
         with engine.connect() as conn:
+            if not _verify_user_own_address(conn, id_address, id_user):
+                raise APIException(f"Address id:{id_address} not exist", 404)
+            stmt = update(address_table).where(address_table.c.id == id_address).values(location=location)
             result = conn.execute(stmt)
-            rows_updated = result.rowcount
-            if rows_updated == 0:
+            if result.rowcount == 0:
                 raise APIException(
                     (
                         f"Address id:{str(id_address)} not exist or not owned by user id:{id_user}"
@@ -65,15 +64,12 @@ class DbAddressManager:
             conn.commit()
 
     def delete_data(self, id_address: int, id_user: int | None = None):
-        conditions = [address_table.c.id == id_address]
-        if id_user is not None:
-            #Agregar verificacion de que el address pertenece al user
-            conditions.append(address_table.c.id_user == id_user)
-        stmt = delete(address_table).where(address_table.c.id == id_address)
         with engine.connect() as conn:
+            if not _verify_user_own_address(conn, id_address, id_user):
+                raise APIException(f"Address id:{id_address} not exist", 404)
+            stmt = delete(address_table).where(address_table.c.id == id_address)
             result = conn.execute(stmt)
-            rows_deleted = result.rowcount
-            if rows_deleted == 0:
+            if result.rowcount == 0:
                 raise APIException(
                     (
                         f"Address id:{str(id_address)} not exist or not owned by user id:{id_user}"
