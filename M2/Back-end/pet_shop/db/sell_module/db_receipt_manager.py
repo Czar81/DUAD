@@ -1,10 +1,9 @@
-from sqlalchemy import select, update, and_, Table
+from sqlalchemy import select, insert, update, and_, Table
 from utils.api_exception import APIException
+from datetime import datetime
 from db.utils_db.helpers import (
     _verify_user_own_cart,
-    _filter_values,
-    _verify_amount_product,
-)
+    _filter_locals)
 
 
 class DbReceiptManager:
@@ -27,10 +26,19 @@ class DbReceiptManager:
                 raise APIException(
                     f"Cart id:{id_cart} not owned by user or not exist", 403
                 )
-            stmt_product = select(
-                self.cart_item_table.c.id_product,
-                self.cart_item_table.c.amount.label("amount_bought"),
-            ).where(self.cart_item_table.c.id_cart == id_cart)
+            stmt_product = (
+                select(
+                    self.cart_item_table.c.id_product,
+                    self.cart_item_table.c.amount.label("amount_bought"),
+                    self.product_table.c.amount.label("actual_amount"),
+                )
+                .select_from(self.cart_item_table)
+                .join(
+                    self.product_table,
+                    self.product_table.c.id == self.cart_item_table.c.id_product,
+                )
+                .where(self.cart_item_table.c.id_cart == id_cart)
+            )
 
             products = conn.execute(stmt_product).mappings().all()
 
@@ -38,7 +46,10 @@ class DbReceiptManager:
                 raise APIException(f"Cart id:{id_cart} not found or has no items", 404)
             products_with_stock = []
             for row in products:
-                new_amount = _verify_amount_product(conn, row["id_product"], row["amount_bought"])
+                new_amount = row["actual_amount"]-row["amount_bought"]
+                if new_amount < 0:
+                    raise APIException(
+                        f"Not enough products available: {row["actual_amount"]}, requested: {row['amount_bought']} for product id: {row['id_product']}",400)
                 products_with_stock.append((row["id_product"],new_amount))
             stmt_create = (
                 insert(self.receipt_table)
