@@ -1,21 +1,21 @@
 from sqlalchemy import insert, select, delete, update, and_
-from db.utils_db.tables_manager import TablesManager
 from db.utils_db.helpers import _filter_locals, _filter_values, _verify_user_own_payment
 from utils.api_exception import APIException
-
-payment_table = TablesManager.payment_table
-engine = TablesManager.engine
 
 
 class DbPaymentManager:
 
+    def __init__(self, TablesManager):
+        self.payment_table = TablesManager.payment_table
+        self.engine = TablesManager.engine
+
     def insert_data(self, id_user: str, type: str, data: str):
         stmt = (
-            insert(payment_table)
-            .returning(payment_table.c.id)
+            insert(self.payment_table)
+            .returning(self.payment_table.c.id)
             .values(id_user=id_user, type=type, data=data)
         )
-        with engine.connect() as conn:
+        with self.engine.connect() as conn:
             result = conn.execute(stmt)
             conn.commit()
             return result.scalar()
@@ -27,11 +27,11 @@ class DbPaymentManager:
         type: str | None = None,
         data: str | None = None,
     ):
-        conditions = _filter_locals(payment_table, locals())
-        stmt = select(payment_table)
+        conditions = _filter_locals(self.payment_table, locals())
+        stmt = select(self.payment_table)
         if conditions:
             stmt = stmt.where(and_(*conditions))
-        with engine.connect() as conn:
+        with self.engine.connect() as conn:
             if not _verify_user_own_payment(conn, id_payment, id_user):
                 raise APIException(f"Payment id:{id_payment} not exist", 404)
             result = conn.execute(stmt)
@@ -45,11 +45,11 @@ class DbPaymentManager:
     ):
         values = _filter_values(locals(), ("self", "id", "id_user"))
         stmt = (
-            update(payment_table)
-            .where(payment_table.c.id == id_payment)
+            update(self.payment_table)
+            .where(self.payment_table.c.id == id_payment)
             .values(**values)
         )
-        with engine.connect() as conn:
+        with self.engine.connect() as conn:
             if not _verify_user_own_payment(conn, id_payment, id_user):
                 raise APIException(f"Payment id:{id_payment} not exist", 404)
             result = conn.execute(stmt)
@@ -60,8 +60,8 @@ class DbPaymentManager:
             conn.commit()
 
     def delete_data(self, id_payment: int, id_user: int | None = None):
-        stmt = delete(payment_table).where(payment_table.c.id == id_payment)
-        with engine.connect() as conn:
+        stmt = delete(self.payment_table).where(self.payment_table.c.id == id_payment)
+        with self.engine.connect() as conn:
             if not _verify_user_own_payment(conn, id_payment, id_user):
                 raise APIException(f"Payment id:{id_payment} not exist", 404)
             result = conn.execute(stmt)
