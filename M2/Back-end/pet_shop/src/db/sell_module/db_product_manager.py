@@ -1,6 +1,6 @@
 from sqlalchemy import insert, select, delete, update, and_
-from utils.api_exception import APIException
-from db.utils_db.helpers import _filter_locals, _filter_values
+from src.utils.api_exception import APIException
+from src.db.utils_db.helpers import _filter_locals, _filter_values
 
 
 class DbProductManager:

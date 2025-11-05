@@ -1,6 +1,6 @@
 from sqlalchemy import insert, select, delete, update, and_
-from db.utils_db.helpers import _filter_locals, _verify_user_own_address
-from utils.api_exception import APIException
+from src.db.utils_db.helpers import _filter_locals, _verify_user_own_address
+from src.utils.api_exception import APIException
 
 
 class DbAddressManager:
