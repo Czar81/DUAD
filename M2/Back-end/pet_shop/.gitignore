@@ -1,6 +1,7 @@
 # Environment
 .env
 .venv
+notes.md
 
 # Python
 *.pyc

@@ -1,0 +1,177 @@
+from sqlalchemy import select, insert, update, and_, Table
+from src.utils.api_exception import APIException
+from datetime import datetime
+from src.db.utils_db.helpers import (
+    _verify_user_own_cart,
+    _filter_locals)
+
+
+class DbReceiptManager:
+    def __init__(self, TablesManager):
+        self.cart_item_table = TablesManager.cart_item_table
+        self.receipt_table = TablesManager.receipt_table
+        self.product_table = TablesManager.product_table
+        self.engine = TablesManager.engine
+
+    def create_receipt(
+        self,
+        id_cart: int,
+        id_address: int,
+        id_payment: int,
+        state: str | None = None,
+        id_user: int | None = None,
+    ):
+        with self.engine.connect() as conn:
+            if not _verify_user_own_cart(conn, id_user, id_cart=id_cart):
+                raise APIException(
+                    f"Cart id:{id_cart} not owned by user or not exist", 403
+                )
+            stmt_product = (
+                select(
+                    self.cart_item_table.c.id_product,
+                    self.cart_item_table.c.amount.label("amount_bought"),
+                    self.product_table.c.amount.label("actual_amount"),
+                )
+                .select_from(self.cart_item_table)
+                .join(
+                    self.product_table,
+                    self.product_table.c.id == self.cart_item_table.c.id_product,
+                )
+                .where(self.cart_item_table.c.id_cart == id_cart)
+            )
+
+            products = conn.execute(stmt_product).mappings().all()
+
+            if not products:
+                raise APIException(f"Cart id:{id_cart} not found or has no items", 404)
+            products_with_stock = []
+            for row in products:
+                new_amount = row["actual_amount"]-row["amount_bought"]
+                if new_amount < 0:
+                    raise APIException(
+                        f"Not enough products available: {row["actual_amount"]}, requested: {row['amount_bought']} for product id: {row['id_product']}",400)
+                products_with_stock.append((row["id_product"],new_amount))
+            stmt_create = (
+                insert(self.receipt_table)
+                .returning(self.receipt_table.c.id)
+                .values(
+                    id_cart=id_cart,
+                    id_address=id_address,
+                    id_payment=id_payment,
+                    state=state,
+                )
+            )
+            id_new_receipt = conn.execute(stmt_create).scalar()
+            for id_product, new_amount in products_with_stock:
+                stmt_update_product = (
+                    update(self.product_table)
+                    .where(self.product_table.c.id == id_product)
+                    .values(amount=new_amount)
+                )
+                conn.execute(stmt_update_product)
+            conn.commit()
+        return id_new_receipt
+
+    def get_data(
+        self,
+        id: int | None = None,
+        id_user: int | None = None,
+        id_cart: int | None = None,
+        id_address: int | None = None,
+        id_payment: int | None = None,
+        entry_date: str | None = None,
+        state: str | None = None,
+    ):
+        filters = _filter_locals(
+            self.receipt_table,
+            locals(),
+            (
+                "self",
+                "id_user",
+            ),
+        )
+        conditions = []
+        with self.engine.connect() as conn:
+            if id_user is not None and id is not None:
+                if not _verify_user_own_cart(conn, id, id_user, self.receipt_table):
+                    raise APIException(f"Receipt id:{id} does not exist", 403)
+            if entry_date is not None:
+                self.__validate_date_str(entry_date)
+            for key, value in filters.items():
+                if value is not None:
+                    conditions.append(getattr(self.receipt_table.c, key) == value)
+            stmt = select(self.receipt_table)
+            if conditions:
+                stmt = stmt.where(and_(*conditions))
+            result = conn.execute(stmt).mappings().all()
+        if result:
+            return [dict(row) for row in result]
+        error_msg = (
+            f"Receipt id:{id} not found"
+            if id is not None
+            else "No receipts found matching criteria"
+        )
+        raise APIException(error_msg, 404)
+
+    def return_receipt(self, id_receipt: int, id_user: int):
+        with self.engine.connect() as conn:
+            if not _verify_user_own_cart(
+                conn, id_user, id_receipt, table=self.receipt_table
+            ):
+                raise APIException(
+                    f"Receipt id:{id_receipt} not owned by user or not exist", 403
+                )
+            stmt_join = (
+                select(
+                    self.cart_item_table.c.id_product,
+                    self.cart_item_table.c.amount.label("amount_bought"),
+                    self.product_table.c.amount.label("actual_amount"),
+                    self.receipt_table.c.state,
+                )
+                .select_from(self.receipt_table)
+                .join(
+                    self.cart_item_table,
+                    self.receipt_table.c.id_cart == self.cart_item_table.c.id_cart,
+                )
+                .join(
+                    self.product_table,
+                    self.product_table.c.id == self.cart_item_table.c.id_product,
+                )
+                .where(self.receipt_table.c.id == id_receipt)
+            )
+            result_join = conn.execute(stmt_join).mappings().all()
+            if not result_join:
+                raise APIException(
+                    f"Receipt id:{id_receipt} not found or has no items", 404
+                )
+            if result_join[0]["state"] == "returned":
+                raise APIException(f"Receipt id{id_receipt}, its already returned", 400)
+            products = [
+                {
+                    "id_product": row["id_product"],
+                    "amount_bought": row["amount_bought"],
+                    "actual_amount": row["actual_amount"],
+                }
+                for row in result_join
+            ]
+            for row in products:
+                new_amount = row["actual_amount"] + row["amount_bought"]
+                stmt_update_product = (
+                    update(self.product_table)
+                    .where(self.product_table.c.id == row["id_product"])
+                    .values(amount=new_amount)
+                )
+                conn.execute(stmt_update_product)
+            stmt_update_receipt = (
+                update(self.receipt_table)
+                .where(self.receipt_table.c.id == id_receipt)
+                .values(state="returned")
+            )
+            conn.execute(stmt_update_receipt)
+            conn.commit()
+
+    def __validate_date_str(self, date_str: str):
+        try:
+            datetime.strptime(date_str, "%Y-%m-%d")
+        except ValueError:
+            raise APIException("Entry date in receipt is not valid", 400)
