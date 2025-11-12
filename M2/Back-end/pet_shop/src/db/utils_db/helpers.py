@@ -12,10 +12,6 @@ def _filter_locals(table, locals_dict: dict, exclude: tuple = ("self",)):
     }
     return [getattr(table.c, k) == v for k, v in filtered.items()]
 
-
-def _filter_values(locals_dict: dict, exclude: tuple = ("self",)):
-    return {k: v for k, v in locals_dict.items() if k not in exclude and v is not None}
-
 def _verify_amount_product(conn, id_product, amount_bought):
     stmt = select(product_table.c.amount).where(product_table.c.id==id_product)
     actual_amount=conn.execute(stmt)
