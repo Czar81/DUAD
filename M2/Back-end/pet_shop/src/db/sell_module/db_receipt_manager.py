@@ -1,10 +1,8 @@
 from sqlalchemy import select, insert, update, and_, Table
 from src.utils.api_exception import APIException
 from datetime import datetime
-from src.db.utils_db.helpers import (
-    _verify_user_own_cart,
-    _filter_locals)
-
+from src.db.utils_db.helpers import _filter_locals
+from src.db.utils_db.verifies import _verify_user_own_cart
 
 class DbReceiptManager:
     def __init__(self, TablesManager):

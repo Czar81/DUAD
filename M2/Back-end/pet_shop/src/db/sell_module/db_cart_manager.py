@@ -1,5 +1,6 @@
 from sqlalchemy import insert, select, delete, update, and_
-from src.db.utils_db.helpers import _filter_locals, _verify_user_own_cart
+from src.db.utils_db.helpers import _filter_locals
+from src.db.utils_db.verifies import _verify_user_own_cart
 from src.utils.api_exception import APIException
 
 

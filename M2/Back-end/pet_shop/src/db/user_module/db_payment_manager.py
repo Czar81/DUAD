@@ -1,5 +1,7 @@
 from sqlalchemy import insert, select, delete, update, and_
-from src.db.utils_db.helpers import _filter_locals, _filter_values, _verify_user_own_payment
+from src.db.utils_db.helpers import _filter_locals
+from src.utils.helpers import filter_values
+from src.db.utils_db.verifies import _verify_user_own_payment
 from src.utils.api_exception import APIException
 
 
@@ -43,7 +45,7 @@ class DbPaymentManager:
     def update_data(
         self, id_payment: int, type: str, data: str, id_user: str | None = None
     ):
-        values = _filter_values(locals(), ("self", "id", "id_user"))
+        values = filter_values(locals(), ("self", "id", "id_user"))
         stmt = (
             update(self.payment_table)
             .where(self.payment_table.c.id == id_payment)

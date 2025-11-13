@@ -1,6 +1,7 @@
 from sqlalchemy import insert, select, delete, update, and_
 from src.utils.api_exception import APIException
-from src.db.utils_db.helpers import _filter_locals, _filter_values
+from src.db.utils_db.helpers import _filter_locals
+from src.utils.helpers import filter_values
 
 
 class DbProductManager:
@@ -47,7 +48,7 @@ class DbProductManager:
         price: int | None = None,
         amount: int | None = None,
     ):
-        values = _filter_values(locals(), ("self", "id_product"))
+        values = filter_values(locals(), ("self", "id_product"))
         if values is None:
             raise APIException("No provide any value", 400)
         stmt = (

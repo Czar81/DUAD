@@ -45,17 +45,10 @@ def delete_product():
     pass
 
 
-def __get_cache_if_exist(
-    key,
-    id_product: int | None = None,
-    sku: str | None = None,
-    name: str | None = None,
-    price: int | None = None,
-    amount: int | None = None,
-):
+def __get_cache_if_exist(key, **search_params):
     result = cache_manager.get_data(key)
     if result is None:
-        result = db_product_manager.get_data(id_product, sku, name, price, amount)
+        result = db_product_manager.get_data(**search_params)
         if result is None:
             raise APIException("Could not find any product with params", 404)
         cache_manager.store_data(key, result)

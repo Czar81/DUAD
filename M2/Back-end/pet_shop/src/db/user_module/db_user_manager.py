@@ -1,5 +1,6 @@
 from sqlalchemy import insert, select, delete, update, and_
-from src.db.utils_db.helpers import _filter_locals, _filter_values
+from src.db.utils_db.helpers import _filter_locals
+from src.utils.helpers import filter_values
 from src.utils.api_exception import APIException
 
 
@@ -59,7 +60,7 @@ class DbUserManager:
         password: str | None = None,
         role: str | None = None,
     ):
-        values = _filter_values(locals(), ("self", "id"))
+        values = filter_values(locals(), ("self", "id"))
         stmt = update(self.user_table).where(self.user_table.c.id == id_user)
         if values:
             stmt = stmt.values(**values)
