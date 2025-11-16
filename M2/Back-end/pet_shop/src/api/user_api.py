@@ -6,8 +6,6 @@ from src.utils import (
     role_required,
     CacheManager,
     validate_fields,
-    generate_cache_based_filters,
-    generate_cache_key,
     register_error_handlers,
 )
 
