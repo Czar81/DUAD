@@ -18,7 +18,6 @@ db_user_manager = DbUserManager()
 @validate_fields(required=["name", "password"])
 def register(name, password):
     id_user = db_user_manager.insert_data(sku, name, price, amount)
-    cache_manager.delete_data_with_pattern("getProducts:")
     return jsonify({"id": f"User created id:{id_user}"}), 201
 
 
@@ -27,7 +26,6 @@ def register(name, password):
 @validate_fields(required=["name", "password"])
 def login(name, password):
     id_user = db_user_manager.insert_data(sku, name, price, amount)
-    cache_manager.delete_data_with_pattern("getProducts:")
     return jsonify({"id": f"User created id:{id_user}"}), 201
 
 
@@ -36,8 +34,6 @@ def login(name, password):
 def me(id_user, name):
     # Add verify user own this
     user = db_user_manager.get_data(id_user)
-    if user is None:
-        raise APIException("Invalid user", 404)
     return jsonify(user=user), 200
 
 
