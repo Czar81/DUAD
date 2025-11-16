@@ -4,7 +4,6 @@ from src.db.user_module.db_user_manager import DbUserManager
 from src.utils import (
     APIException,
     role_required,
-    CacheManager,
     validate_fields,
     register_error_handlers,
 )
@@ -12,7 +11,6 @@ from src.utils import (
 user_bp = Blueprint("user", __name__)
 register_error_handlers(user_bp)
 db_user_manager = DbUserManager()
-cache_manager = CacheManager()
 
 
 @user_bp.route("register", methods=["POST"])
@@ -32,6 +30,7 @@ def login(name, password):
     cache_manager.delete_data_with_pattern("getProducts:")
     return jsonify({"id": f"User created id:{id_user}"}), 201
 
+
 @user_bp.route("<name>", methods=["GET"])
 @role_required(["user", "admin"])
 def me(id_user, name):
@@ -40,7 +39,6 @@ def me(id_user, name):
     if user is None:
         raise APIException("Invalid user", 404)
     return jsonify(user=user), 200
-
 
 
 @user_bp.route("<name>", methods=["PUT"])
@@ -53,8 +51,7 @@ def update_product(id_user, role, **filters):
     else:
         db_user_manager.update_data(id_user, filters["name"], filters["password"])
     return jsonify({"message": "User updated"}), 200
-    
-        
+
 
 @user_bp.route("products/<id_user>", methods=["DELETE"])
 @role_required(["admin", "user"])
