@@ -2,7 +2,7 @@ from .cache_manager import CacheManager
 from .api_exception import APIException
 from .encoding import JWT_Manager
 from .verify_data import role_required, validate_fields
-from .helpers import filter_values, generate_cache_based_filters, generate_cache_key
+from .helpers import filter_values, generate_cache_based_filters, generate_cache_key, get_cache_if_exist
 from .error_handler import register_error_handlers
 
 __all__ = [
@@ -14,5 +14,6 @@ __all__ = [
     "filter_values"
     "generate_cache_based_filters"
     "register_error_handlers"
-    "generate_cache_key"
+    "generate_cache_key",
+    "get_cache_if_exist"
 ]

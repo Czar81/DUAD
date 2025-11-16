@@ -30,7 +30,7 @@ def register_product(sku, name, price, amount):
 @validate_fields(optional=["id_product", "sku", "name", "price", "amount"])
 def get_products(**filters):
     key = generate_cache_based_filters("getProducts", filters)
-    result = __get_cache_if_exist(key, **filters)
+    result = get_cache_if_exist(key, cache_manager, db_product_manager, **filters)
     return jsonify({"products": result}), 200
 
 
@@ -41,7 +41,7 @@ def get_product(id_product):
     except ValueError:
         return jsonify(error="id_product must be an integer"), 400
     key = generate_cache_key("getProduct", id_product=id_product)
-    result = __get_cache_if_exist(key, id_product=int(id_product))
+    result = get_cache_if_exist(key, cache_manager, db_product_manager, id_product=id_product)
     return jsonify({"product": result}), 200
 
 
@@ -73,12 +73,3 @@ def delete_product(id_product):
     cache_manager.delete_data(key)
     cache_manager.delete_data_with_pattern("getProducts:")
     return jsonify({"message": "Product Deleted"}), 200
-
-def __get_cache_if_exist(key, **search_params):
-    result = cache_manager.get_data(key)
-    if result is None:
-        result = db_product_manager.get_data(**search_params)
-        if result is None:
-            raise APIException("Could not find any product with params", 404)
-        cache_manager.store_data(key, result)
-    return result
