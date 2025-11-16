@@ -8,3 +8,6 @@ def generate_cache_based_filters(key_prefix:str, filter_dict:dict):
         return f"{key_prefix}:{cache_suffix}"
     else:
         return f"{key_prefix}:all"
+
+def generate_cache_key(key_prefix, id_product):
+    return f"{key_prefix}:{id_product}"
