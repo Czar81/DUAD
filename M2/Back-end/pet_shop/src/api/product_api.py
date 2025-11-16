@@ -15,8 +15,23 @@ cache_manager = CacheManager()
 
 
 @product_bp.route("products", methods=["POST"])
-def register_product():
-    pass
+@role_required(["admin"])
+@validate_fields(required=["sku", "name", "price", "amount"])
+def register_product(sku, name, price, amount):
+    try:
+        id_product=db_product_manager.insert_data(sku, name, price, amount)
+        cache_manager.delete_data_with_pattern("getProducts:")
+        return jsonify({"id": f"Product created id{id_product}"}), 200
+    except ValueError as e:
+        return jsonify(error=str(e)), 400
+    except SQLAlchemyError as e:
+        return jsonify(error=f"Internal database error: {e}"), 500
+    except APIException as e:
+        return jsonify(error=str(e)), e.status_code
+    except RecursionError as e:
+        return jsonify(error=f"An unexpected error occurred with redis: {e}"), 500
+    except Exception as e:
+        return jsonify(error=f"An unexpected error occurred: {e}"), 500
 
 
 @product_bp.route("products", methods=["GET"])
