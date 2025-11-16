@@ -7,6 +7,7 @@ from src.utils import (
     CacheManager,
     validate_fields,
     generate_cache_based_filters,
+    generate_cache_key,
     register_error_handlers,
 )
 
@@ -22,7 +23,7 @@ cache_manager = CacheManager()
 def register_product(sku, name, price, amount):
     id_product = db_product_manager.insert_data(sku, name, price, amount)
     cache_manager.delete_data_with_pattern("getProducts:")
-    return jsonify({"id": f"Product created id{id_product}"}), 200
+    return jsonify({"id": f"Product created id{id_product}"}), 201
 
 
 @product_bp.route("products", methods=["GET"])
@@ -39,7 +40,7 @@ def get_product(id_product):
         id_product = int(id_product)
     except ValueError:
         return jsonify(error="id_product must be an integer"), 400
-    key = generate_cache_based_filters("getProduct", id_product=id_product)
+    key = generate_cache_key("getProduct", id_product=id_product)
     result = __get_cache_if_exist(key, id_product=int(id_product))
     return jsonify({"product": result}), 200
 
@@ -53,7 +54,7 @@ def update_product(id_product, **filters):
     except ValueError:
         return jsonify(error="id_product must be an integer"), 400
     filters["id_product"] = id_product
-    key = generate_cache_based_filters("getProduct", id_product=id_product)
+    key = generate_cache_key("getProduct", id_product=id_product)
     db_product_manager.update_data(**filters)
     cache_manager.delete_data(key)
     cache_manager.delete_data_with_pattern("getProducts:")
@@ -61,9 +62,17 @@ def update_product(id_product, **filters):
 
 
 @product_bp.route("products/<id_product>", methods=["DELETE"])
-def delete_product():
-    pass
-
+@role_required(["admin"])
+def delete_product(id_product):
+    try:
+        id_product = int(id_product)
+    except ValueError: 
+        return jsonify(error="id_product must be an integer"), 400
+    key = generate_cache_key("getProduct", id_product=id_product)
+    db_product_manager.delete_data(id_product)
+    cache_manager.delete_data(key)
+    cache_manager.delete_data_with_pattern("getProducts:")
+    return jsonify({"message": "Product Deleted"}), 200
 
 def __get_cache_if_exist(key, **search_params):
     result = cache_manager.get_data(key)
