@@ -18,7 +18,8 @@ def role_required(allowed_roles):
             role = DbUserManager.get_user_role_by_id(id_decoded["id"])
             if role not in allowed_roles:
                 return jsonify(message="Unauthorized"), 403
-            kwargs["user_id"] = id_decoded["id"]
+            kwargs["id_user"] = id_decoded["id"]
+            kwargs["role"] = id_decoded["role"]
             return func(*args, **kwargs)
 
         return wrapper

@@ -21,27 +21,15 @@ class DbUserManager:
             conn.commit()
         return result.all()[0]
 
-    def get_data(
-        self,
-        id: int | None = None,
-        name: str | None = None,
-        password: str | None = None,
-        role: str | None = None,
-    ):
-        conditions = _filter_locals(
-            self.user_table,
-            locals(),
-            (
-                "self",
-                "password",
-            ),
+    def get_data(self, name: str, id_user: int):
+        stmt = (
+            select(user_table)
+            .where(user_table.c.name == name)
+            .where(user_table.c.id_user == id_user)
         )
-        stmt = select(self.user_table)
-        if conditions:
-            stmt = stmt.where(and_(*conditions))
-        with self.engine.connect() as conn:
-            result = conn.execute(stmt)
-            return [dict(row) for row in result.mappings().all()]
+        with engine.connect() as conn:
+            result = conn.execute(stmt).scalar()
+            return result
 
     @classmethod
     def get_role_by_id(self, id):
