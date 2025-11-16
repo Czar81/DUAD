@@ -2,7 +2,7 @@ from sqlalchemy import select, insert, update, and_, Table
 from src.utils.api_exception import APIException
 from datetime import datetime
 from src.db.utils_db.helpers import _filter_locals
-from src.db.utils_db.verifies import _verify_user_own_cart
+from src.db.utils_db.verifies import _verify_user_own_cart, _verify_user_own_address, _verify_user_own_payment
 
 class DbReceiptManager:
     def __init__(self, TablesManager):
@@ -23,6 +23,14 @@ class DbReceiptManager:
             if not _verify_user_own_cart(conn, id_user, id_cart=id_cart):
                 raise APIException(
                     f"Cart id:{id_cart} not owned by user or not exist", 403
+                )
+            if not _verify_user_own_address(conn, id_user, id_address=id_address):
+                raise APIException(
+                    f"Address id:{id_address} not owned by user or not exist", 403
+                )
+            if not _verify_user_own_payment(conn, id_user, id_payment=id_payment):
+                raise APIException(
+                    f"Payment id:{id_payment} not owned by user or not exist", 403
                 )
             stmt_product = (
                 select(
@@ -121,7 +129,7 @@ class DbReceiptManager:
                 )
             stmt_join = (
                 select(
-                    self.cart_item_table.c.id_product,
+                    self.cart**filters_item_table.c.id_product,
                     self.cart_item_table.c.amount.label("amount_bought"),
                     self.product_table.c.amount.label("actual_amount"),
                     self.receipt_table.c.state,
