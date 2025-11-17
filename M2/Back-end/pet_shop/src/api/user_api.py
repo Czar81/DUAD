@@ -17,6 +17,7 @@ db_user_manager = DbUserManager()
 @role_required(["user", "admin"])
 @validate_fields(required=["name", "password"])
 def register(name, password):
+    # Check if this return a token
     id_user = db_user_manager.insert_data(sku, name, price, amount)
     return jsonify({"id": f"User created id:{id_user}"}), 201
 
@@ -25,7 +26,7 @@ def register(name, password):
 @role_required(["user", "admin"])
 @validate_fields(required=["name", "password"])
 def login(name, password):
-    id_user = db_user_manager.insert_data(sku, name, price, amount)
+    id_user = db_user_manager.get_data(sku, name, price, amount)
     return jsonify({"id": f"User created id:{id_user}"}), 201
 
 
