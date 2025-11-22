@@ -31,8 +31,9 @@ def get_cart(**filters):
     return jsonify(data=receipts), 200
 
 
-@cart_bp.route("me/carts/<id_cart>", methods=["GET"])
+@cart_bp.route("cart", methods=["GET"])
 @role_required(["admin", "user"])
+@validate_fields(required=["id_cart"])
 def get_cart(id_cart):
     receipts = db_cart_manager.get_data(id_cart)
     return jsonify(data=receipts), 200
