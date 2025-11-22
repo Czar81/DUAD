@@ -30,7 +30,7 @@ def login(name, password):
     return jsonify({"id": f"User created id:{id_user}"}), 201
 
 
-@user_bp.route("<name>", methods=["GET"])
+@user_bp.route("me", methods=["GET"])
 @role_required(["user", "admin"])
 def me(id_user, name):
     # Add verify user own this
@@ -38,7 +38,7 @@ def me(id_user, name):
     return jsonify(user=user), 200
 
 
-@user_bp.route("<name>", methods=["PUT"])
+@user_bp.route("me", methods=["PUT"])
 @role_required(["admin", "user"])
 @validate_fields(optional=["name", "password", "role"])
 def update_product(id_user, role, **filters):
@@ -50,7 +50,7 @@ def update_product(id_user, role, **filters):
     return jsonify({"message": "User updated"}), 200
 
 
-@user_bp.route("products/<id_user>", methods=["DELETE"])
+@user_bp.route("me", methods=["DELETE"])
 @role_required(["admin", "user"])
 def delete_product(id_user):
     # Add verify user own this
