@@ -40,7 +40,7 @@ class DbPaymentManager:
             rows = result.mappings().all()
             if result:
                 return [dict(row) for row in result]
-            raise APIException(f"Address id:{id_item} not exist", 404)
+            raise APIException(f"Address id:{id_payment} not exist", 404)
 
     def update_data(
         self, id_payment: int, type: str, data: str, id_user: str | None = None

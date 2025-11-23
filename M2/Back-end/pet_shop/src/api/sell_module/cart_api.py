@@ -15,7 +15,7 @@ db_cart_manager = DbCartManager()
 @cart_bp.route("me/carts", methods=["POST"])
 @role_required(["admin", "user"])
 @validate_fields(optional=["state"])
-def create_cart(id_user, state):
+def create_cart(id_user,role, state):
     if role == "user":
         db_cart_manager.insert_data(id_user)
     else:
@@ -25,7 +25,7 @@ def create_cart(id_user, state):
 
 @cart_bp.route("me/carts", methods=["GET"])
 @role_required(["admin", "user"])
-@validate_fields(optional=["id_cart", "id_cart", "id_payment", "state", entry_date])
+@validate_fields(optional=["id_cart", "id_cart", "id_payment", "state", "entry_date"])
 def get_cart(**filters):
     receipts = db_cart_manager.get_data(**filters)
     return jsonify(data=receipts), 200

@@ -39,7 +39,7 @@ class DbAddressManager:
             result = conn.execute(stmt).mappings().all()
             if result:
                 return [dict(row) for row in result]
-            raise APIException(f"Address id:{id_item} not exist", 404)
+            raise APIException(f"Address id:{id_address} not exist", 404)
 
     def update_data(self, id_address: int, location: str, id_user: str | None = None):
         with self.engine.connect() as conn:

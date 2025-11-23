@@ -23,7 +23,7 @@ class DbCartItemsManager:
             new_amount = _verify_amount_product(conn, id_product, amount)
             if new_amount < 0:
                 raise APIException(
-                    f"Not enough products available: {ractual_amount}, requested: {row['amount_bought']} for product id: {row['id_product']}",
+                    f"Not enough products available: {actual_amount}, requested: {row['amount_bought']} for product id: {row['id_product']}",
                     400,
                 )
             stmt = (
@@ -72,7 +72,7 @@ class DbCartItemsManager:
                 conn=conn, id_user=id_user, id_table=id_item, table=self.cart_item_table
             ):
                 raise APIException(f"Iteam id:{id_item} not exist", 403)
-            new_amount = _verify_amount_product(conn, id_product, amount)
+            new_amount = _verify_amount_product(conn, id_item, amount)
             if new_amount < 0:
                 raise APIException(
                     f"Not enough products available: {ractual_amount}, requested: {row['amount_bought']} for product id: {row['id_product']}",
