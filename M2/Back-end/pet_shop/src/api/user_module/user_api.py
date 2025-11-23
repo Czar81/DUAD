@@ -1,16 +1,13 @@
 from flask import jsonify, Blueprint
-from src.db.user_module.db_user_manager import DbUserManager
+from src.extensions import db_user_manager
 from src.utils import (
     role_required,
     validate_fields,
     register_error_handlers,
-    JWT_Manager,
 )
 
 user_bp = Blueprint("user", __name__)
 register_error_handlers(user_bp)
-db_user_manager = DbUserManager()
-jwt_manager = JWT_Manager()
 
 
 @user_bp.route("/register", methods=["POST"])

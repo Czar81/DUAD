@@ -1,5 +1,5 @@
 from flask import jsonify, Blueprint
-from src.db.user_module.db_address_manager import DbAddressManager
+from src.extensions import db_address_manager
 from src.utils import (
     role_required,
     validate_fields,
@@ -8,7 +8,6 @@ from src.utils import (
 
 address_bp = Blueprint("address", __name__)
 register_error_handlers(address_bp)
-db_address_manager = DbAddressManager()
 
 
 @address_bp.route("/me/address", methods=["POST"])

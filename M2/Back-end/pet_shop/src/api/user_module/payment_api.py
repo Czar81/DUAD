@@ -1,6 +1,5 @@
 from flask import jsonify, Blueprint
-from sqlalchemy.exc import SQLAlchemyError
-from src.db.user_module.db_payment_manager import DbPaymentManager
+from src.extensions import db_payment_manager
 from src.utils import (
     role_required,
     validate_fields,
@@ -9,8 +8,6 @@ from src.utils import (
 
 payment_bp = Blueprint("payment", __name__)
 register_error_handlers(payment_bp)
-db_payment_manager = DbPaymentManager()
-
 
 @payment_bp.route("/me/payment", methods=["POST"])
 @role_required(["admin","user"])

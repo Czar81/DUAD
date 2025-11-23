@@ -1,5 +1,5 @@
 from flask import Blueprint, jsonify
-from src.db.sell_module.db_cart_item_manager import DbCartItemsManager
+from src.extensions import db_cart_item_manager
 from src.utils import (
     role_required,
     validate_fields,
@@ -8,7 +8,6 @@ from src.utils import (
 
 cart_items_bp = Blueprint("cart_items", __name__)
 register_error_handlers(cart_items_bp)
-db_cart_item_manager = DbCartItemsManager()
 
 
 @cart_items_bp.route("/add-item", methods=["POST"])

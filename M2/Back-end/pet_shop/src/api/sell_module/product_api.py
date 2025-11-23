@@ -1,8 +1,7 @@
 from flask import jsonify, Blueprint
-from src.db.sell_module.db_product_manager import DbProductManager
+from src.extensions import db_product_manager, cache_manager
 from src.utils import (
     role_required,
-    CacheManager,
     validate_fields,
     generate_cache_based_filters,
     generate_cache_key,
@@ -12,8 +11,6 @@ from src.utils import (
 
 product_bp = Blueprint("product", __name__)
 register_error_handlers(product_bp)
-db_product_manager = DbProductManager()
-cache_manager = CacheManager()
 
 
 @product_bp.route("/products", methods=["POST"])

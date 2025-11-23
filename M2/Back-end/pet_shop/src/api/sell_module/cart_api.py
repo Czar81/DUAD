@@ -1,5 +1,5 @@
 from flask import Blueprint, jsonify
-from src.db.sell_module.db_cart_manager import DbCartManager
+from src.extensions import db_cart_manager
 from src.utils import (
     APIException,
     role_required,
@@ -9,18 +9,17 @@ from src.utils import (
 
 cart_bp = Blueprint("cart", __name__)
 register_error_handlers(cart_bp)
-db_cart_manager = DbCartManager()
 
 
 @cart_bp.route("/me/carts", methods=["POST"])
 @role_required(["admin", "user"])
 @validate_fields(optional=["state"])
-def create_cart(id_user,role, state):
+def create_cart(id_user, role, state):
     if role == "user":
-        id_cart=db_cart_manager.insert_data(id_user)
+        id_cart = db_cart_manager.insert_data(id_user)
     else:
-        id_cart=db_cart_manager.insert_data(id_user, state)
-    return jsonify(message="Cart created",data={"id":id_cart}), 201
+        id_cart = db_cart_manager.insert_data(id_user, state)
+    return jsonify(message="Cart created", data={"id": id_cart}), 201
 
 
 @cart_bp.route("/me/carts", methods=["GET"])

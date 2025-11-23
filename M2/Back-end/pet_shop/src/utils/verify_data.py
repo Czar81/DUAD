@@ -1,9 +1,6 @@
 from flask import request, jsonify
-from .encoding import JWT_Manager
-from src.db.user_module.db_user_manager import DbUserManager
+from src.extensions import db_user_manager, jwt_manager
 from functools import wraps
-
-jwt_manager = JWT_Manager()
 
 def role_required(allowed_roles):
     def decorator(func):
@@ -15,7 +12,7 @@ def role_required(allowed_roles):
             try:
                 token = token.replace("Bearer ", "")
                 id_decoded = jwt_manager.decode(token)
-                role = DbUserManager.get_role_by_id(id_decoded["id"])
+                role = db_user_manager.get_role_by_id(id_decoded["id"])
                 if role not in allowed_roles:
                     return jsonify(message="Unauthorized"), 403
                 kwargs["id_user"] = id_decoded["id"]

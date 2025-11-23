@@ -1,5 +1,5 @@
 from flask import jsonify, Blueprint
-from src.db.sell_module.db_receipt_manager import DbReceiptManager
+from src.extensions import db_receipt_manager
 from src.utils import (
     APIException,
     role_required,
@@ -9,7 +9,6 @@ from src.utils import (
 
 receipt_bp = Blueprint("receipt", __name__)
 register_error_handlers(receipt_bp)
-db_receipt_manager = DbReceiptManager()
 
 @receipt_bp.route("/me/receipt", methods=["POST"])
 @role_required(["admin", "user"])
