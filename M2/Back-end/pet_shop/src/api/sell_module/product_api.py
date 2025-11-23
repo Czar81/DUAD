@@ -1,14 +1,13 @@
 from flask import jsonify, Blueprint
-from sqlalchemy.exc import SQLAlchemyError
 from src.db.sell_module.db_product_manager import DbProductManager
 from src.utils import (
-    APIException,
     role_required,
     CacheManager,
     validate_fields,
     generate_cache_based_filters,
     generate_cache_key,
     register_error_handlers,
+    get_cache_if_exist
 )
 
 product_bp = Blueprint("product", __name__)

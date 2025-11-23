@@ -1,5 +1,4 @@
 from sqlalchemy import insert, select, delete, update, and_
-from src.db.utils_db.helpers import _filter_locals
 from src.utils.helpers import filter_values
 from src.utils.api_exception import APIException
 
@@ -23,11 +22,11 @@ class DbUserManager:
 
     def get_data(self, name: str, id_user: int):
         stmt = (
-            select(user_table)
-            .where(user_table.c.name == name)
-            .where(user_table.c.id_user == id_user)
+            select(self.user_table)
+            .where(self.user_table.c.name == name)
+            .where(self.user_table.c.id_user == id_user)
         )
-        with engine.connect() as conn:
+        with self.engine.connect() as conn:
             result = conn.execute(stmt).scalar()
             return result
 

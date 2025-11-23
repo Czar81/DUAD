@@ -2,7 +2,6 @@ from flask import jsonify, Blueprint
 from sqlalchemy.exc import SQLAlchemyError
 from src.db.user_module.db_payment_manager import DbPaymentManager
 from src.utils import (
-    APIException,
     role_required,
     validate_fields,
     register_error_handlers,

@@ -1,7 +1,6 @@
 from flask import Blueprint, jsonify
 from src.db.sell_module.db_cart_item_manager import DbCartItemsManager
 from src.utils import (
-    APIException,
     role_required,
     validate_fields,
     register_error_handlers,
