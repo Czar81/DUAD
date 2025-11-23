@@ -20,7 +20,7 @@ class DbProductManager:
         with self.engine.connect() as conn:
             result = conn.execute(stmt).scalar()
             if result is None:
-                raise APIException("Could not create user", 500)
+                raise APIException("Could not create product", 500)
             conn.commit()
         return result
 
@@ -40,7 +40,7 @@ class DbProductManager:
             result = conn.execute(stmt).mappings().all()
         if result:
             return [dict(row) for row in result]
-        raise APIException(f"Product id:{id_item} not exist", 404)
+        raise APIException(f"Product id:{id_product} not exist", 404)
 
     def update_data(
         self,
@@ -51,7 +51,7 @@ class DbProductManager:
         amount: int | None = None,
     ):
         values = filter_values(locals(), ("self", "id_product"))
-        if values is None:
+        if not values:
             raise APIException("No provide any value", 400)
         stmt = (
             update(self.product_table)
