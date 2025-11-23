@@ -16,7 +16,7 @@ db_product_manager = DbProductManager()
 cache_manager = CacheManager()
 
 
-@product_bp.route("products", methods=["POST"])
+@product_bp.route("/products", methods=["POST"])
 @role_required(["admin"])
 @validate_fields(required=["sku", "name", "price", "amount"])
 def register_product(sku, name, price, amount):
@@ -25,7 +25,7 @@ def register_product(sku, name, price, amount):
     return jsonify({"id": f"Product created id{id_product}"}), 201
 
 
-@product_bp.route("products", methods=["GET"])
+@product_bp.route("/products", methods=["GET"])
 @validate_fields(optional=["id_product", "sku", "name", "price", "amount"])
 def get_products(**filters):
     key = generate_cache_based_filters("getProducts", filters)
@@ -33,7 +33,7 @@ def get_products(**filters):
     return jsonify({"products": result}), 200
 
 
-@product_bp.route("products/<id_product>", methods=["GET"])
+@product_bp.route("/products/<id_product>", methods=["GET"])
 def get_product(id_product):
     try:
         id_product = int(id_product)
@@ -44,7 +44,7 @@ def get_product(id_product):
     return jsonify({"product": result}), 200
 
 
-@product_bp.route("products/<id_product>", methods=["PUT"])
+@product_bp.route("/products/<id_product>", methods=["PUT"])
 @role_required(["admin"])
 @validate_fields(optional=["sku", "name", "price", "amount"])
 def update_product(id_product, **filters):
@@ -60,7 +60,7 @@ def update_product(id_product, **filters):
     return jsonify({"message": "Product Updated"}), 200
 
 
-@product_bp.route("products/<id_product>", methods=["DELETE"])
+@product_bp.route("/products/<id_product>", methods=["DELETE"])
 @role_required(["admin"])
 def delete_product(id_product):
     try:
