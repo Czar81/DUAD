@@ -5,7 +5,6 @@ from functools import wraps
 
 jwt_manager = JWT_Manager()
 
-
 def role_required(allowed_roles):
     def decorator(func):
         @wraps(func)
@@ -16,7 +15,7 @@ def role_required(allowed_roles):
             try:
                 token = token.replace("Bearer ", "")
                 id_decoded = jwt_manager.decode(token)
-                role = DbUserManager.get_user_role_by_id(id_decoded["id"])
+                role = DbUserManager.get_role_by_id(id_decoded["id"])
                 if role not in allowed_roles:
                     return jsonify(message="Unauthorized"), 403
                 kwargs["id_user"] = id_decoded["id"]
