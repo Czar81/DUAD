@@ -11,15 +11,15 @@ register_error_handlers(address_bp)
 db_address_manager = DbAddressManager()
 
 
-@address_bp.route("me/address", methods=["POST"])
+@address_bp.route("/me/address", methods=["POST"])
 @role_required(["admin","user"])
 @validate_fields(required=["location"])
 def register_address(id_user, location):
-    db_address_manager.insert_data(id_user, location)
-    return jsonify(message="Address created"), 201
+    id_address=db_address_manager.insert_data(id_user, location)
+    return jsonify(message="Address created", data={"id":id_address}), 201
 
 
-@address_bp.route("me/address", methods=["GET"])
+@address_bp.route("/me/address", methods=["GET"])
 @role_required(["admin","user"])
 def get_address(id_user, role):
     if role == "user":
@@ -29,7 +29,7 @@ def get_address(id_user, role):
     return jsonify(data=address), 200
 
 
-@address_bp.route("me/address/<id_address>", methods=["GET"])
+@address_bp.route("/me/address/<id_address>", methods=["GET"])
 @role_required(["admin","user"])
 def get_address(id_address,role, id_user):
     if role == "user":
@@ -39,7 +39,7 @@ def get_address(id_address,role, id_user):
     return jsonify(data=address), 200
 
 
-@address_bp.route("me/address/<id_address>", methods=["PUT"])
+@address_bp.route("/me/address/<id_address>", methods=["PUT"])
 @role_required(["admin","user"])
 @validate_fields(required=["location"])
 def update_address(id_user, role, id_address, location):
@@ -50,7 +50,7 @@ def update_address(id_user, role, id_address, location):
     return jsonify(message="Address updated"), 200
 
 
-@address_bp.route("me/address/<id_address>", methods=["DELETE"])
+@address_bp.route("/me/address/<id_address>", methods=["DELETE"])
 @role_required(["admin", "user"])
 def delete_address(id_user, role, id_address):
     if role == "user":
