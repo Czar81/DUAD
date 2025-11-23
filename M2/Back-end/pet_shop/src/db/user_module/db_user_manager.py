@@ -29,6 +29,16 @@ class DbUserManager:
         with engine.connect() as conn:
             result = conn.execute(stmt).scalar()
             return result
+    
+    def get_user(self, username, password):
+        stmt = (
+            select(user_table)
+            .where(user_table.c.username == username)
+            .where(user_table.c.password == password)
+        )
+        with engine.connect() as conn:
+            result = conn.execute(stmt).scalar()
+            return result
             
     @classmethod
     def get_role_by_id(self, id):
@@ -69,3 +79,4 @@ class DbUserManager:
             else:
                 conn.commit()
         return True
+
