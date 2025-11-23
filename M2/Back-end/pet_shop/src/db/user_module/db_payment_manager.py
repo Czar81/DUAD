@@ -11,7 +11,7 @@ class DbPaymentManager:
         self.payment_table = TablesManager.payment_table
         self.engine = TablesManager.engine
 
-    def insert_data(self, id_user: str, type: str, data: str):
+    def insert_data(self, id_user: int, type: str, data: str):
         stmt = (
             insert(self.payment_table)
             .returning(self.payment_table.c.id)
@@ -38,14 +38,14 @@ class DbPaymentManager:
                 raise APIException(f"Payment id:{id_payment} not exist", 404)
             result = conn.execute(stmt)
             rows = result.mappings().all()
-            if result:
-                return [dict(row) for row in result]
-            raise APIException(f"Address id:{id_payment} not exist", 404)
+            if not result:
+                raise APIException(f"Payment id:{id_payment} not exist", 404)
+            return [dict(row) for row in result]
 
     def update_data(
         self, id_payment: int, type: str, data: str, id_user: str | None = None
     ):
-        values = filter_values(locals(), ("self", "id", "id_user"))
+        values = filter_values(locals(), ("self", "id_payment", "id_user"))
         stmt = (
             update(self.payment_table)
             .where(self.payment_table.c.id == id_payment)
