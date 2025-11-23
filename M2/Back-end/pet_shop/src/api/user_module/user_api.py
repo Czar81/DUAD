@@ -17,7 +17,6 @@ db_user_manager = DbUserManager()
 @role_required(["user", "admin"])
 @validate_fields(required=["name", "password"])
 def register(name, password):
-    # Check if this return a token
     id_user = db_user_manager.insert_data(sku, name, price, amount)
     return jsonify({"id": f"User created id:{id_user}"}), 201
 
@@ -33,7 +32,6 @@ def login(name, password):
 @user_bp.route("me", methods=["GET"])
 @role_required(["user", "admin"])
 def me(id_user, name):
-    # Add verify user own this
     user = db_user_manager.get_data(id_user)
     return jsonify(user=user), 200
 
@@ -41,8 +39,7 @@ def me(id_user, name):
 @user_bp.route("me", methods=["PUT"])
 @role_required(["admin", "user"])
 @validate_fields(optional=["name", "password", "role"])
-def update_product(id_user, role, **filters):
-    # Add verify user own this
+def update_user(id_user, role, **filters):
     if role == "admin":
         db_user_manager.update_data(id_user, **filters)
     else:
@@ -52,7 +49,6 @@ def update_product(id_user, role, **filters):
 
 @user_bp.route("me", methods=["DELETE"])
 @role_required(["admin", "user"])
-def delete_product(id_user):
-    # Add verify user own this
+def delete_user(id_user):
     db_user_manager.delete_data(id_user)
     return jsonify(message="User deleted"), 200
