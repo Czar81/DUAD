@@ -2,7 +2,12 @@ from sqlalchemy import select, insert, update, and_, Table
 from src.utils.api_exception import APIException
 from datetime import datetime
 from src.db.utils_db.helpers import _filter_locals
-from src.db.utils_db.verifies import _verify_user_own_cart, _verify_user_own_address, _verify_user_own_payment
+from src.db.utils_db.verifies import (
+    _verify_user_own_cart,
+    _verify_user_own_address,
+    _verify_user_own_payment,
+)
+
 
 class DbReceiptManager:
     def __init__(self, TablesManager):
@@ -52,11 +57,13 @@ class DbReceiptManager:
                 raise APIException(f"Cart id:{id_cart} not found or has no items", 404)
             products_with_stock = []
             for row in products:
-                new_amount = row["actual_amount"]-row["amount_bought"]
+                new_amount = row["actual_amount"] - row["amount_bought"]
                 if new_amount < 0:
                     raise APIException(
-                        f"Not enough products available: {row["actual_amount"]}, requested: {row['amount_bought']} for product id: {row['id_product']}",400)
-                products_with_stock.append((row["id_product"],new_amount))
+                        f"Not enough products available: {row["actual_amount"]}, requested: {row['amount_bought']} for product id: {row['id_product']}",
+                        400,
+                    )
+                products_with_stock.append((row["id_product"], new_amount))
             stmt_create = (
                 insert(self.receipt_table)
                 .returning(self.receipt_table.c.id)
@@ -76,13 +83,13 @@ class DbReceiptManager:
                 )
                 conn.execute(stmt_update_product)
             if id_new_receipt is None:
-                raise APIException("Could not create user", 500)
+                raise APIException("Could not create receipt", 500)
             conn.commit()
         return id_new_receipt
 
     def get_data(
         self,
-        id: int | None = None,
+        id_receipt: int | None = None,
         id_user: int | None = None,
         id_cart: int | None = None,
         id_address: int | None = None,
@@ -90,24 +97,19 @@ class DbReceiptManager:
         entry_date: str | None = None,
         state: str | None = None,
     ):
-        filters = _filter_locals(
+        conditions = _filter_locals(
             self.receipt_table,
             locals(),
-            (
-                "self",
-                "id_user",
-            ),
         )
-        conditions = []
         with self.engine.connect() as conn:
-            if id_user is not None and id is not None:
-                if not _verify_user_own_cart(conn, id, id_user, self.receipt_table):
-                    raise APIException(f"Receipt id:{id} does not exist", 403)
+            if id_user is not None and id_receipt is not None:
+                if not _verify_user_own_cart(
+                    conn, id_receipt, id_user, table=self.receipt_table
+                ):
+                    raise APIException(f"Receipt id:{id_receipt} does not exist", 403)
             if entry_date is not None:
                 self.__validate_date_str(entry_date)
-            for key, value in filters.items():
-                if value is not None:
-                    conditions.append(getattr(self.receipt_table.c, key) == value)
+
             stmt = select(self.receipt_table)
             if conditions:
                 stmt = stmt.where(and_(*conditions))
@@ -115,8 +117,8 @@ class DbReceiptManager:
         if result:
             return [dict(row) for row in result]
         error_msg = (
-            f"Receipt id:{id} not found"
-            if id is not None
+            f"Receipt id:{id_receipt} not found"
+            if id_receipt is not None
             else "No receipts found matching criteria"
         )
         raise APIException(error_msg, 404)
@@ -131,7 +133,7 @@ class DbReceiptManager:
                 )
             stmt_join = (
                 select(
-                    self.cart**filters_item_table.c.id_product,
+                    self.cart_item_table.c.id_product,
                     self.cart_item_table.c.amount.label("amount_bought"),
                     self.product_table.c.amount.label("actual_amount"),
                     self.receipt_table.c.state,
@@ -147,21 +149,13 @@ class DbReceiptManager:
                 )
                 .where(self.receipt_table.c.id == id_receipt)
             )
-            result_join = conn.execute(stmt_join).mappings().all()
-            if not result_join:
+            products = conn.execute(stmt_join).mappings().all()
+            if not products:
                 raise APIException(
                     f"Receipt id:{id_receipt} not found or has no items", 404
                 )
-            if result_join[0]["state"] == "returned":
-                raise APIException(f"Receipt id{id_receipt}, its already returned", 400)
-            products = [
-                {
-                    "id_product": row["id_product"],
-                    "amount_bought": row["amount_bought"],
-                    "actual_amount": row["actual_amount"],
-                }
-                for row in result_join
-            ]
+            if products[0]["state"] == "returned":
+                raise APIException(f"Receipt id{id_receipt}, is already returned", 400)
             for row in products:
                 new_amount = row["actual_amount"] + row["amount_bought"]
                 stmt_update_product = (
@@ -177,6 +171,7 @@ class DbReceiptManager:
             )
             conn.execute(stmt_update_receipt)
             conn.commit()
+        return True
 
     def __validate_date_str(self, date_str: str):
         try:
