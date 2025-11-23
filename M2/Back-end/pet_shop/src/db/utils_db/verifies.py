@@ -22,7 +22,7 @@ def _verify_amount_product(conn, id_product, amount_bought):
     if actual_amount is None:
         return False
     new_amount = actual_amount - amount_bought
-    return new_amount, actual_amount
+    return new_amount
 
 
 def _verify_user_own_cart(
