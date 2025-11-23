@@ -12,26 +12,26 @@ register_error_handlers(cart_bp)
 db_cart_manager = DbCartManager()
 
 
-@cart_bp.route("me/carts", methods=["POST"])
+@cart_bp.route("/me/carts", methods=["POST"])
 @role_required(["admin", "user"])
 @validate_fields(optional=["state"])
 def create_cart(id_user,role, state):
     if role == "user":
-        db_cart_manager.insert_data(id_user)
+        id_cart=db_cart_manager.insert_data(id_user)
     else:
-        db_cart_manager.insert_data(id_user, state)
-    return jsonify(message="Cart created"), 201
+        id_cart=db_cart_manager.insert_data(id_user, state)
+    return jsonify(message="Cart created",data={"id":id_cart}), 201
 
 
-@cart_bp.route("me/carts", methods=["GET"])
+@cart_bp.route("/me/carts", methods=["GET"])
 @role_required(["admin", "user"])
-@validate_fields(optional=["id_cart", "id_cart", "id_payment", "state", "entry_date"])
-def get_cart(**filters):
-    receipts = db_cart_manager.get_data(**filters)
+@validate_fields(optional=["id_cart", "state"])
+def get_cart(id_user, id_cart, state):
+    receipts = db_cart_manager.get_data(id_cart, id_user, state)
     return jsonify(data=receipts), 200
 
 
-@cart_bp.route("cart", methods=["GET"])
+@cart_bp.route("/cart", methods=["GET"])
 @role_required(["admin", "user"])
 @validate_fields(required=["id_cart"])
 def get_cart(id_cart):
@@ -39,7 +39,7 @@ def get_cart(id_cart):
     return jsonify(data=receipts), 200
 
 
-@cart_bp.route("me/carts/<id_cart>", methods=["PUT"])
+@cart_bp.route("/me/carts/<id_cart>", methods=["PUT"])
 @role_required(["admin", "user"])
 def update_cart(id_user, role, id_cart):
     if role == "user":
@@ -49,7 +49,7 @@ def update_cart(id_user, role, id_cart):
     return jsonify(message="Cart updated"), 200
 
 
-@cart_bp.route("me/carts/<id_cart>", methods=["DELETE"])
+@cart_bp.route("/me/carts/<id_cart>", methods=["DELETE"])
 @role_required(["admin", "user"])
 def delete_cart(id_user, role, id_cart):
     if role == "user":
