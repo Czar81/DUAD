@@ -3,7 +3,6 @@ from src.db.utils_db.helpers import _filter_locals
 from src.db.utils_db.verifies import _verify_user_own_cart, _verify_amount_product
 from src.utils.api_exception import APIException
 
-
 class DbCartItemsManager:
 
     def __init__(self, TablesManager):
@@ -20,20 +19,16 @@ class DbCartItemsManager:
                 raise APIException(
                     f"Cart id:{id_cart} not owned by user id:{id_user}", 403
                 )
-            new_amount = _verify_amount_product(conn, id_product, amount)
-            if new_amount < 0:
-                raise APIException(
-                    f"Not enough products available: {actual_amount}, requested: {row['amount_bought']} for product id: {row['id_product']}",
-                    400,
-                )
             stmt = (
                 insert(self.cart_item_table)
                 .returning(self.cart_item_table.c.id)
                 .values(id_cart=id_cart, id_product=id_product, amount=amount)
             )
-            result = conn.execute(stmt)
+            result = conn.execute(stmt).scalar()
+            if result is None:
+                raise APIException(f"Could not create cart item",500)
             conn.commit()
-            return result.scalar()
+        return result
 
     def get_data(
         self,
@@ -71,33 +66,32 @@ class DbCartItemsManager:
             if not _verify_user_own_cart(
                 conn=conn, id_user=id_user, id_table=id_item, table=self.cart_item_table
             ):
-                raise APIException(f"Iteam id:{id_item} not exist", 403)
-            new_amount = _verify_amount_product(conn, id_item, amount)
-            if new_amount < 0:
-                raise APIException(
-                    f"Not enough products available: {ractual_amount}, requested: {row['amount_bought']} for product id: {row['id_product']}",
-                    400,
-                )
+                raise APIException(f"Item id:{id_item} not exist", 403)
+            stmt_id_product=select(self.cart_item_table.c.id_product).where(self.cart_item_table.c.id == id_item)
+            id_product = conn.execute(stmt_id_product).scalar()
+            new_amount, actual_amount = _verify_amount_product(conn, id_product, amount)
             stmt = (
                 update(self.cart_item_table)
-                .where(self.cart_item_table.c.id_item == id_item)
+                .where(self.cart_item_table.c.id == id_item)
                 .values(amount=amount)
             )
             result = conn.execute(stmt)
             if result.rowcount == 0:
                 raise APIException((f"Item id:{id_item} not exist"), 404)
             conn.commit()
+        return True
 
     def delete_data(self, id_item: int, id_user: int | None = None):
         with self.engine.connect() as conn:
             if not _verify_user_own_cart(
                 conn=conn, id_user=id_user, id_table=id_item, table=self.cart_item_table
             ):
-                raise APIException(f"Iteam id:{id_item} not exist", 403)
+                raise APIException(f"Item id:{id_item} not exist", 403)
             stmt = delete(self.cart_item_table).where(
                 self.cart_item_table.c.id == id_item
             )
             result = conn.execute(stmt)
             if result.rowcount == 0:
-                raise APIException(f"Iteam id:{id_item} not exist", 404)
+                raise APIException(f"Item id:{id_item} not exist", 404)
             conn.commit()
+        return True
