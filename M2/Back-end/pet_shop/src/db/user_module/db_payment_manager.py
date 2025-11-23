@@ -21,7 +21,7 @@ class DbPaymentManager:
             result = conn.execute(stmt).scalar()
             if result is None:
                 raise APIException("Could not create payment", 500)
-            conn.commit()
+            conn.commit().scalar()
         return result
 
     def get_data(
