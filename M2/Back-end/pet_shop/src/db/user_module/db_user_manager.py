@@ -16,9 +16,11 @@ class DbUserManager:
             .values(name=name, password=password, role=role)
         )
         with engine.connect() as conn:
-            result = conn.execute(stmt)
+            result = conn.execute(stmt).scalar()
+            if result is None:
+                raise APIException("Could not create user", 500)
             conn.commit()
-        return result.scalar()
+        return result
 
     def get_data(self, name: str, id_user: int):
         stmt = select(user_table).where(

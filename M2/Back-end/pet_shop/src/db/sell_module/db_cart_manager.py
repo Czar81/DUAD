@@ -23,9 +23,11 @@ class DbCartManager:
             stmt = (
                 insert(self.cart_table).returning(self.cart_table.c.id).values(**values)
             )
-            result = conn.execute(stmt)
+            result = conn.execute(stmt).scalar()
+            if result is None:
+                raise APIException("Could not create cart", 500)
             conn.commit()
-            return result.scalar()
+        return result
 
     def get_data(
         self,

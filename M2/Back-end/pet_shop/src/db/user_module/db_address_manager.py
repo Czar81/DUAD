@@ -18,9 +18,11 @@ class DbAddressManager:
             .values(id_user=id_user, location=location)
         )
         with self.engine.connect() as conn:
-            result = conn.execute(stmt)
+            result = conn.execute(stmt).scalar()
+            if result is None:
+                raise APIException("Could not create address", 500)
             conn.commit()
-            return result.scalar()
+        return result
 
     def get_data(
         self,

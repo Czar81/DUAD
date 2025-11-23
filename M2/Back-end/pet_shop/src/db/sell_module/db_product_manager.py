@@ -18,9 +18,11 @@ class DbProductManager:
             .values(sku=sku, name=name, price=price, amount=amount)
         )
         with self.engine.connect() as conn:
-            result = conn.execute(stmt)
+            result = conn.execute(stmt).scalar()
+            if result is None:
+                raise APIException("Could not create user", 500)
             conn.commit()
-        return result.scalar()
+        return result
 
     def get_data(
         self,

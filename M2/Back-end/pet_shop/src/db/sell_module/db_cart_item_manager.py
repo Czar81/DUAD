@@ -53,8 +53,8 @@ class DbCartItemsManager:
                 stmt = stmt.where(and_(*conditions))
             result = conn.execute(stmt).mappings().all()
         if result:
-            return [dict(row) for row in result]
-        raise APIException(f"Item cart id:{id_item} not exist", 404)
+            raise APIException(f"Item cart id:{id_item} not exist", 404)
+        return [dict(row) for row in result]
 
     def update_data(
         self,

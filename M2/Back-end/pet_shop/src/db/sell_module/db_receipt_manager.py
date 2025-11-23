@@ -75,6 +75,8 @@ class DbReceiptManager:
                     .values(amount=new_amount)
                 )
                 conn.execute(stmt_update_product)
+            if id_new_receipt is None:
+                raise APIException("Could not create user", 500)
             conn.commit()
         return id_new_receipt
 
