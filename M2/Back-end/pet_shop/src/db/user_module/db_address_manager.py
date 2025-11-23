@@ -11,7 +11,7 @@ class DbAddressManager:
         self.address_table = TablesManager.address_table
         self.engine = TablesManager.engine
 
-    def insert_data(self, id_user: str, location: str):
+    def insert_data(self, id_user: int, location: str):
         stmt = (
             insert(self.address_table)
             .returning(self.address_table.c.id)
@@ -41,7 +41,7 @@ class DbAddressManager:
                 return [dict(row) for row in result]
             raise APIException(f"Address id:{id_address} not exist", 404)
 
-    def update_data(self, id_address: int, location: str, id_user: str | None = None):
+    def update_data(self, id_address: int, location: str, id_user: int | None = None):
         with self.engine.connect() as conn:
             if not _verify_user_own_address(conn, id_address, id_user):
                 raise APIException(f"Address id:{id_address} not exist", 404)
