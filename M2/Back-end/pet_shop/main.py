@@ -7,7 +7,7 @@ from src.api.sell_module.product_api import product_bp
 from src.api.sell_module.receipt_api import receipt_bp
 from flask import Flask
 from dotenv import load_dotenv
-from src.db import TablesManager
+from src.extensions import tm
 from os import environ
 
 load_dotenv()
@@ -15,7 +15,7 @@ load_dotenv()
 app = Flask("Store-service")
 
 if __name__ == "__main__":
-    TablesManager.create_tables()
+    tm.create_tables()
     app.register_blueprint(product_bp)
     app.register_blueprint(user_bp)
     app.register_blueprint(address_bp)

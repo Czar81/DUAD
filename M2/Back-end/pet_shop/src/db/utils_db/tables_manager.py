@@ -9,7 +9,8 @@ load_dotenv()
 
 
 class TablesManager:
-    engine = create_engine(environ.get("URL_POSTGRES"))
+    def __init__(self, url=environ.get("URL_POSTGRES")):
+        self.engine = create_engine(url)
     metadata_obj = MetaData()
     product_table = Table(
         "product",
@@ -69,6 +70,5 @@ class TablesManager:
         Column("state", String(10), server_default="bought"),
     )
 
-    @classmethod
-    def create_tables(cls):
-        cls.metadata_obj.create_all(cls.engine)
+    def create_tables(self):
+        self.metadata_obj.create_all(self.engine)
