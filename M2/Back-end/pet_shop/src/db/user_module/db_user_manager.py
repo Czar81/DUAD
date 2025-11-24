@@ -9,13 +9,9 @@ class DbUserManager:
         self.user_table = TablesManager.user_table
         self.engine = TablesManager.engine
 
-
-    def insert_data(self, name: str, password: str, role: str):
-        stmt = (
-            insert(self.user_table)
-            .returning(self.user_table.c.id)
-            .values(name=name, password=password, role=role)
-        )
+    def insert_data(self, username: str, password: str, role: str | None = None):
+        values = filter_values(locals())
+        stmt = insert(self.user_table).returning(self.user_table.c.id).values(**values)
         with self.engine.connect() as conn:
             result = conn.execute(stmt).scalar()
             if result is None:
@@ -23,15 +19,17 @@ class DbUserManager:
             conn.commit()
         return result
 
-    def get_data(self, name: str, id_user: int):
-        stmt = select(self.user_table).where(
-            and_(self.user_table.c.name == name, self.user_table.c.id_user == id_user)
-        )
+    def get_data(self, id_user: int | None = None):
+        stmt = select(self.user_table)
+        if id_user is not None:
+            stmt.where(self.user_table.c.id_user == id_user)
         with self.engine.connect() as conn:
-            result = conn.execute(stmt).scalar()
+            result = conn.execute(stmt).mappings().all()
+            if result == []:
+                return "Not users found"
             return result
-    
-    def get_user(self, username, password):
+
+    def get_user(self, username: str, password: str):
         stmt = (
             select(self.user_table)
             .where(self.user_table.c.username == username)
@@ -40,9 +38,9 @@ class DbUserManager:
         with self.engine.connect() as conn:
             result = conn.execute(stmt).scalar()
             return result
-            
-    def get_role_by_id(self, id):
-        stmt = select(self.user_table.c.role).where(self.user_table.c.id == id)
+
+    def get_role_by_id(self, id_user: int):
+        stmt = select(self.user_table.c.role).where(self.user_table.c.id == id_user)
         with self.engine.connect() as conn:
             result = conn.execute(stmt)
         if result == None:
@@ -53,7 +51,7 @@ class DbUserManager:
     def update_data(
         self,
         id_user: int,
-        name: str | None = None,
+        username: str | None = None,
         password: str | None = None,
         role: str | None = None,
     ):
@@ -79,4 +77,3 @@ class DbUserManager:
             else:
                 conn.commit()
         return True
-

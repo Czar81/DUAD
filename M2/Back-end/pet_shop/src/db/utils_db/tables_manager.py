@@ -16,7 +16,7 @@ class TablesManager:
         "product",
         metadata_obj,
         Column("id", Integer, primary_key=True),
-        Column("sku", String(20), nullable=False),
+        Column("sku", String(20), nullable=False, unique=True),
         Column("name", String(30), nullable=False),
         Column("price", Integer, nullable=False),
         Column("amount", Integer, nullable=False),
@@ -25,7 +25,7 @@ class TablesManager:
         "user",
         metadata_obj,
         Column("id", Integer, primary_key=True),
-        Column("name", String(30), nullable=False),
+        Column("username", String(30), nullable=False, unique=True),
         Column("password", String, nullable=False),
         Column("role", String(10), server_default="user"),
     )

@@ -14,6 +14,7 @@ from src.db import (
 @pytest.fixture
 def db():
     tm = TablesManager(url="sqlite:///:memory:")
+    tm.create_tables()
     return tm
 
 
