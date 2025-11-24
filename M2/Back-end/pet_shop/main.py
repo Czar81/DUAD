@@ -7,7 +7,7 @@ from src.api.sell_module.product_api import product_bp
 from src.api.sell_module.receipt_api import receipt_bp
 from flask import Flask
 from dotenv import load_dotenv
-from db.tables_manager import TablesManager
+from src.db import TablesManager
 from os import environ
 
 load_dotenv()

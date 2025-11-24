@@ -45,7 +45,7 @@ def update_profile(id_user, role, name, password, new_role):
     return jsonify({"message": "User updated"}), 200
 
 
-@user_bp.route("me", methods=["DELETE"])
+@user_bp.route("/me", methods=["DELETE"])
 @role_required(["admin", "user"])
 def delete_profile(id_user, role):
     db_user_manager.delete_data(id_user)

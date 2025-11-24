@@ -30,7 +30,7 @@ def get_payment(id_user, role, type_data):
 
 @payment_bp.route("/me/payment/<id_payment>", methods=["GET"])
 @role_required(["admin","user"])
-def get_payment(id_payment, role, id_user):
+def get_single_payment(id_payment, role, id_user):
     if role == "user":
         payment = db_payment_manager.get_data(id_payment,id_user)
     else:

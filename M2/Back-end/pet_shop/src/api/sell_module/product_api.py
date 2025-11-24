@@ -31,7 +31,7 @@ def get_products(**filters):
 
 
 @product_bp.route("/products/<id_product>", methods=["GET"])
-def get_product(id_product):
+def get_single_product(id_product):
     try:
         id_product = int(id_product)
     except ValueError:

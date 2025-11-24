@@ -1,6 +1,6 @@
 from flask import jsonify
 from sqlalchemy.exc import SQLAlchemyError
-from utils import APIException
+from .api_exception import APIException
 import logging
 
 logger = logging.getLogger(__name__)

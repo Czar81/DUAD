@@ -1,4 +1,5 @@
-from src.utils import JWT_Manager, CacheManager
+from src.utils.encoding import JWT_Manager
+from src.utils.cache_manager import CacheManager
 from src.db import (
     DbPaymentManager,
     DbUserManager,
@@ -15,7 +16,7 @@ db_user_manager = DbUserManager(TablesManager)
 db_address_manager =DbAddressManager(TablesManager)
 db_cart_manager = DbCartManager(TablesManager)
 db_cart_item_manager = DbCartItemsManager(TablesManager)
-db_product_manager=DbProductManager(TablesManager),
+db_product_manager=DbProductManager(TablesManager)
 db_receipt_manager=DbReceiptManager(TablesManager)
 cache_manager = CacheManager()
 jwt_manager = JWT_Manager()

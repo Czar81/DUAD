@@ -30,7 +30,7 @@ def get_receipt(**filters):
 
 @receipt_bp.route("/me/receipt/<id_receipt>", methods=["GET"])
 @role_required(["admin", "user"])
-def get_receipt(id_receipt):
+def get_single_receipt(id_receipt):
     receipts=db_receipt_manager.get_data(id_receipt)
     return jsonify(data=receipts), 200
 

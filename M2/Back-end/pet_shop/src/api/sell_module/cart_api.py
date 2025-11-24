@@ -33,7 +33,7 @@ def get_cart(id_user, id_cart, state):
 @cart_bp.route("/cart", methods=["GET"])
 @role_required(["admin", "user"])
 @validate_fields(required=["id_cart"])
-def get_cart(id_cart):
+def get_current_cart(id_cart):
     receipts = db_cart_manager.get_data(id_cart)
     return jsonify(data=receipts), 200
 

@@ -30,7 +30,7 @@ def get_address(id_user, role):
 
 @address_bp.route("/me/address/<id_address>", methods=["GET"])
 @role_required(["admin","user"])
-def get_address(id_address,role, id_user):
+def get_single_address(id_address,role, id_user):
     if role == "user":
         address = db_address_manager.get_data(id_address,id_user)
     else:

@@ -1,8 +1,9 @@
 from flask import request, jsonify
-from src.extensions import db_user_manager, jwt_manager
 from functools import wraps
 
 def role_required(allowed_roles):
+    from src.extensions import db_user_manager, jwt_manager 
+
     def decorator(func):
         @wraps(func)
         def wrapper(*args, **kwargs):
