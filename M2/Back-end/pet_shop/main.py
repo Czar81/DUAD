@@ -1,10 +1,12 @@
-from src.api.user_module.address_api import address_bp
-from src.api.user_module.payment_api import payment_bp
-from src.api.user_module.user_api import user_bp
-from src.api.sell_module.cart_api import cart_bp
-from src.api.sell_module.cart_item_api import cart_items_bp
-from src.api.sell_module.product_api import product_bp
-from src.api.sell_module.receipt_api import receipt_bp
+from src.api import (
+    address_bp,
+    cart_bp,
+    user_bp,
+    payment_bp,
+    product_bp,
+    receipt_bp,
+    cart_items_bp,
+)
 from flask import Flask
 from dotenv import load_dotenv
 from src.extensions import tm
