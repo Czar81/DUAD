@@ -1,7 +1,4 @@
 import pytest
-from src.db import DbUserManager, TablesManager
-from sqlalchemy import inspect
-
 
 def test_create_user(db_user_manager):
     username = "Ian"
