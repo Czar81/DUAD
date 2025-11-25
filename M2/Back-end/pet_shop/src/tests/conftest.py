@@ -17,6 +17,10 @@ def db():
     tm.create_tables()
     return tm
 
+@pytest.fixture
+def base_user(db_user_manager):
+    user_id = db_user_manager.insert_data("TestUser", "12345", "user")
+    return user_id
 
 @pytest.fixture
 def db_payment_manager(db):
