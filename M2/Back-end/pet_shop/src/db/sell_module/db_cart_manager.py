@@ -11,7 +11,7 @@ class DbCartManager:
 
     def insert_data(self, id_user: int, state: str | None = None):
         with self.engine.connect() as conn:
-            if not self.__verify_if_cart_is_active(conn, id_user):
+            if self.__verify_if_cart_is_active(conn, id_user):
                 if state == "active" or state is None:
                     raise APIException(
                         f"User id: {id_user} already have an active cart", 400
@@ -41,32 +41,29 @@ class DbCartManager:
         with self.engine.connect() as conn:
             if not _verify_user_own_cart(conn, id_user, id_cart):
                 raise APIException(f"Cart id:{id_cart} not exist", 401)
-            stmt = select
-
             result = conn.execute(stmt).mappings().all()
-            if result:
-                return [dict(row) for row in result]
-            raise APIException(f"Cart id:{id_cart} not exist", 404)
+            if not result:
+                return "Not carts found"
+            return [dict(row) for row in result]
 
-    def update_data(self, id_cart: int, state: str, id_user: int | None = None):
+    def update_data(self, id_cart: int, state: str, id_user: int):
         with self.engine.connect() as conn:
-            if not _verify_user_own_cart(conn, id_user, id_cart):
+            if not _verify_user_own_cart(conn, id_user, id_cart=id_cart):
                 raise APIException(f"Cart id:{id_cart} not exist", 401)
-            if self.__verify_if_cart_is_active(conn, id_user) and state == "active":
-                raise APIException(
-                    f"User id: {id_user} already has an active cart", 400
-                )
-            stmt_select = select(self.cart_table.c.id).where(
+
+            stmt_select = select(self.cart_table).where(and_(
                 self.cart_table.c.id_user == id_user,
                 self.cart_table.c.state == "active",
             )
-            id_active_cart = conn.execute(stmt_select)
-            stmt_update_old = (
-                update(self.cart_table)
-                .where(self.cart_table.c.id == id_active_cart)
-                .values(state="inactive")
             )
-            conn.execute(stmt_update_old)
+            id_active_cart = conn.execute(stmt_select).scalar()
+            if id_active_cart is not None:
+                stmt_update_old = (
+                    update(self.cart_table)
+                    .where(self.cart_table.c.id == id_active_cart)
+                    .values(state="inactive")
+                )
+                conn.execute(stmt_update_old)
             stmt = (
                 update(self.cart_table)
                 .where(self.cart_table.c.id == id_cart)
@@ -96,7 +93,9 @@ class DbCartManager:
             conn.commit()
         return True
 
-    def __verify_if_cart_is_active(self, conn, id_user: int | None):
+    def __verify_if_cart_is_active(self, conn, id_user: int | None=None):
+        if id_user is None:
+            return False
         stmt = select(self.cart_table).where(
             and_(
                 self.cart_table.c.id_user == id_user,
