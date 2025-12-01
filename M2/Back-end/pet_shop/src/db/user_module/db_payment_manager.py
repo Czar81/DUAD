@@ -37,11 +37,10 @@ class DbPaymentManager:
             stmt = stmt.where(and_(*conditions))
         with self.engine.connect() as conn:
             if not _verify_user_own_payment(conn, id_payment, id_user):
-                raise APIException(f"Payment id:{id_payment} not exist", 404)
-            result = conn.execute(stmt)
-            rows = result.mappings().all()
+                raise APIException(f"Payment id:{id_payment} not exist", 404)       
+            result = conn.execute(stmt).mappings().all()
             if not result:
-                raise APIException(f"Payment id:{id_payment} not exist", 404)
+                return "Not payments found"
             return [dict(row) for row in result]
 
     def update_data(
@@ -62,6 +61,7 @@ class DbPaymentManager:
                     f"Payment method id:{str(id_payment)} not exist", 404
                 )
             conn.commit()
+        return True
 
     def delete_data(self, id_payment: int, id_user: int | None = None):
         stmt = delete(self.payment_table).where(self.payment_table.c.id == id_payment)
@@ -72,3 +72,4 @@ class DbPaymentManager:
             if result.rowcount == 0:
                 raise APIException(f"Payment method id:{id_payment} not exist", 404)
             conn.commit()
+        return True
