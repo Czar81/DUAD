@@ -43,7 +43,6 @@ def test_update_all_payment_params(db_payment_manager, base_payment):
 def test_delete_payment(db_payment_manager, base_payment):
     id_payment = base_payment
     result_expected = "Not payments found"
-    payments = db_payment_manager.get_data()
     deleted = db_payment_manager.delete_data(id_payment)
     payments = db_payment_manager.get_data()
 

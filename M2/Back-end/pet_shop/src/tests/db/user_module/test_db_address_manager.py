@@ -41,7 +41,6 @@ def test_update_all_address_params(db_address_manager, base_address):
 def test_delete_address(db_address_manager, base_address):
     id_address = base_address
     result_expected = "Not address found"
-    address = db_address_manager.get_data()
     deleted = db_address_manager.delete_data(id_address)
     address = db_address_manager.get_data()
 
