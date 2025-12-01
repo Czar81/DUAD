@@ -39,9 +39,9 @@ class DbAddressManager:
             if not _verify_user_own_address(conn, id_address, id_user):
                 raise APIException(f"Address id:{id_address} not exist", 404)
             result = conn.execute(stmt).mappings().all()
-            if result:
-                return [dict(row) for row in result]
-            raise APIException(f"Address id:{id_address} not exist", 404)
+            if not result:
+                return "Not address found"
+            return [dict(row) for row in result]
 
     def update_data(self, id_address: int, location: str, id_user: int | None = None):
         with self.engine.connect() as conn:
@@ -56,6 +56,7 @@ class DbAddressManager:
             if result.rowcount == 0:
                 raise APIException(f"Address id:{str(id_address)} not exist", 404)
             conn.commit()
+        return True
 
     def delete_data(self, id_address: int, id_user: int | None = None):
         with self.engine.connect() as conn:
@@ -66,3 +67,4 @@ class DbAddressManager:
             if result.rowcount == 0:
                 raise APIException(f"Address id:{str(id_address)} not exist", 404)
             conn.commit()
+        return True
