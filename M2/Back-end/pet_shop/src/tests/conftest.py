@@ -79,7 +79,7 @@ def base_receipt(
     db_product_manager,
     db_receipt_manager,
 ):
-    amount, state = request.param
+
     id_user = db_user_manager.insert_data("TestUser", "12345", "user")
     id_payment = db_payment_manager.insert_data(id_user, "card", "data_payment")
     id_address = db_address_manager.insert_data(id_user, "9 Oak Valley Avenue")
@@ -88,10 +88,10 @@ def base_receipt(
         "FD_NU_132", "nutrisource lite", 1000, 50
     )
     id_cart_item = db_cart_item_manager.insert_data(
-        id_cart, id_product, amount, id_user
+        id_cart, id_product, 20, id_user
     )
     id_receip = db_receipt_manager.create_receipt(
-        id_cart, id_address, id_payment, state, id_user
+        id_cart, id_address, id_payment, "bought", id_user
     )
     return id_receip
 

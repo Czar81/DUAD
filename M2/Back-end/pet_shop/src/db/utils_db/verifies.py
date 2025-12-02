@@ -30,6 +30,7 @@ def _verify_user_own_cart(
     id_cart: int | None = None,
     table=None,
 ):
+    print(locals())
     if id_user is None:
         return True
     if id_table is not None and table is not None:

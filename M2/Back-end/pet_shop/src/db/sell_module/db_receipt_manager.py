@@ -29,11 +29,11 @@ class DbReceiptManager:
                 raise APIException(
                     f"Cart id:{id_cart} not owned by user or not exist", 403
                 )
-            if not _verify_user_own_address(conn, id_user, id_address=id_address):
+            if not _verify_user_own_address(conn, id_address, id_user):
                 raise APIException(
                     f"Address id:{id_address} not owned by user or not exist", 403
                 )
-            if not _verify_user_own_payment(conn, id_user, id_payment=id_payment):
+            if not _verify_user_own_payment(conn, id_payment, id_user ):
                 raise APIException(
                     f"Payment id:{id_payment} not owned by user or not exist", 403
                 )
@@ -122,6 +122,25 @@ class DbReceiptManager:
             else "No receipts found matching criteria"
         )
         raise APIException(error_msg, 404)
+
+    def update_data(self, id_receipt: int, state: str, id_user: int | None = None):
+        with self.engine.connect() as conn:
+            stmt_get_cart_id=select(self.receipt_table.c.id_cart).where(self.receipt_table.c.id == id_receipt)
+            id_cart=conn.execute(stmt_get_cart_id).scalar()
+            if not _verify_user_own_cart(conn, id_user, id_cart=id_cart):
+                raise APIException(
+                    f"Cart id:{id_receipt} not owned by user or not exist", 403
+                )
+            stmt = (
+                update(self.receipt_table)
+                .where(self.receipt_table.c.id == id_receipt)
+                .values(state=state)
+            )
+            result = conn.execute(stmt)
+            if result.rowcount == 0:
+                raise APIException(f"Receipt id:{id_receipt} not exist", 404)
+            conn.commit()
+        return True
 
     def return_receipt(self, id_receipt: int, id_user: int):
         with self.engine.connect() as conn:
