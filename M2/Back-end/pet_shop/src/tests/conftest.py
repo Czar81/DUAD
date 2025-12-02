@@ -57,14 +57,13 @@ def base_cart(db_user_manager, db_cart_manager):
 def base_cart_item(
     request, db_cart_manager, db_user_manager, db_cart_item_manager, db_product_manager
 ):
-    amount = request.param
     id_user = db_user_manager.insert_data("TestUser", "12345", "user")
     id_cart = db_cart_manager.insert_data(id_user)
     id_product = db_product_manager.insert_data(
         "FD_NU_132", "nutrisource lite", 1000, 50
     )
     id_cart_item = db_cart_item_manager.insert_data(
-        id_cart, id_product, amount, id_user
+        id_cart, id_product, 10, id_user
     )
     return id_cart_item
 

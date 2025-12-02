@@ -9,12 +9,10 @@ cart_table = TablesManager.cart_table
 
 def _verify_amount_product(conn, id_product, amount_bought):
     stmt = select(product_table.c.amount).where(product_table.c.id == id_product)
-    result = conn.execute(stmt).fetchone()
-    if result is None:
+    actual_amount = conn.execute(stmt).scalar()
+    if actual_amount is None:
         raise ValueError(f"Product with id {id_product} not found")
-    
-    actual_amount = result[0]
-    
+        
     if actual_amount < amount_bought:
         raise ValueError(
             f"Insufficient stock. Available: {actual_amount}, Requested: {amount_bought}"
