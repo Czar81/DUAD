@@ -13,6 +13,7 @@ from src.db import (
 
 tm = TablesManager()
 tm.create_tables()
+db_payment_manager = DbPaymentManager(tm)
 db_user_manager = DbUserManager(tm)
 db_address_manager =DbAddressManager(tm)
 db_cart_manager = DbCartManager(tm)
