@@ -9,11 +9,17 @@ class JWT_Manager:
     def __init__(self):
         self.private_key = environ.get("PRIVATE_KEY")
         self.public_key = environ.get("PUBLIC_KEY")
-
+        if not self.private_key or not self.public_key:
+            raise ValueError("PRIVATE_KEY y PUBLIC_KEY must be defiend in .env")
     def encode(self, data):
-        encoded = encode(data, self.private_key, algorithm="RS256")
-        return encoded
-
+        try:
+            encoded = encode(data, self.private_key, algorithm="RS256")
+            return encoded
+        except Exception as e:
+            raise ValueError(f"Error codificando JWT: {str(e)}")
     def decode(self, token):
-        decoded = decode(token, self.public_key, algorithms=["RS256"])
-        return decoded
+        try:
+            decoded = decode(token, self.public_key, algorithms=["RS256"])
+            return decoded
+        except Exception as e:
+            raise ValueError(f"Error decodificando JWT: {str(e)}")

@@ -10,8 +10,9 @@ from src.db import (
     DbReceiptManager,
     TablesManager
 )
+
 tm = TablesManager()
-db_payment_manager = DbPaymentManager(tm)
+tm.create_tables()
 db_user_manager = DbUserManager(tm)
 db_address_manager =DbAddressManager(tm)
 db_cart_manager = DbCartManager(tm)
