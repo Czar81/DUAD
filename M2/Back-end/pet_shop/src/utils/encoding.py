@@ -16,10 +16,10 @@ class JWT_Manager:
             encoded = encode(data, self.private_key, algorithm="RS256")
             return encoded
         except Exception as e:
-            raise ValueError(f"Error codificando JWT: {str(e)}")
+            raise ValueError(f"Error encoding JWT: {str(e)}")
     def decode(self, token):
         try:
             decoded = decode(token, self.public_key, algorithms=["RS256"])
             return decoded
         except Exception as e:
-            raise ValueError(f"Error decodificando JWT: {str(e)}")
+            raise ValueError(f"Error decoding JWT: {str(e)}")

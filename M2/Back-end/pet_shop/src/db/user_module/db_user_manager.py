@@ -22,12 +22,12 @@ class DbUserManager:
     def get_data(self, id_user: int | None = None):
         stmt = select(self.user_table)
         if id_user is not None:
-            stmt.where(self.user_table.c.id_user == id_user)
+            stmt=stmt.where(self.user_table.c.id == id_user)
         with self.engine.connect() as conn:
             result = conn.execute(stmt).mappings().all()
             if result == []:
                 return "Not users found"
-            return result
+            return [dict(row) for row in result]
 
     def get_user(self, username: str, password: str):
         stmt = (
