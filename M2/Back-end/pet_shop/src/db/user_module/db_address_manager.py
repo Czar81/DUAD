@@ -26,7 +26,7 @@ class DbAddressManager:
 
     def get_data(
         self,
-        id_address: int | None = None,
+        id: int | None = None,
         id_user: int | None = None,
         location: str | None = None,
     ):
@@ -36,8 +36,8 @@ class DbAddressManager:
             stmt = stmt.where(and_(*conditions))
 
         with self.engine.connect() as conn:
-            if not _verify_user_own_address(conn, id_address, id_user):
-                raise APIException(f"Address id:{id_address} not exist", 404)
+            if not _verify_user_own_address(conn, id, id_user):
+                raise APIException(f"Address id:{id} not exist", 404)
             result = conn.execute(stmt).mappings().all()
             if not result:
                 return "Not address found"
