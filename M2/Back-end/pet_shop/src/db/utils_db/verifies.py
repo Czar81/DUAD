@@ -12,7 +12,7 @@ def _verify_amount_product(conn, id_product, amount_bought):
     actual_amount = conn.execute(stmt).scalar()
     if actual_amount is None:
         raise ValueError(f"Product with id {id_product} not found")
-        
+
     if actual_amount < amount_bought:
         raise ValueError(
             f"Insufficient stock. Available: {actual_amount}, Requested: {amount_bought}"
@@ -47,7 +47,7 @@ def _verify_user_own_cart(
 
 
 def _verify_user_own_payment(conn, id_payment: int, id_user: int | None = None):
-    if id_user is None:
+    if id_user is None or id_payment is None:
         return True
     stmt = select(payment_table.c.id_user).where(
         and_(payment_table.c.id == id_payment, payment_table.c.id_user == id_user)
@@ -56,7 +56,9 @@ def _verify_user_own_payment(conn, id_payment: int, id_user: int | None = None):
     return bool(result and result == id_user)
 
 
-def _verify_user_own_address(conn, id_address: int| None = None, id_user: int | None = None):
+def _verify_user_own_address(
+    conn, id_address: int | None = None, id_user: int | None = None
+):
     if id_user is None or id_address is None:
         return True
     stmt = select(address_table.c.id_user).where(
