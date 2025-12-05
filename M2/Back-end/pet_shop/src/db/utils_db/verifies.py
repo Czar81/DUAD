@@ -30,7 +30,6 @@ def _verify_user_own_cart(
     id_cart: int | None = None,
     table=None,
 ):
-    print(locals())
     if id_user is None:
         return True
     if id_table is not None and table is not None:
@@ -43,8 +42,8 @@ def _verify_user_own_cart(
         stmt = select(cart_table.c.id_user).where(
             and_(cart_table.c.id_user == id_user, cart_table.c.id == id_cart)
         )
-    result = conn.execute(stmt).fetchone()
-    return bool(result and result.id_user == id_user)
+    result = conn.execute(stmt).scalar()
+    return bool(result and result == id_user)
 
 
 def _verify_user_own_payment(conn, id_payment: int, id_user: int | None = None):
@@ -53,15 +52,15 @@ def _verify_user_own_payment(conn, id_payment: int, id_user: int | None = None):
     stmt = select(payment_table.c.id_user).where(
         and_(payment_table.c.id == id_payment, payment_table.c.id_user == id_user)
     )
-    result = conn.execute(stmt).fetchone()
-    return bool(result and result.id_user == id_user)
+    result = conn.execute(stmt).scalar()
+    return bool(result and result == id_user)
 
 
-def _verify_user_own_address(conn, id_address: int, id_user: int | None = None):
-    if id_user is None:
+def _verify_user_own_address(conn, id_address: int| None = None, id_user: int | None = None):
+    if id_user is None or id_address is None:
         return True
     stmt = select(address_table.c.id_user).where(
         and_(address_table.c.id == id_address, address_table.c.id_user == id_user)
     )
-    result = conn.execute(stmt).fetchone()
-    return bool(result and result.id_user == id_user)
+    result = conn.execute(stmt).scalar()
+    return bool(result and result == id_user)
