@@ -13,7 +13,9 @@ def test_create_payment(base_user, db_payment_manager):
 
 
 def test_get_all_payment(db_payment_manager, base_payment):
-    result_expected = [{"id": 1, "id_user": 1, "type": "card", "data": "data_payment"}]
+    result_expected = [
+        {"id": 1, "id_user": 1, "type_data": "card", "data": "data_payment"}
+    ]
 
     payments = db_payment_manager.get_data()
 
@@ -28,7 +30,7 @@ def test_update_all_payment_params(db_payment_manager, base_payment):
         {
             "id": id_payment,
             "id_user": id_payment,
-            "type": "visa card",
+            "type_data": "visa card",
             "data": "new data content",
         }
     ]
