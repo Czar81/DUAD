@@ -1,14 +1,21 @@
 import pytest
+from os import getenv
 
-
-def est_register_user(client):
+def test_register_user(client):
     response = client.post(
-        "/register", json={"username": "TestUser", "password": "12345"}
+        "/register", json={"username": "TestUser1", "password": "12345"}
     )
 
     assert response.status_code == 201
     assert "token" in response.json
 
+def test_register_admin(client):
+    response = client.post(
+        "/register", json={"username": "admin232", "password": "12345"}, headers={"X-ADMIN-TOKEN":getenv("ADMIN_BOOTSTRAP_TOKEN")}
+    )
+    print(response.json)
+    assert response.status_code == 201
+    assert "token" in response.json
 
 def test_login(client, get_token_user):
     response = client.post("/login", json={"username": "TestUser", "password": "12345"})

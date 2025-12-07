@@ -25,7 +25,7 @@ class TablesManager:
         "user",
         metadata_obj,
         Column("id", Integer, primary_key=True),
-        Column("username", String(30), nullable=False, unique=True),
+        Column("username", String(30), nullable=False),
         Column("password", String, nullable=False),
         Column("role", String(10), server_default="user"),
     )

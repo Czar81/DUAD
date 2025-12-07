@@ -1,10 +1,11 @@
-from flask import jsonify, Blueprint
+from flask import jsonify, Blueprint, request
 from src.extensions import db_user_manager, jwt_manager
 from src.utils import (
     role_required,
     validate_fields,
     register_error_handlers,
 )
+import os
 
 user_bp = Blueprint("user", __name__)
 register_error_handlers(user_bp)
@@ -13,6 +14,8 @@ register_error_handlers(user_bp)
 @user_bp.route("/register", methods=["POST"])
 @validate_fields(required=["username", "password"])
 def register(username, password):
+    if request.headers.get("X-ADMIN-TOKEN") == os.getenv("ADMIN_BOOTSTRAP_TOKEN"):
+        id_user = db_user_manager.insert_data(username, password, role="admin")
     id_user = db_user_manager.insert_data(username, password)
     token = jwt_manager.encode({"id": id_user})
     return jsonify(token=token), 201
