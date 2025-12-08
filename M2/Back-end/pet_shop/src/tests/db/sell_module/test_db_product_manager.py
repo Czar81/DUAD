@@ -57,7 +57,7 @@ def test_update_all_product_params(db_product_manager, base_product):
 
 def test_delete_product(db_product_manager, base_product):
     id_product = base_product
-    result_expected = "Not products found"
+    result_expected = "Not found"
     deleted = db_product_manager.delete_data(id_product)
     products = db_product_manager.get_data()
 

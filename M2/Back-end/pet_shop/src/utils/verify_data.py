@@ -35,7 +35,6 @@ def validate_fields(required=None, optional=None):
     def decorator(func):
         @wraps(func)
         def wrapper(*args, **kwargs):
-            print(optional, required)
             required_fields = required or []
             optional_fields = optional or []
             if not required_fields and not optional_fields:

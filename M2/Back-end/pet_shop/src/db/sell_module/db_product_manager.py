@@ -26,7 +26,7 @@ class DbProductManager:
 
     def get_data(
         self,
-        id_product: int | None = None,
+        id: int | None = None,
         sku: str | None = None,
         name: str | None = None,
         price: int | None = None,
@@ -39,7 +39,7 @@ class DbProductManager:
         with self.engine.connect() as conn:
             result = conn.execute(stmt).mappings().all()
         if not result:
-            return "Not products found"
+            return "Not found"
         return [dict(row) for row in result]
 
     def update_data(
