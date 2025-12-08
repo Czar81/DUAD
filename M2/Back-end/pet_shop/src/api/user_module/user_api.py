@@ -14,8 +14,10 @@ register_error_handlers(user_bp)
 @user_bp.route("/register", methods=["POST"])
 @validate_fields(required=["username", "password"])
 def register(username, password):
-    if request.headers.get("X-ADMIN-TOKEN") == os.getenv("ADMIN_BOOTSTRAP_TOKEN"):
-        id_user = db_user_manager.insert_data(username, password, role="admin")
+    x_admin_token=request.headers.get("X-ADMIN-TOKEN")
+    if x_admin_token :
+        if x_admin_token == os.getenv("ADMIN_BOOTSTRAP_TOKEN"):
+            id_user = db_user_manager.insert_data(username, password, role="admin")
     id_user = db_user_manager.insert_data(username, password)
     token = jwt_manager.encode({"id": id_user})
     return jsonify(token=token), 201

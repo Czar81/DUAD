@@ -9,7 +9,7 @@ from src.api import (
 )
 from flask import Flask
 import pytest
-
+from os import getenv
 
 @pytest.fixture
 def client():
@@ -33,3 +33,23 @@ def get_token_user(client):
     )
     response = client.post("/login", json={"username": "TestUser", "password": "12345"})
     return response.json["token"]
+
+
+@pytest.fixture
+def get_token_admin(client):
+    response = client.post(
+        "/register",
+        json={"username": "admin232", "password": "fds67tf67dstf67sdf687sd"},
+        headers={"X-ADMIN-TOKEN": getenv("ADMIN_BOOTSTRAP_TOKEN")},
+    )
+    response = client.post("/login", json={"username": "admin232", "password": "fds67tf67dstf67sdf687sd"})
+    return response.json["token"]
+
+@pytest.fixture(autouse=True)
+def clean_db():
+    from sqlalchemy import text
+    from src.extensions import tm
+
+    engine = tm.engine
+    with engine.begin() as conn:
+        conn.execute(text("DELETE FROM user"))
