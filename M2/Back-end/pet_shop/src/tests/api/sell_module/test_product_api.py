@@ -20,7 +20,7 @@ def test_register_product(client, get_token_admin):
 
 
 def test_get_all_products(client):
-    response = client.get("/products")
+
     expected_result = {
         "products": [
             {
@@ -74,7 +74,7 @@ def test_get_single_product(client):
     response = client.get(
         f"/products/{id_product}"
     )
-    print(response.json)
+
     assert response.status_code == 200
     assert response.json == expected_result
 
