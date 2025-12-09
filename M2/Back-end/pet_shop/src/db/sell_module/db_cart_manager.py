@@ -9,16 +9,12 @@ class DbCartManager:
         self.cart_table = TablesManager.cart_table
         self.engine = TablesManager.engine
 
-    def insert_data(self, id_user: int, state: str | None = None):
+    def insert_data(self, id_user: int):
+        values = {"id_user": id_user}
         with self.engine.connect() as conn:
             if self.__verify_if_cart_is_active(conn, id_user):
-                if state == "active" or state is None:
-                    raise APIException(
-                        f"User id: {id_user} already have an active cart", 400
-                    )
-            values = {"id_user": id_user}
-            if state is not None:
-                values["state"] = state
+                values["state"] = "inactive"
+
             stmt = (
                 insert(self.cart_table).returning(self.cart_table.c.id).values(**values)
             )
@@ -30,8 +26,8 @@ class DbCartManager:
 
     def get_data(
         self,
+        id_user: int,
         id_cart: int | None = None,
-        id_user: int | None = None,
         state: str | None = None,
     ):
         conditions = _filter_locals(self.cart_table, locals())
@@ -39,11 +35,20 @@ class DbCartManager:
         if conditions:
             stmt = stmt.where(and_(*conditions))
         with self.engine.connect() as conn:
-            if not _verify_user_own_cart(conn, id_user, id_cart):
-                raise APIException(f"Cart id:{id_cart} not exist", 401)
             result = conn.execute(stmt).mappings().all()
             if not result:
                 return "Not carts found"
+            return [dict(row) for row in result]
+
+    def get_active_cart(
+        self,
+        id_user: int,
+    ):
+        stmt = select(self.cart_table).where(and_(self.cart_table.c.id==id_user, self.cart_table.c.state=="active"))
+        with self.engine.connect() as conn:
+            result = conn.execute(stmt).mappings().all()
+            if not result:
+                raise APIException("Unexpected error occuerd trying to get current cart", 500)
             return [dict(row) for row in result]
 
     def update_data(self, id_cart: int, state: str, id_user: int):
@@ -51,10 +56,11 @@ class DbCartManager:
             if not _verify_user_own_cart(conn, id_user, id_cart=id_cart):
                 raise APIException(f"Cart id:{id_cart} not exist", 401)
 
-            stmt_select = select(self.cart_table).where(and_(
-                self.cart_table.c.id_user == id_user,
-                self.cart_table.c.state == "active",
-            )
+            stmt_select = select(self.cart_table).where(
+                and_(
+                    self.cart_table.c.id_user == id_user,
+                    self.cart_table.c.state == "active",
+                )
             )
             id_active_cart = conn.execute(stmt_select).scalar()
             if id_active_cart is not None:
@@ -93,7 +99,7 @@ class DbCartManager:
             conn.commit()
         return True
 
-    def __verify_if_cart_is_active(self, conn, id_user: int | None=None):
+    def __verify_if_cart_is_active(self, conn, id_user: int | None = None):
         if id_user is None:
             return False
         stmt = select(self.cart_table).where(
