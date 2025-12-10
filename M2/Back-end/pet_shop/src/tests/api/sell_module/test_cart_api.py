@@ -14,8 +14,8 @@ def test_register_cart(client, get_token_user):
     assert response.json == expected_result
 
 
-def test_get_all_carts(client, get_token_user):
-    token = get_token_user
+def test_get_all_carts(client, base_cart_api):
+    id_cart, token = base_cart_api
     expected_result = {
         "carts": [
             {
@@ -32,8 +32,8 @@ def test_get_all_carts(client, get_token_user):
     assert response.json == expected_result
 
 
-def test_get_current_cart(client, get_token_user):
-    token = get_token_user
+def test_get_current_cart(client, base_cart_api):
+    id_cart, token = base_cart_api
     expected_result = {
         "carts": [
             {
@@ -48,8 +48,8 @@ def test_get_current_cart(client, get_token_user):
     assert response.json == expected_result
 
 
-def test_update_cart(client, get_token_user):
-    token = get_token_user
+def test_update_cart(client, base_cart_api):
+    id_cart, token = base_cart_api
     expected_put_result = {"message":"Cart updated"}
     expected_get_result = {
         "carts": [
@@ -69,10 +69,7 @@ def test_update_cart(client, get_token_user):
     response = client.post(
         "/me/carts",
         headers={"Authorization": f"Bearer {token}"},
-    )
-    response_get = client.get(
-    f"/me/carts", headers={"Authorization": f"Bearer {token}"}
-)   
+    ) 
     response_put = client.put(
         f"/me/carts/{2}",
         headers={"Authorization": f"Bearer {token}"},
@@ -87,18 +84,11 @@ def test_update_cart(client, get_token_user):
     assert response_get.json == expected_get_result
 
 
-def test_delete_cart(client, get_token_user):
-    token = get_token_user
-    id_cart = 1
+def test_delete_cart(client, base_cart_api):
+    id_cart, token = base_cart_api
     expected_delete_result = {"message": "Cart Deleted"}
     expected_get_result = {
-    "carts": [
-        {
-            "id": 2,
-            "id_user": 1,
-            "state": "active",
-        },
-    ]
+    "carts": 'Not carts found'
 }
     response_delete = client.delete(
         f"/me/carts/{id_cart}", headers={"Authorization": f"Bearer {token}"}

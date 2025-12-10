@@ -7,7 +7,7 @@ def test_register_payment(client, get_token_user):
     data = (
         "89fgd7u89d7g897df87fdg89u8y9fg7y78gyhfdghj8dfg6dfsg78dfgy83gt783y3589hdfg8dfgu"
     )
-    expected_result = {"message": "Payment created", "data": {"id": 1}}
+    expected_result = {"message": "Payment created", "id": 1}
 
     response = client.post(
         "/me/payment",
@@ -18,38 +18,34 @@ def test_register_payment(client, get_token_user):
     assert response.json == expected_result
 
 
-def test_get_payment(client, get_token_user):
-    token = get_token_user
+def test_get_payment(client, base_payment_api):
+    id_payment, token = base_payment_api
     expected_result = {
         "data": [
             {
-                "id": 1,
+                "id": id_payment,
                 "id_user": 1,
                 "type_data": "card",
-                "data": "89fgd7u89d7g897df87fdg89u8y9fg7y78gyhfdghj8dfg6dfsg78dfgy83gt783y3589hdfg8dfgu",
+                "data": "fsdfsdafsadffsdf",
             },
         ]
     }
 
-    response = client.get(
-        "/me/payment",
-        headers={"Authorization": f"Bearer {token}"}
-    )
+    response = client.get("/me/payment", headers={"Authorization": f"Bearer {token}"})
 
     assert response.status_code == 200
     assert response.json == expected_result
 
 
-def test_get_one_payment(client, get_token_user):
-    token = get_token_user
-    id_payment = 1
+def test_get_one_payment(client, base_payment_api):
+    id_payment, token = base_payment_api
     expected_result = {
         "data": [
             {
-                "id": 1,
+                "id": id_payment,
                 "id_user": 1,
                 "type_data": "card",
-                "data": "89fgd7u89d7g897df87fdg89u8y9fg7y78gyhfdghj8dfg6dfsg78dfgy83gt783y3589hdfg8dfgu",
+                "data": "fsdfsdafsadffsdf",
             },
         ]
     }
@@ -61,9 +57,8 @@ def test_get_one_payment(client, get_token_user):
     assert response.json == expected_result
 
 
-def test_delete_payment(client, get_token_user):
-    token = get_token_user
-    id_payment = 1
+def test_delete_payment(client, base_payment_api):
+    id_payment, token = base_payment_api
     expected_delete_result = {"message": "Payment deleted"}
     expected_get_result = {"data": "Not payments found"}
 

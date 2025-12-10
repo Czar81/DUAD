@@ -62,7 +62,7 @@ def base_payment_api(client, get_token_user):
     token = get_token_user
     response = client.post(
         "/me/payment",
-        json={"type_data": "Card", "data": "fsdfsdafsadffsdf"},
+        json={"type_data": "card", "data": "fsdfsdafsadffsdf"},
         headers={"Authorization": f"Bearer {token}"},
     )
     return response.json["id"], token
@@ -87,7 +87,7 @@ def base_product_api(client, get_token_admin):
 
 @pytest.fixture
 def base_cart_api(client, get_token_user):
-    token = get_token_admin
+    token = get_token_user
     response = client.post(
         "/me/carts",
         headers={"Authorization": f"Bearer {token}"},

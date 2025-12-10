@@ -11,20 +11,16 @@ def role_required(allowed_roles):
             token = request.headers.get("Authorization")
             if not token:
                 return jsonify(message="Missing token"), 401
-            try:
-                token = token.replace("Bearer ", "")
-                id_decoded = jwt_manager.decode(token)
-                role = db_user_manager.get_role_by_id(id_decoded["id"])
-                if role not in allowed_roles:
-                    return jsonify(message="Unauthorized"), 403
-                kwargs["id_user"] = id_decoded["id"]
-                if role is not None:
-                    kwargs["role"] = role
-                return func(*args, **kwargs)
-            except ValueError as e:
-                raise
-            except Exception as e:
-                raise
+            token = token.replace("Bearer ", "")
+            print(token)
+            id_decoded = jwt_manager.decode(token)
+            role = db_user_manager.get_role_by_id(id_decoded["id"])
+            if role not in allowed_roles:
+                return jsonify(message="Unauthorized"), 403
+            kwargs["id_user"] = id_decoded["id"]
+            if role is not None:
+                kwargs["role"] = role
+            return func(*args, **kwargs)
 
         return wrapper
 

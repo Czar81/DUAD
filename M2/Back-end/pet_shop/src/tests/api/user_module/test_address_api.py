@@ -3,8 +3,8 @@ import pytest
 
 def test_register_address(client, get_token_user):
     token = get_token_user
-    location = "1600 Pennsylvania Avenue NW"
-    expected_result = {"message": "Address created", "data": {"id": 1}}
+    location = "Test location"
+    expected_result = {"message": "Address created", "id": 1}
 
     response = client.post(
         "/me/address",
@@ -15,11 +15,11 @@ def test_register_address(client, get_token_user):
     assert response.json == expected_result
 
 
-def test_get_address(client, get_token_user):
-    token = get_token_user
+def test_get_address(client, base_address_api):
+    id_address, token = base_address_api
     expected_result = {
         "data": [
-            {"id": 1, "id_user": 1, "location": "1600 Pennsylvania Avenue NW"},
+            {"id": id_address, "id_user": 1, "location": "Test location"},
         ]
     }
 
@@ -29,12 +29,11 @@ def test_get_address(client, get_token_user):
     assert response.json == expected_result
 
 
-def test_get_one_address(client, get_token_user):
-    token = get_token_user
-    id_address = 1
+def test_get_one_address(client, base_address_api):
+    id_address, token = base_address_api
     expected_result = {
         "data": [
-            {"id": 1, "id_user": 1, "location": "1600 Pennsylvania Avenue NW"},
+            {"id": id_address, "id_user": 1, "location": "Test location"},
         ]
     }
 
@@ -45,14 +44,14 @@ def test_get_one_address(client, get_token_user):
     assert response.json == expected_result
 
 
-def test_update_address(client, get_token_user):
-    token = get_token_user
-    id_address = 1
+def test_update_address(client, base_address_api):
+    id_address, token = base_address_api
     new_location = "200 New Jersey Avenue NY"
+
     expected_update_result = {"message": "Address updated"}
     expected_get_result = {
         "data": [
-            {"id": 1, "id_user": 1, "location": "200 New Jersey Avenue NY"},
+            {"id": id_address, "id_user": 1, "location": "200 New Jersey Avenue NY"},
         ]
     }
 
@@ -70,9 +69,9 @@ def test_update_address(client, get_token_user):
     assert response_update.json == expected_update_result
 
 
-def test_delete_address(client, get_token_user):
-    token = get_token_user
-    id_address = 1
+def test_delete_address(client, base_address_api):
+    id_address, token = base_address_api
+
     expected_delete_result = {"message": "Address deleted"}
     expected_get_result = {"data": "Not address found"}
 

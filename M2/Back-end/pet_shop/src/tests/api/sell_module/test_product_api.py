@@ -3,9 +3,9 @@ import pytest
 
 def test_register_product(client, get_token_admin):
     token = get_token_admin
-    sku = "FOODNU454"
-    name = "Dogs Food"
-    price = 10000
+    sku = "TESTN1"
+    name = "Test product"
+    price = 1000
     amount = 30
     expected_result = {"id": 1, "message": "Product created"}
 
@@ -19,15 +19,15 @@ def test_register_product(client, get_token_admin):
     assert response.json == expected_result
 
 
-def test_get_all_products(client):
-
+def test_get_all_products(client, base_product_api):
+    id_address, token = base_product_api
     expected_result = {
         "products": [
             {
                 "id": 1,
-                "sku": "FOODNU454",
-                "name": "Dogs Food",
-                "price": 10000,
+                "sku": "TESTN1",
+                "name": "Test product",
+                "price": 1000,
                 "amount": 30,
             }
         ]
@@ -39,15 +39,16 @@ def test_get_all_products(client):
     assert response.json == expected_result
 
 
-def test_get_filter_products(client):
-    price = 10000
+def test_get_filter_products(client, base_product_api):
+    id_address, token = base_product_api
+    price = 1000
     expected_result = {
         "products": [
             {
                 "id": 1,
-                "sku": "FOODNU454",
-                "name": "Dogs Food",
-                "price": 10000,
+                "sku": "TESTN1",
+                "name": "Test product",
+                "price": 1000,
                 "amount": 30,
             }
         ]
@@ -58,15 +59,16 @@ def test_get_filter_products(client):
     assert response.json == expected_result
 
 
-def test_get_single_product(client):
+def test_get_single_product(client, base_product_api):
+    id_address, token = base_product_api
     id_product = 1
     expected_result = {
     "product": [
         {
             "id": 1,
-            "sku": "FOODNU454",
-            "name": "Dogs Food",
-            "price": 10000,
+            "sku": "TESTN1",
+            "name": "Test product",
+            "price": 1000,
             "amount": 30,
         }
     ]
@@ -79,18 +81,18 @@ def test_get_single_product(client):
     assert response.json == expected_result
 
 
-def test_update_product(client, get_token_admin):
-    token = get_token_admin
+def test_update_product(client, base_product_api):
+    id_product, token = base_product_api
     id_product = 1
     expected_put_result = {"message": "Product Updated"}
-    new_price = 10000
+    new_price = 1000
     new_amount = 30
     expected_get_result = {
     "product": [
         {
             "id": 1,
-            "sku": "FOODNU454",
-            "name": "Dogs Food",
+            "sku": "TESTN1",
+            "name": "Test product",
             "price": new_price,
             "amount": new_amount,
         }
@@ -109,8 +111,8 @@ def test_update_product(client, get_token_admin):
     assert response_get.json == expected_get_result
 
 
-def test_delete_product(client, get_token_admin):
-    token = get_token_admin
+def test_delete_product(client, base_product_api):
+    id_product, token = base_product_api
     id_product = 1
     expected_delete_result = {"message": "Product Deleted"}
     expected_get_result = {"product": "Could not find any item"}
