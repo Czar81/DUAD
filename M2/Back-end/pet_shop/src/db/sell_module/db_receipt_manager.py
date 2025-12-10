@@ -25,6 +25,8 @@ class DbReceiptManager:
         id_user: int | None = None,
     ):
         with self.engine.connect() as conn:
+            if state is None:
+                state = "bought"
             if not _verify_user_own_cart(conn, id_user, id_cart=id_cart):
                 raise APIException(
                     f"Cart id:{id_cart} not owned by user or not exist", 403
@@ -89,7 +91,7 @@ class DbReceiptManager:
 
     def get_data(
         self,
-        id_receipt: int | None = None,
+        id: int | None = None,
         id_user: int | None = None,
         id_cart: int | None = None,
         id_address: int | None = None,
@@ -100,13 +102,14 @@ class DbReceiptManager:
         conditions = _filter_locals(
             self.receipt_table,
             locals(),
+            exclude=("self", "id_user",)
         )
         with self.engine.connect() as conn:
-            if id_user is not None and id_receipt is not None:
+            if id_user is not None and id is not None:
                 if not _verify_user_own_cart(
-                    conn, id_receipt, id_user, table=self.receipt_table
+                    conn, id, id_user, table=self.receipt_table
                 ):
-                    raise APIException(f"Receipt id:{id_receipt} does not exist", 403)
+                    raise APIException(f"Receipt id:{id} does not exist", 403)
             if entry_date is not None:
                 self.__validate_date_str(entry_date)
 
@@ -123,32 +126,32 @@ class DbReceiptManager:
         )
         raise APIException(error_msg, 404)
 
-    def update_data(self, id_receipt: int, state: str, id_user: int | None = None):
+    def update_data(self, id: int, state: str, id_user: int | None = None):
         with self.engine.connect() as conn:
-            stmt_get_cart_id=select(self.receipt_table.c.id_cart).where(self.receipt_table.c.id == id_receipt)
+            stmt_get_cart_id=select(self.receipt_table.c.id_cart).where(self.receipt_table.c.id == id)
             id_cart=conn.execute(stmt_get_cart_id).scalar()
             if not _verify_user_own_cart(conn, id_user, id_cart=id_cart):
                 raise APIException(
-                    f"Cart id:{id_receipt} not owned by user or not exist", 403
+                    f"Cart id:{id} not owned by user or not exist", 403
                 )
             stmt = (
                 update(self.receipt_table)
-                .where(self.receipt_table.c.id == id_receipt)
+                .where(self.receipt_table.c.id == id)
                 .values(state=state)
             )
             result = conn.execute(stmt)
             if result.rowcount == 0:
-                raise APIException(f"Receipt id:{id_receipt} not exist", 404)
+                raise APIException(f"Receipt id:{id} not exist", 404)
             conn.commit()
         return True
 
-    def return_receipt(self, id_receipt: int, id_user: int):
+    def return_receipt(self, id: int, id_user: int):
         with self.engine.connect() as conn:
             if not _verify_user_own_cart(
-                conn, id_user, id_receipt, table=self.receipt_table
+                conn, id_user, id, table=self.receipt_table
             ):
                 raise APIException(
-                    f"Receipt id:{id_receipt} not owned by user or not exist", 403
+                    f"Receipt id:{id} not owned by user or not exist", 403
                 )
             stmt_join = (
                 select(
@@ -166,15 +169,15 @@ class DbReceiptManager:
                     self.product_table,
                     self.product_table.c.id == self.cart_item_table.c.id_product,
                 )
-                .where(self.receipt_table.c.id == id_receipt)
+                .where(self.receipt_table.c.id == id)
             )
             products = conn.execute(stmt_join).mappings().all()
             if not products:
                 raise APIException(
-                    f"Receipt id:{id_receipt} not found or has no items", 404
+                    f"Receipt id:{id} not found or has no items", 404
                 )
             if products[0]["state"] == "returned":
-                raise APIException(f"Receipt id{id_receipt}, is already returned", 400)
+                raise APIException(f"Receipt id{id}, is already returned", 400)
             for row in products:
                 new_amount = row["actual_amount"] + row["amount_bought"]
                 stmt_update_product = (
@@ -185,7 +188,7 @@ class DbReceiptManager:
                 conn.execute(stmt_update_product)
             stmt_update_receipt = (
                 update(self.receipt_table)
-                .where(self.receipt_table.c.id == id_receipt)
+                .where(self.receipt_table.c.id == id)
                 .values(state="returned")
             )
             conn.execute(stmt_update_receipt)

@@ -109,9 +109,8 @@ def base_cart_item_api(client, base_cart_api, base_product_api):
 
 
 @pytest.fixture
-def base_receipt_api(client, base_product_api, base_cart_api):
-    id_cart, token_user = base_cart_api
-    id_product, token_admin = base_product_api
+def base_receipt_api(client, base_cart_item_api):
+    id_cart, token = base_cart_item_api
 
     response_payment = client.post(
         "/me/payment",
@@ -123,7 +122,6 @@ def base_receipt_api(client, base_product_api, base_cart_api):
         json={"location": "Test location"},
         headers={"Authorization": f"Bearer {token}"},
     )
-
     response = client.post(
         "/create-receipt",
         json={
@@ -131,9 +129,9 @@ def base_receipt_api(client, base_product_api, base_cart_api):
             "id_address": response_address.json["id"],
             "id_payment": response_payment.json["id"],
         },
-        headers={"Authorization": f"Bearer {token_user}"},
+        headers={"Authorization": f"Bearer {token}"},
     )
-    return response.json["id"], token_user
+    return response.json["id"], token
 
 
 @pytest.fixture(autouse=True)
