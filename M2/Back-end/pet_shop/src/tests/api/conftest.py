@@ -11,6 +11,7 @@ from flask import Flask
 import pytest
 from os import getenv
 
+
 @pytest.fixture
 def client():
     app = Flask("Store-service")
@@ -42,8 +43,98 @@ def get_token_admin(client):
         json={"username": "admin232", "password": "fds67tf67dstf67sdf687sd"},
         headers={"X-ADMIN-TOKEN": getenv("ADMIN_BOOTSTRAP_TOKEN")},
     )
-    response = client.post("/login", json={"username": "admin232", "password": "fds67tf67dstf67sdf687sd"})
     return response.json["token"]
+
+
+@pytest.fixture
+def base_address_api(client, get_token_user):
+    token = get_token_user
+    response = client.post(
+        "/me/address",
+        json={"location": "Test location"},
+        headers={"Authorization": f"Bearer {token}"},
+    )
+    return response.json["id"], token
+
+
+@pytest.fixture
+def base_payment_api(client, get_token_user):
+    token = get_token_user
+    response = client.post(
+        "/me/payment",
+        json={"type_data": "Card", "data": "fsdfsdafsadffsdf"},
+        headers={"Authorization": f"Bearer {token}"},
+    )
+    return response.json["id"], token
+
+
+@pytest.fixture
+def base_product_api(client, get_token_admin):
+    token = get_token_admin
+    response = client.post(
+        "/products",
+        json={
+            "sku": "TESTN1",
+            "name": "Test product",
+            "price": 1000,
+            "amount": 30,
+        },
+        headers={"Authorization": f"Bearer {token}"},
+    )
+
+    return response.json["id"], token
+
+
+@pytest.fixture
+def base_cart_api(client, get_token_user):
+    token = get_token_admin
+    response = client.post(
+        "/me/carts",
+        headers={"Authorization": f"Bearer {token}"},
+    )
+    return response.json["id"], token
+
+
+@pytest.fixture
+def base_cart_item_api(client, base_cart_api, base_product_api):
+    id_cart, token_user = base_cart_api
+    id_product, token_admin = base_product_api
+
+    response = client.post(
+        "/add-item",
+        json={"id_cart": id_cart, "id_product": id_product, "amount": 10},
+        headers={"Authorization": f"Bearer {token_user}"},
+    )
+    return response.json["id"], token_user
+
+
+@pytest.fixture
+def base_receipt_api(client, base_product_api, base_cart_api):
+    id_cart, token_user = base_cart_api
+    id_product, token_admin = base_product_api
+
+    response_payment = client.post(
+        "/me/payment",
+        json={"type_data": "Card", "data": "fsdfsdafsfdsfadffsdf"},
+        headers={"Authorization": f"Bearer {token}"},
+    )
+    response_address = client.post(
+        "/me/address",
+        json={"location": "Test location"},
+        headers={"Authorization": f"Bearer {token}"},
+    )
+
+    response = client.post(
+        "/create-receipt",
+        json={
+            "id_cart": id_cart,
+            "id_address": response_address.json["id"],
+            "id_payment": response_payment.json["id"],
+        },
+        headers={"Authorization": f"Bearer {token_user}"},
+    )
+    return response.json["id"], token_user
+
 
 @pytest.fixture(autouse=True)
 def clean_db():
@@ -52,4 +143,10 @@ def clean_db():
 
     engine = tm.engine
     with engine.begin() as conn:
+        conn.execute(text("DELETE FROM receipt"))
+        conn.execute(text("DELETE FROM cart_item"))
+        conn.execute(text("DELETE FROM cart"))
+        conn.execute(text("DELETE FROM payment"))
+        conn.execute(text("DELETE FROM address"))
         conn.execute(text("DELETE FROM user"))
+        conn.execute(text("DELETE FROM product"))

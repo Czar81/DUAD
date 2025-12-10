@@ -17,6 +17,20 @@ def db():
     tm.create_tables()
     return tm
 
+@pytest.fixture(autouse=True)
+def clean_db():
+    from sqlalchemy import text
+    from src.extensions import tm
+
+    engine = tm.engine
+    with engine.begin() as conn:
+        conn.execute(text("DELETE FROM receipt"))
+        conn.execute(text("DELETE FROM cart_item"))
+        conn.execute(text("DELETE FROM cart"))
+        conn.execute(text("DELETE FROM payment"))
+        conn.execute(text("DELETE FROM address"))
+        conn.execute(text("DELETE FROM user"))
+        conn.execute(text("DELETE FROM product"))
 
 @pytest.fixture
 def base_user(db_user_manager):
