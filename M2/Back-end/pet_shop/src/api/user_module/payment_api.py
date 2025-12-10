@@ -15,7 +15,7 @@ register_error_handlers(payment_bp)
 @validate_fields(required=["type_data", "data"])
 def register_payment(id_user, role, type_data, data):
     id_payment = db_payment_manager.insert_data(id_user, type_data, data)
-    return jsonify(message="Payment created", data={"id": id_payment}), 201
+    return jsonify(message="Payment created", id=id_payment), 201
 
 
 @payment_bp.route("/me/payment", methods=["GET"])

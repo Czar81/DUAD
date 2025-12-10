@@ -14,8 +14,8 @@ register_error_handlers(cart_items_bp)
 @role_required(["admin", "user"])
 @validate_fields(required=["id_cart","id_product", "amount"])
 def create_cart_item(id_cart,id_product, amount, id_user, role):
-    db_cart_item_manager.insert_data(id_cart,id_product, amount, id_user)
-    return jsonify(message="Item added"), 201
+    id_item = db_cart_item_manager.insert_data(id_cart,id_product, amount, id_user)
+    return jsonify(id_item=id_item, message="Item added"), 201
 
 
 @cart_items_bp.route("/modify-item", methods=["PUT"])
@@ -23,7 +23,7 @@ def create_cart_item(id_cart,id_product, amount, id_user, role):
 @role_required(["admin", "user"])
 def update_cart_item(id_user, amount, id_cart_item):
     db_cart_item_manager.update_data(id_cart_item, amount, id_user)
-    return jsonify(message="Amounr updated"), 200
+    return jsonify(message="Amount updated"), 200
 
 
 @cart_items_bp.route("/remove-item", methods=["DELETE"])

@@ -15,7 +15,7 @@ register_error_handlers(address_bp)
 @validate_fields(required=["location"])
 def register_address(id_user, role, location):
     id_address = db_address_manager.insert_data(id_user, location)
-    return jsonify(message="Address created", data={"id": id_address}), 201
+    return jsonify(message="Address created", id=id_address), 201
 
 
 @address_bp.route("/me/address", methods=["GET"])

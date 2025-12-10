@@ -69,7 +69,9 @@ class DbCartManager:
                     .where(self.cart_table.c.id == id_active_cart)
                     .values(state="inactive")
                 )
-                conn.execute(stmt_update_old)
+                updated_old_cart = conn.execute(stmt_update_old)
+            if updated_old_cart is None: 
+                raise APIException(f"Must have another cart, can not have all unactive carts", 400)
             stmt = (
                 update(self.cart_table)
                 .where(self.cart_table.c.id == id_cart)
