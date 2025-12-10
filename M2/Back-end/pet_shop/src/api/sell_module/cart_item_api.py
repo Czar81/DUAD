@@ -12,22 +12,24 @@ register_error_handlers(cart_items_bp)
 
 @cart_items_bp.route("/add-item", methods=["POST"])
 @role_required(["admin", "user"])
-@validate_fields(required=["id_cart","id_product", "amount"])
-def create_cart_item(id_cart,id_product, amount, id_user, role):
-    id_item = db_cart_item_manager.insert_data(id_cart,id_product, amount, id_user)
-    return jsonify(id_item=id_item, message="Item added"), 201
+@validate_fields(required=["id_cart", "id_product", "amount"])
+def create_cart_item(id_cart, id_product, amount, id_user, role):
+    id_cart_item = db_cart_item_manager.insert_data(
+        id_cart, id_product, amount, id_user
+    )
+    return jsonify(id=id_cart_item, message="Item added"), 201
 
 
-@cart_items_bp.route("/modify-item", methods=["PUT"])
-@validate_fields(required=["amount"])
+@cart_items_bp.route("/modify-amount-item/<int:id_cart_item>", methods=["PUT"])
 @role_required(["admin", "user"])
-def update_cart_item(id_user, amount, id_cart_item):
-    db_cart_item_manager.update_data(id_cart_item, amount, id_user)
+@validate_fields(required=["id_cart_item", "amount"])
+def update_cart_item(id_user, role, id_cart_item, amount):
+    result = db_cart_item_manager.update_data(id_cart_item, amount, id_user)
     return jsonify(message="Amount updated"), 200
 
 
-@cart_items_bp.route("/remove-item", methods=["DELETE"])
+@cart_items_bp.route("/remove-item/<int:id_cart_item>", methods=["DELETE"])
 @role_required(["admin", "user"])
-def delete_cart_item(id_user, id_cart_item):
+def delete_cart_item(id_user,role,  id_cart_item):
     db_cart_item_manager.delete_data(id_cart_item, id_user)
     return jsonify(message="Item deleted"), 200

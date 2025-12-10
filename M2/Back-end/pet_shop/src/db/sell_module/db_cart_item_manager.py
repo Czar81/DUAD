@@ -62,7 +62,7 @@ class DbCartItemsManager:
         self,
         id_item: int,
         amount: int,
-        id_user: int | None = None,
+        id_user: int,
     ):
         with self.engine.connect() as conn:
             if not _verify_user_own_cart(

@@ -32,7 +32,7 @@ def get_products(**filters):
 
 @product_bp.route("/products/<int:id_product>", methods=["GET"])
 def get_single_product(id_product):
-    id_product = int(id_product)
+    id_product = id_product
     key = generate_cache_key("getProduct", id=id_product)
     result, code_status = get_cache_if_exist(key, cache_manager, db_product_manager, id=id_product)
     return jsonify({"product": result}), code_status
@@ -42,7 +42,7 @@ def get_single_product(id_product):
 @role_required(["admin"])
 @validate_fields(optional=["sku", "name", "price", "amount"])
 def update_product(id_user, role, id_product, **filters):
-    id_product = int(id_product)
+    id_product = id_product
     filters["id_product"] = id_product
     key = generate_cache_key("getProduct", id=id_product)
     db_product_manager.update_data(**filters)
@@ -54,7 +54,7 @@ def update_product(id_user, role, id_product, **filters):
 @product_bp.route("/products/<int:id_product>", methods=["DELETE"])
 @role_required(["admin"])
 def delete_product(id_user, role, id_product):
-    id_product = int(id_product)
+    id_product = id_product
     key = generate_cache_key("getProduct", id=id_product)
     db_product_manager.delete_data(id_product)
     cache_manager.delete_data(key)

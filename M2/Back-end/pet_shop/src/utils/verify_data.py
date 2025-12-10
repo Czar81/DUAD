@@ -12,7 +12,6 @@ def role_required(allowed_roles):
             if not token:
                 return jsonify(message="Missing token"), 401
             token = token.replace("Bearer ", "")
-            print(token)
             id_decoded = jwt_manager.decode(token)
             role = db_user_manager.get_role_by_id(id_decoded["id"])
             if role not in allowed_roles:
