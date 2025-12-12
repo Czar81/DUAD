@@ -40,6 +40,13 @@ def me(id_user, role):
     return jsonify(user=myself), 200
 
 
+@user_bp.route("/users", methods=["GET"])
+@role_required(["admin"])
+def get_users(id_user, role):
+    users = db_user_manager.get_data()
+    return jsonify(user=users), 200
+
+
 @user_bp.route("/me", methods=["PUT"])
 @role_required(["admin", "user"])
 @validate_fields(optional=["username", "password", "new_role"])

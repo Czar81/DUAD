@@ -28,6 +28,27 @@ def test_login(client, get_token_user):
     assert response.status_code == 200
     assert "token" in response.json
 
+def test_get_all_users(client, get_token_user, get_token_admin):
+    token = get_token_admin
+    result_expected = {
+        'user': [
+            {
+                'id': 1,
+                'password': '12345',
+                'role': 'user',
+                'username': 'TestUser',
+            },
+            {
+                'id': 2,
+                'password': 'fds67tf67dstf67sdf687sd',
+                'role': 'admin',
+                'username': 'admin232',
+            },
+        ],
+    }
+    response = client.get("/users", headers={"Authorization": f"Bearer {token}"})
+    assert response.status_code == 200
+    assert result_expected == response.json
 
 def test_get_profile(client, get_token_user):
     token = get_token_user

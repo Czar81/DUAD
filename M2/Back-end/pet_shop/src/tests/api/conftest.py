@@ -32,7 +32,6 @@ def get_token_user(client):
     response = client.post(
         "/register", json={"username": "TestUser", "password": "12345"}
     )
-    response = client.post("/login", json={"username": "TestUser", "password": "12345"})
     return response.json["token"]
 
 
