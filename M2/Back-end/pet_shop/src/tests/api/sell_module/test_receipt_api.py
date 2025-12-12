@@ -1,4 +1,5 @@
 import pytest
+from datetime import date
 
 
 def test_create_receipt(client, base_cart_item_api):
@@ -33,7 +34,7 @@ def test_get_all_receipt(client, base_receipt_api):
     expected_result = {
         "data": [
             {
-                "entry_date": "2025-12-10",
+                "entry_date": str(date.today()),
                 "id": 1,
                 "id_address": 1,
                 "id_cart": 1,
@@ -54,7 +55,7 @@ def test_get_filter_receipt(client, base_receipt_api):
     expected_result = {
         "data": [
             {
-                "entry_date": "2025-12-10",
+                "entry_date": str(date.today()),
                 "id": 1,
                 "id_address": 1,
                 "id_cart": 1,
@@ -66,7 +67,7 @@ def test_get_filter_receipt(client, base_receipt_api):
 
     response = client.get(
         "/me/receipt",
-        json={"entry_date": "2025-12-10"},
+        json={"entry_date": str(date.today())},
         headers={"Authorization": f"Bearer {token}"},
     )
 
@@ -79,7 +80,7 @@ def test_get_single_receipt(client, base_receipt_api):
     expected_result = {
         "receipt": [
             {
-                "entry_date": "2025-12-10",
+                "entry_date": str(date.today()),
                 "id": 1,
                 "id_address": 1,
                 "id_cart": 1,
@@ -104,7 +105,7 @@ def test_return_receipt(client, base_receipt_api):
     expected_get_result = {
         "receipt": [
             {
-                "entry_date": "2025-12-10",
+                "entry_date": str(date.today()),
                 "id": 1,
                 "id_address": 1,
                 "id_cart": 1,
