@@ -1,7 +1,14 @@
 from src.utils import register_error_handlers, APIException
+from src.extensions import jwt_manager, db_user_manager
 from sqlalchemy.exc import SQLAlchemyError
 from flask import Flask, Blueprint
 import pytest
+
+@pytest.fixture
+def app():
+    app = Flask(__name__)
+    app.config["TESTING"] = True
+    return app
 
 @pytest.fixture
 def client():
@@ -34,3 +41,19 @@ def client():
     client = app.test_client()
 
     return client
+
+
+@pytest.fixture
+def admin_token():
+    user_data = {"username": "admin_test", "password": "1234"}
+    id_user = db_user_manager.insert_data(**user_data, role="admin")  
+    token = jwt_manager.encode({"id": id_user})
+    return token
+
+
+@pytest.fixture
+def user_token():
+    user_data = {"username": "user_test", "password": "1234"}
+    id_user = db_user_manager.insert_data(**user_data, role="user")
+    token = jwt_manager.encode({"id": id_user})
+    return token
