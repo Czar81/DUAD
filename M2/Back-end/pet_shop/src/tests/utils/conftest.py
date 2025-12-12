@@ -3,12 +3,39 @@ from src.extensions import jwt_manager, db_user_manager
 from sqlalchemy.exc import SQLAlchemyError
 from flask import Flask, Blueprint
 import pytest
+from redis import Redis
+from src.utils.cache_manager import CacheManager
+import os
+
+
+REDIS_HOST = os.getenv("REDIS_HOST", "localhost")
+REDIS_PORT = int(os.getenv("REDIS_PORT", 6379))
+REDIS_KEY = os.getenv("REDIS_KEY", None)
+
+
+@pytest.fixture(scope="module")
+def redis_client():
+    client = Redis(
+        host=REDIS_HOST, port=REDIS_PORT, password=REDIS_KEY, decode_responses=True
+    )
+    yield client
+    client.flushdb()
+
+
+@pytest.fixture
+def cache_manager(redis_client):
+    cm = CacheManager()
+    cm.redis_client = redis_client
+    redis_client.flushdb()
+    return cm
+
 
 @pytest.fixture
 def app():
     app = Flask(__name__)
     app.config["TESTING"] = True
     return app
+
 
 @pytest.fixture
 def client():
@@ -46,7 +73,7 @@ def client():
 @pytest.fixture
 def admin_token():
     user_data = {"username": "admin_test", "password": "1234"}
-    id_user = db_user_manager.insert_data(**user_data, role="admin")  
+    id_user = db_user_manager.insert_data(**user_data, role="admin")
     token = jwt_manager.encode({"id": id_user})
     return token
 

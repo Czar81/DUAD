@@ -24,7 +24,7 @@ class CacheManager:
             if time_to_live is None:
                 self.redis_client.set(key, list_str)
             else:
-                self.redis_client.setex(key, list_str, ex=time_to_live)
+                self.redis_client.setex(key, time_to_live, list_str)
         except RedisError as error:
             raise RedisError(f"An error ocurred while storing data in Redis: {error}")
 
@@ -42,8 +42,9 @@ class CacheManager:
             output = self.redis_client.get(key)
 
             if output is not None:
-                result = output.decode("utf-8")
-                result = loads(result)
+                if isinstance(output, bytes):
+                    output = output.decode("utf-8")
+                result = loads(output)
                 return result
             else:
                 return None
