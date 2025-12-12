@@ -32,17 +32,14 @@ def test_get_all_carts(client, base_cart_api):
     assert response.json == expected_result
 
 
-def test_get_current_cart(client, base_cart_api):
-    id_cart, token = base_cart_api
-    expected_result = {
-        "carts": [
-            {
-                "id": 1,
-                "id_user": 1,
-                "state": "active",
-            }
-        ]
-    }
+def test_get_current_cart(client, base_cart_item_api):
+    id_cart, token = base_cart_item_api
+    expected_result = {"cart":{
+        "id": 1,
+        "id_user": 1,
+        "state": "active",
+        "items": [{"id": 1, "id_cart": 1, "id_product": 1, "amount": 10}],
+    }}
     response = client.get("/cart", headers={"Authorization": f"Bearer {token}"})
     assert response.status_code == 200
     assert response.json == expected_result

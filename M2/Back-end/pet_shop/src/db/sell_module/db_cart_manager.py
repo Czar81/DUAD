@@ -7,6 +7,7 @@ from src.utils.api_exception import APIException
 class DbCartManager:
     def __init__(self, TablesManager):
         self.cart_table = TablesManager.cart_table
+        self.cart_item_table = TablesManager.cart_item_table
         self.engine = TablesManager.engine
 
     def insert_data(self, id_user: int):
@@ -44,12 +45,39 @@ class DbCartManager:
         self,
         id_user: int,
     ):
-        stmt = select(self.cart_table).where(and_(self.cart_table.c.id==id_user, self.cart_table.c.state=="active"))
+        stmt = (
+            select(self.cart_table, self.cart_item_table)
+            .join(
+                self.cart_item_table,
+                self.cart_item_table.c.id_cart == self.cart_table.c.id,
+                isouter=True,
+            )
+            .where(
+                and_(
+                    self.cart_table.c.id_user == id_user,
+                    self.cart_table.c.state == "active",
+                )
+            )
+        )
+
         with self.engine.connect() as conn:
-            result = conn.execute(stmt).mappings().all()
-            if not result:
-                raise APIException("Unexpected error occuerd trying to get current cart", 500)
-            return [dict(row) for row in result]
+            rows = conn.execute(stmt).mappings().all()
+            if not rows:
+                raise APIException(
+                    "Unexpected error occurred trying to get current cart", 500
+                )
+
+            cart_data = dict(rows[0])
+            cart_data = {k: cart_data[k] for k in self.cart_table.columns.keys()}
+
+            items = []
+            for row in rows:
+                item_dict = {k: row[k] for k in self.cart_item_table.columns.keys()}
+                if item_dict["id"] is not None:
+                    items.append(item_dict)
+
+            cart_data["items"] = items  # Changed this line
+            return cart_data
 
     def update_data(self, id_cart: int, state: str, id_user: int):
         with self.engine.connect() as conn:
@@ -70,8 +98,10 @@ class DbCartManager:
                     .values(state="inactive")
                 )
                 updated_old_cart = conn.execute(stmt_update_old)
-            if updated_old_cart is None: 
-                raise APIException(f"Must have another cart, can not have all unactive carts", 400)
+            if updated_old_cart is None:
+                raise APIException(
+                    f"Must have another cart, can not have all unactive carts", 400
+                )
             stmt = (
                 update(self.cart_table)
                 .where(self.cart_table.c.id == id_cart)

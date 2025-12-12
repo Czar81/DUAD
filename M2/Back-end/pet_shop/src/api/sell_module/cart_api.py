@@ -30,7 +30,7 @@ def get_cart(id_user, role, id_cart:int|None=None, state:str|None=None):
 @role_required(["admin", "user"])
 def get_current_cart(id_user, role):
     cart = db_cart_manager.get_active_cart(id_user)
-    return jsonify(carts=cart), 200
+    return jsonify(cart=cart), 200
 
 
 @cart_bp.route("/me/carts/<id_cart>", methods=["PUT"])

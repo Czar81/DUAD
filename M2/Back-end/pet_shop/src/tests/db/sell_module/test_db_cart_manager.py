@@ -10,7 +10,10 @@ def test_create_cart(db_cart_manager, base_user):
     assert result_expected == cart_created
 
 
-def test_get_all_cart(db_cart_manager, base_cart, ):
+def test_get_all_cart(
+    db_cart_manager,
+    base_cart,
+):
     id_cart = base_cart
     result_expected = [{"id": id_cart, "id_user": 1, "state": "active"}]
 
@@ -18,26 +21,33 @@ def test_get_all_cart(db_cart_manager, base_cart, ):
 
     assert result_expected == carts
 
-def test_get_active_cart(db_cart_manager, base_cart, ):
-   id_cart = base_cart
-   result_expected = [{"id": id_cart, "id_user": 1, "state": "active"}]
-   carts = db_cart_manager.get_data(id_user=1)
-   assert result_expected == carts
+
+def test_get_active_cart(db_cart_manager, base_cart_item):
+    id_cart = base_cart_item
+    result_expected = {
+        "id": 1,
+        "id_user": 1,
+        "state": "active",
+        "items": [{"id": 1, "id_cart": 1, "id_product": 1, "amount": 10}],
+    }
+    cart = db_cart_manager.get_active_cart(id_user=1)
+    assert result_expected == cart
+
 
 def test_updates_cart_state(db_cart_manager, base_cart):
     id_cart = base_cart
     new_state = "active"
     cart_created = db_cart_manager.insert_data(id_user=1)
-    result_expected =    [
+    result_expected = [
         {
-            'id': id_cart,
-            'id_user': 1,
-            'state': 'inactive',
+            "id": id_cart,
+            "id_user": 1,
+            "state": "inactive",
         },
         {
-            'id': cart_created,
-            'id_user': 1,
-            'state': 'active',
+            "id": cart_created,
+            "id_user": 1,
+            "state": "active",
         },
     ]
 
