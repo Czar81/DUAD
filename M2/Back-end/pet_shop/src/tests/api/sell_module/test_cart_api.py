@@ -71,7 +71,7 @@ def test_update_cart(client, base_cart_api):
         headers={"Authorization": f"Bearer {token}"},
     ) 
     response_put = client.put(
-        f"/me/carts/{response.json["id"]}",
+        f"/me/carts/{response.json['id']}",
         headers={"Authorization": f"Bearer {token}"},
     )
     response_get = client.get(

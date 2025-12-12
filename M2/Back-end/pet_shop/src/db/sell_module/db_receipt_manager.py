@@ -62,7 +62,7 @@ class DbReceiptManager:
                 new_amount = row["actual_amount"] - row["amount_bought"]
                 if new_amount < 0:
                     raise APIException(
-                        f"Not enough products available: {row["actual_amount"]}, requested: {row['amount_bought']} for product id: {row['id_product']}",
+                        f"Not enough products available: {row['actual_amount']}, requested: {row['amount_bought']} for product id: {row['id_product']}",
                         400,
                     )
                 products_with_stock.append((row["id_product"], new_amount))
@@ -120,8 +120,8 @@ class DbReceiptManager:
         if result:
             return [dict(row) for row in result]
         error_msg = (
-            f"Receipt id:{id_receipt} not found"
-            if id_receipt is not None
+            f"Receipt id:{id} not found"
+            if id is not None
             else "No receipts found matching criteria"
         )
         raise APIException(error_msg, 404)
