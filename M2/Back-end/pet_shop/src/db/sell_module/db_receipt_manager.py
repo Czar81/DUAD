@@ -1,4 +1,4 @@
-from sqlalchemy import select, insert, update, and_, Table
+from sqlalchemy import select, insert, update, and_
 from src.utils.api_exception import APIException
 from datetime import datetime
 from src.db.utils_db.helpers import _filter_locals
@@ -12,6 +12,7 @@ from src.db.utils_db.verifies import (
 class DbReceiptManager:
     def __init__(self, TablesManager):
         self.cart_item_table = TablesManager.cart_item_table
+        self.cart_table = TablesManager.cart_table
         self.receipt_table = TablesManager.receipt_table
         self.product_table = TablesManager.product_table
         self.engine = TablesManager.engine
@@ -26,7 +27,7 @@ class DbReceiptManager:
     ):
         with self.engine.connect() as conn:
             if state is None:
-                state = "bought"
+                state = "paid"
             if not _verify_user_own_cart(conn, id_user, id_cart=id_cart):
                 raise APIException(
                     f"Cart id:{id_cart} not owned by user or not exist", 403
@@ -84,6 +85,19 @@ class DbReceiptManager:
                     .values(amount=new_amount)
                 )
                 conn.execute(stmt_update_product)
+            stmt_update_cart = (
+                update(self.cart_table)
+                .where(self.cart_table.c.id == id_cart)
+                .values(state="paid"))
+            result = conn.execute(stmt_update_cart)
+            if result.rowcount == 0:
+                raise APIException(f"Could not update the cart state", 500)
+            stmt_create_cart=(
+                insert(self.cart_table)
+                .values(id_user=id_user, state="active"))
+            result = conn.execute(stmt_create_cart)
+            if result.rowcount == 0:
+                raise APIException(f"Could not created new active cart state", 500)
             if id_new_receipt is None:
                 raise APIException("Could not create receipt", 500)
             conn.commit()
