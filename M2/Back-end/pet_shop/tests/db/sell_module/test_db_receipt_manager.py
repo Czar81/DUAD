@@ -26,7 +26,7 @@ def test_get_all_receipt(db_receipt_manager, base_receipt):
             "id_address": 1,
             "id_cart": 1,
             "id_payment": 1,
-            "state": "bought",
+            "state": "paid",
             "entry_date": str(date.today()),
         }
     ]
@@ -38,14 +38,14 @@ def test_get_all_receipt(db_receipt_manager, base_receipt):
 def test_update_receipt_state(db_receipt_manager, base_receipt):
     id_user = 1
     id_receipt = base_receipt
-    new_state = "special"
+    new_state = "canceled"
     result_expected = [
         {
             "id": 1,
             "id_address": 1,
             "id_cart": 1,
             "id_payment": 1,
-            "state": "special",
+            "state": "canceled",
             "entry_date": str(date.today()),
         }
     ]

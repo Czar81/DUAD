@@ -39,7 +39,7 @@ def test_get_all_receipt(client, base_receipt_api):
                 "id_address": 1,
                 "id_cart": 1,
                 "id_payment": 1,
-                "state": "bought",
+                "state": "paid",
             },
         ],
     }
@@ -60,7 +60,7 @@ def test_get_filter_receipt(client, base_receipt_api):
                 "id_address": 1,
                 "id_cart": 1,
                 "id_payment": 1,
-                "state": "bought",
+                "state": "paid",
             },
         ],
     }
@@ -85,7 +85,7 @@ def test_get_single_receipt(client, base_receipt_api):
                 "id_address": 1,
                 "id_cart": 1,
                 "id_payment": 1,
-                "state": "bought",
+                "state": "paid",
             },
         ],
     }
