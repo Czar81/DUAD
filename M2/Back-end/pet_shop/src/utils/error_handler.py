@@ -1,5 +1,5 @@
 from flask import jsonify
-from sqlalchemy.exc import SQLAlchemyError
+from sqlalchemy.exc import SQLAlchemyError, IntegrityError
 from .api_exception import APIException
 import logging
 import traceback
@@ -15,6 +15,12 @@ def register_error_handlers(blueprint):
         traceback.print_exc()
         return jsonify(error=str(e)), 400
     
+    @blueprint.errorhandler(IntegrityError)    
+    def handle_integrity_error(e):
+        logger.warning(f"Integrity error: {str(e)}")
+        traceback.print_exc()
+        return jsonify(error=f"Database integrity error: {e}"), 400
+
     @blueprint.errorhandler(SQLAlchemyError)
     def handle_db_error(e):
         logger.error(f"Database error: {str(e)}")
