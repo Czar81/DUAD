@@ -25,7 +25,7 @@ Below is the visual representation of the database structure:
 
 ### Entity Relationship Diagram
 
-![TABLE_diagram](./diagrams/diagrama_er.png)
+![ER_diagram](./diagrams/diagrama_er.png)
 
 ### Table manager
 
@@ -57,6 +57,8 @@ manager.engine
 manager.user_table
 ```
 
+---
+
 ### Table Structures
 
 #### user
@@ -75,6 +77,8 @@ manager.user_table
 - Password must be hashed before storage
 - Role determines access permissions
 - Valid roles: 'user' (default), 'admin'
+
+---
 
 #### product
 
@@ -99,6 +103,8 @@ manager.user_table
 - When product is added to cart, verify sufficient stock
 - Stock is decremented when receipt is generated, not when added to cart
 
+---
+
 #### cart
 
 **Description:** Shopping carts for users to collect products before checkout.
@@ -115,6 +121,8 @@ manager.user_table
 - State changes: active to bought, after receipt was generated
 - When user creates new cart, previous active cart automatic will be marked archive
 - When receipt is generated, also generate a new active cart
+
+---
 
 #### cart_item
 
@@ -135,6 +143,8 @@ manager.user_table
 - Cart items are automatically deleted when cart is deleted (CASCADE)
 - Same product cannot appear twice in one cart (enforce with UNIQUE constraint)
 
+---
+
 #### address
 
 **Description:** User delivery addresses for shipping.
@@ -152,6 +162,8 @@ manager.user_table
 - Addresses cannot be deleted if used in receipts (preserve history)
 - Users must have at least one address before checkout
 - When user is deleted, their addresses are deleted (CASCADE)
+
+---
 
 #### payment
 
@@ -173,6 +185,8 @@ manager.user_table
 - Users must have at least one payment method before checkout
 - When user is deleted, their payment methods are deleted (CASCADE)
 
+---
+
 #### receipt
 
 **Description:** Purchase receipts generated from completed carts.
@@ -190,12 +204,14 @@ manager.user_table
 
 - One cart can generate multiple receipts
 - Receipt is immutable once created (cannot be modified, only state changes)
-- Valid states: 'paid', 'cancelled', 'return'
+- Valid states: 'paid', 'cancelled', 'returned'
 - Receipts CANNOT be deleted (ON DELETE RESTRICT) to maintain order history
 - Entry_date is automatically set to current timestamp
 - When receipt is created, cart state automatic change to 'archive', and can be use to generade another receipt
 - When receipt is created, product stock automatic decremented
 - Refunds restore stock automatically
+
+---
 
 ### Relationships
 
@@ -343,8 +359,8 @@ Parameters:
 
 - `id_product` (int), Unique product id
 
-> [!Note] 
-> Cannot delete products that are in active carts (RESTRICT constraint), so needs to be set to amount=0
+> [!Note]
+> Cannot delete products that are in receipt (RESTRICT constraint), so needs to be set to amount=0
 
 Returns: True
 
@@ -359,7 +375,7 @@ new_stock = pm.delete_data(123)
 
 #### Cart Manager
 
-Location: db/sell/cart_manager.py
+Location: src/db/sell/cart_manager.py
 
 Purpose: Manages shopping cart operations.
 
@@ -392,7 +408,8 @@ tm = TablesManager()
 cm = CartManager(tm)
 
 # The next examples will omit the above lines
-product_id = cm.insert_data(id_user=1)
+id_cart = cm.insert_data(id_user=1)
+# Returns: 456(ID)
 ```
 
 ---
@@ -456,9 +473,11 @@ cart = cm.get_cart(id_user=1, state="archive")
 ```py
 update_data(id_cart, state, id_user)
 ```
+
 Updates cart from archive or bought, preferably to active, and currect active became archive
 
 Parameters:
+
 - id_cart (int): Cart ID
 - State (str): New state
 - id_user (int): User ID
@@ -466,6 +485,7 @@ Parameters:
 Returns: True
 
 Raises:
+
 - `APIException`: If cart not exist, estatus code: 404
 - `APIException`: If just have one cart(active)
 
@@ -473,7 +493,7 @@ Example Usage:
 
 ```py
 updated = cm.update_data(id_cart=500, state="active", id_user=1)
-# Returns: True 
+# Returns: True
 ```
 
 > [!IMPORTANT]
@@ -488,15 +508,17 @@ delete_data(id_cart, id_user)
 Delete cart
 
 > [!Note]
-> Cannot delete products that are in active carts (RESTRICT constraint)
+> Cannot delete carts that are in receipt (RESTRICT constraint)
 
 Parameters:
-- `id_cart`:(int)
-- `id_user`:(int)
+
+- `id_cart`(int): Cart ID
+- `id_user`(int): User ID
 
 Returns: True
 
 Raises:
+
 - `APIException`: If the carts state is active, status code: 400
 - `APIException`: If could not find the cart, status code: 404
 
@@ -504,19 +526,227 @@ Example Usage:
 
 ```py
 deleted = cm.delete_data(id_cart=34, id_user=1)
-# Returns: True 
+# Returns: True
 ```
 
 ---
 
 #### Cart Item Manager
 
+Location: src/db/sell/cart_item_manager.py
+Purpose: Low-level cart item operations (typically used by CartManager).
+
+> [!NOTE]
+> There is not a method get in this manager. To get the items must use get_data from cart manager
+
+##### Methods
+
+```PY
+create_cart_item(id_cart, id_product, amount)
+```
+
+Creates a cart item.
+
+Parameters:
+
+- id_cart: (int), Cart ID
+- id_product: (int), Product ID
+- amount: (int), Amount of product to buy
+- id_user: (int), User ID
+
+Returns: Cart Item ID
+
+Example Usage:
+
+```py
+# Import requierd libraries and Initialize
+from db.utils_db.tables_manager import TablesManager
+from src.db import DbCartItemsManager
+
+tm = TablesManager()
+cim = DbCartItemsManager(tm)
+
+# The next examples will omit the above lines
+id_item = cim.insert_data(id_cart=400, id_product=123, amount=1, id_user=1)
+#returns: 1 (ID)
+```
+
+---
+
+```py
+update_data(id_item, amount, id_user)
+```
+
+Updates the amount of product in cart.
+
+Parameters:
+
+- id_item: (int), Cart Item ID
+- amount: (int), New mount of product to buy
+- id_user: (int), User ID
+
+Returns: True
+
+Raises:
+
+- `APIException`: If item not exits, status code: 404
+- `APIException`: If user do not own item, status code: 403
+
+Example Usage:
+
+```py
+updated = cim.update_data(id_item=1, amount=5, id_user=1)
+# Returns: True
+```
+
+---
+
+```py
+delete_cart_item(id_item, id_user)
+```
+
+Removes a product from cart.
+
+Parameters:
+
+- `id_item`(int): Cart Item ID
+- `id_user`(int): User ID
+
+Returns: True
+
+Example Usage:
+
+```py
+deleted = cim.delete_data(id_item=1, id_user=1)
+# Returns: True
+```
+
 ---
 
 #### Receipt Manager
 
+Location: db/sell/receipt_manager.py
+Purpose: Manages purchase receipts and order history.
+
+##### Method
+
+```py
+create_receipt(id_cart, id_address, id_payment, state, id_user)
+```
+
+Generates a receipt from a completed cart.
+
+Parameter:
+
+- `id_cart`: (int), Cart ID
+- `id_address`: (int), Shipping address ID
+- `id_payment`: (int), Payment method ID
+- `id_user`: (int), User ID
+- `state`: (str | None = None), State of the cart, default _paid_
+
+Returns: Receipt ID
+
+Raises:
+
+- `APIException`: If user not own cart, address or payment. Status code: 403
+- `APIException`: If cart is empty. Status code: 400
+- `APIException`: If not enough products avaible to buy. Status code: 400
+- `APIException`: If could not update the cart state. Status code: 500
+- `APIException`: If could not created new active cart state. Status code: 500
+- `APIException`: If could not create receipt. Status code: 500
+
+Example Usage:
+
+```py
+# Import requierd libraries and Initialize
+from db.utils_db.tables_manager import TablesManager
+from src.db import DbReceiptManager
+
+tm = TablesManager()
+rm = DbReceiptManager(tm)
+
+# The next examples will omit the above lines
+id_receipt = rm.create_receipt(id_cart=400, id_address=12, id_payment=43, id_user=1)
+# Returns: 1 (ID)
+```
+
 ---
 
+```py
+get_data(id, id_user,id_cart, id_address, id_payment,entry_date,state)
+```
+
+Retrieves receipt details. Could obtain receipt filter with below params.
+
+Parameters:
+
+- `id_user`: (int), User ID
+- `id`: (int | None = None), Receipt ID
+- `id_cart`: (int | None = None), Cart ID
+- `id_address`: (int | None = None), Address ID
+- `id_payment`: (int | None = None), Payment ID
+- `entry_date`: (str | None = None), Date that receipt was created. Default today()
+- `state`: (str | None = None), State of receipt 
+
+Returns: Dict with complete receipt data
+
+Example Usage:
+```py
+receipts = rm.get_data(id_user=1, entry_date="2025-12-15")
+# Returns: [
+#   {
+#   "id": 1,
+#   "id_address": 12,
+#   "id_cart": 400,
+#   "id_payment": 43,
+#   "state": "paid",
+#   "entry_date": 2025-12-15,
+#   }
+#]
+```
+---
+
+```py
+update_data(id, state, id_user)
+```
+Updates receipt state.
+
+Parameters:
+- `id`: (int | None = None), Receipt ID
+- `state`: (str), State of receipt 
+- `id_user`: (int), User ID
+
+Returns: True
+
+Example Usage:
+```py
+updated = update_data(id=400, state="cancelled", id_user=1)
+# Returns: True
+```
+---
+
+```py
+return_receipt(id, id_user)
+```
+Returns receipt and restores stock.
+Parameters:
+- `id`: (int | None = None), Receipt ID
+- `id_user`: (int), User ID
+- `id_cart`: (int | None = None), Cart ID
+
+Returns: True
+
+Raise: 
+- `APIException`: IF Receipt not exist or not own for user. Status code: 403
+- `APIException`: IF Receipt is already returned. Status code: 400
+
+Example Usage:
+```py
+returned = return_receipt(id=400, id_user=1)
+# Returns: True
+```
+
+---
 ### User Module
 
 ---

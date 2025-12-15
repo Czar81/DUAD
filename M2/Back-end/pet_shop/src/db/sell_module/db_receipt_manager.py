@@ -22,12 +22,10 @@ class DbReceiptManager:
         id_cart: int,
         id_address: int,
         id_payment: int,
-        state: str | None = None,
-        id_user: int | None = None,
+        id_user: int,
+        state: str = "paid",
     ):
         with self.engine.connect() as conn:
-            if state is None:
-                state = "paid"
             if not _verify_user_own_cart(conn, id_user, id_cart=id_cart):
                 raise APIException(
                     f"Cart id:{id_cart} not owned by user or not exist", 403
@@ -88,7 +86,7 @@ class DbReceiptManager:
             stmt_update_cart = (
                 update(self.cart_table)
                 .where(self.cart_table.c.id == id_cart)
-                .values(state="paid"))
+                .values(state="bought"))
             result = conn.execute(stmt_update_cart)
             if result.rowcount == 0:
                 raise APIException(f"Could not update the cart state", 500)
@@ -186,10 +184,6 @@ class DbReceiptManager:
                 .where(self.receipt_table.c.id == id)
             )
             products = conn.execute(stmt_join).mappings().all()
-            if not products:
-                raise APIException(
-                    f"Receipt id:{id} not found or has no items", 404
-                )
             if products[0]["state"] == "returned":
                 raise APIException(f"Receipt id{id}, is already returned", 400)
             for row in products:

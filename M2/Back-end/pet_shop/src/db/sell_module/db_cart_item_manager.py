@@ -85,7 +85,7 @@ class DbCartItemsManager:
             conn.commit()
         return True
 
-    def delete_data(self, id_item: int, id_user: int | None = None):
+    def delete_data(self, id_item: int, id_user: int):
         with self.engine.connect() as conn:
             if not _verify_user_own_cart(
                 conn=conn, id_user=id_user, id_table=id_item, table=self.cart_item_table

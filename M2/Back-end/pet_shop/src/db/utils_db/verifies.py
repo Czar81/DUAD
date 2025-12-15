@@ -25,13 +25,11 @@ def _verify_amount_product(conn, id_product, amount_bought):
 
 def _verify_user_own_cart(
     conn,
-    id_user: int | None = None,
+    id_user: int,
     id_table: int | None = None,
     id_cart: int | None = None,
     table=None,
 ):
-    if id_user is None:
-        return True
     if id_table is not None and table is not None:
         stmt = (
             select(cart_table.c.id_user)
