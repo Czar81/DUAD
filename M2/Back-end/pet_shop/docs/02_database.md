@@ -686,11 +686,12 @@ Parameters:
 - `id_address`: (int | None = None), Address ID
 - `id_payment`: (int | None = None), Payment ID
 - `entry_date`: (str | None = None), Date that receipt was created. Default today()
-- `state`: (str | None = None), State of receipt 
+- `state`: (str | None = None), State of receipt
 
 Returns: Dict with complete receipt data
 
 Example Usage:
+
 ```py
 receipts = rm.get_data(id_user=1, entry_date="2025-12-15")
 # Returns: [
@@ -704,59 +705,473 @@ receipts = rm.get_data(id_user=1, entry_date="2025-12-15")
 #   }
 #]
 ```
+
 ---
 
 ```py
 update_data(id, state, id_user)
 ```
+
 Updates receipt state.
 
 Parameters:
+
 - `id`: (int | None = None), Receipt ID
-- `state`: (str), State of receipt 
+- `state`: (str), State of receipt
 - `id_user`: (int), User ID
 
 Returns: True
 
 Example Usage:
+
 ```py
 updated = update_data(id=400, state="cancelled", id_user=1)
 # Returns: True
 ```
+
 ---
 
 ```py
 return_receipt(id, id_user)
 ```
+
 Returns receipt and restores stock.
 Parameters:
+
 - `id`: (int | None = None), Receipt ID
 - `id_user`: (int), User ID
 - `id_cart`: (int | None = None), Cart ID
 
 Returns: True
 
-Raise: 
+Raise:
+
 - `APIException`: IF Receipt not exist or not own for user. Status code: 403
 - `APIException`: IF Receipt is already returned. Status code: 400
 
 Example Usage:
+
 ```py
 returned = return_receipt(id=400, id_user=1)
 # Returns: True
 ```
 
 ---
+
 ### User Module
+
+Handles user management, addresses, and payment methods.
+
+#### User Manager
+
+Location: db/user/user_manager.py
+
+Purpose: Manages user accounts.
+
+##### Method
+
+```py
+insert_data(username, password, role)
+```
+
+Creates a new user account.
+
+Parameters:
+
+- `username`: (str), User name
+- `password`: (str), Plain text password (will be hashed)
+- `role`: (str | None = None), Role of the user. Default will be "user".
+
+Returns: User id
+
+Raises:
+
+- `APIException`: If Could not create user. Status code: 500
+
+Example Usage:
+
+```py
+# Import requierd libraries and Initialize
+from db.utils_db.tables_manager import TablesManager
+from src.db import DbUserManager
+
+tm = TablesManager()
+um = DbUserManager(tm)
+
+# The next examples will omit the above lines
+id_user = um.insert_data(username="jonhDoe", password="5e884898da28047151d0e56f8dc6292773603d0d6aabbddc7f6f1a54ef32f5bd")
+# Returns: 1 (ID)
+```
 
 ---
 
-#### User Manager
+```py
+get_data(id_user)
+```
+
+Retrieves user information.
+
+Parameters:
+
+- `id_user`: (int | None = None), User ID
+
+Returns: Dict with users data
+
+Example Usage:
+
+```py
+users = um.get_data()
+# Returns:[
+#  {
+#   'id': 1,
+#   'username': 'jonhDoe',
+#   'password':'5e884898da28047151d0e56f8dc6292773603d0d6aabbddc7f6f1a54ef32f5bd',
+#   'role': 'user'
+#   }
+# ]
+```
+
+---
+
+```py
+get_user(username, password)
+```
+
+Authenticates user credentials.
+
+Parameters:
+
+- `username`: (str), User name
+- `password`: (str), Password hashed
+
+Returns: Dict with user data, after authentify
+
+Example Usage:
+
+```py
+user = um.get_user(username='jonhDoe', password='5e884898da28047151d0e56f8dc6292773603d0d6aabbddc7f6f1a54ef32f5bd')
+# Returns:[
+#  {
+#   'id': 1,
+#   'username': 'jonhDoe',
+#   'password':'5e884898da28047151d0e56f8dc6292773603d0d6aabbddc7f6f1a54ef32f5bd',
+#   'role': 'user'
+#   }
+# ]
+```
+
+---
+
+```py
+get_role_by_id(id_user)
+```
+
+Retrieves role of user.
+
+Parameters:
+
+- `id_user`: (int), User ID
+
+Returns: Role str of user
+
+Raises:
+
+- `APIException`: If could find role for id provided. Status code: 404
+
+Example Usage:
+
+```py
+user_role = um.get_role_by_id(id_user=1)
+# Returns: "user"
+```
+
+---
+
+```py
+update_data(id_user, username, password, role)
+```
+
+Update user information.
+
+Parameters:
+- `id_user`: (int), User ID
+- `username`: (str | None = None), New user name
+- `password`: (str | None = None), New  password, need to be hash
+- `role`: (str | None = None), New role
+
+Returns: True
+
+Raises:
+- `APIException`: If nor provide any value. Status code: 400
+- `APIException`: If could not update the user. Status code: 404
+
+Example Usage:
+
+```py
+# Updating password
+updated=um.update_data(id_user=1, password="9b0d3d4c0f3a5b1a4f2c9e9c8b8d2f7a6f1d4c6a9e0b5a3d2c1f8e7a4b6d9e2")
+# Returns: True
+```
+
+---
+
+```py
+delete_data(id_user)
+```
+
+Delete user.
+
+Parameters:
+- `id_user`: (int), User ID
+
+Returns: True
+
+Raises:
+- `APIException`: If could not update the user. Status code: 404
+
+Example Usage:
+
+```py
+deleted=um.delete_data(id_user=1)
+# Returns: True
+```
 
 ---
 
 #### Address Manager
 
+Location: db/user/address_manager.py
+
+Purpose: Manages user shipping addresses.
+
+##### Method
+
+```py
+insert_data(id_user, location)
+```
+
+Create an address.
+
+Parameters:
+- `id_user`: (int), User ID
+- `location`: (str), Full address string 
+
+Returns: Address ID
+
+Raises:
+- `APIException`: If could not create the address. Status code: 500
+
+Example Usage:
+
+```py
+from db.utils_db.tables_manager import TablesManager
+from src.db import DbAddressManager
+
+tm = TablesManager()
+am = DbAddressManager(tm)
+
+# The next examples will omit the above lines
+id_address = am.insert_data(id_user=1, location="742 Los Almendros Street, Apartment 3B, Santa Aurora Neighborhood, North District")
+# Returns: 1 (ID)
+```
+
+---
+
+```py
+get_data(id, id_user, location)
+```
+
+Get users address. Could be filter by parameter id and location.
+
+Parameters:
+- `id_user`: (int),
+- `id`: (int | None = None),
+- `location`: (str | None = None),
+
+Returns: Dict with addresses data
+
+Raises:
+
+Example Usage:
+
+```py
+addresses=am.get_data(id_user=1)
+# Returns: [
+#   {
+#     "id": 1,
+#     "id_user": 1,
+#     "location": "742 Los Almendros Street, Apartment 3B, Santa Aurora Neighborhood, North District",
+#   }
+# ]
+```
+
+---
+
+```py
+update_data(id_user, id_address, location)
+```
+
+Update location of the address
+
+Parameters:
+- `id_user`: (int), User ID
+- `id_address`: (int), Address to update
+- `location`: (str), New location
+
+Returns: True
+
+Raises:
+- `APIException`: If could not update the address. Status code: 404
+
+Example Usage:
+
+```py
+updated = am.update_data(id_user=1, id_address=1, location="125 Maple Grove Avenue, Suite 4C, Silverwood Neighborhood, West District")
+# Returns: True
+```
+
+---
+
+```py
+delete_data(id_address, id_user)
+```
+
+Delete address
+
+Parameters:
+- `id_user`: (int), User ID
+- `id_address`: (int), Address to delete
+
+Returns: True
+
+Raises:
+- `APIException`: If could not delete the address. Status code: 404
+
+Example Usage:
+
+```py
+deleted = am.delete_data(id_user=1, id_address=1)
+# Returns: True
+```
+
 ---
 
 #### Payment Manager
+
+Location: db/user/payment_manager.py
+
+Purpose: Manages user payment methods.
+
+##### Method
+
+```py
+insert_data(id_user, type_data, data)
+```
+
+Create a payment.
+
+Parameters:
+- `id_user`: (int), User ID
+- `type_data`: (str), Type of payment method
+- `data`: (str), Token of the payment
+
+Returns: Payment ID
+
+Raises:
+- `APIException`: If could not create the payment. Status code: 500
+
+Example Usage:
+
+```py
+from db.utils_db.tables_manager import TablesManager
+from src.db import DbPaymentManager
+
+tm = TablesManager()
+pm = DbPaymentManager(tm)
+
+# The next examples will omit the above lines
+id_payment = pm.insert_data(id_user=1, type_data="credit_card", data="data token")
+# Returns: 1 (ID)
+```
+
+---
+
+```py
+get_data(id, id_user, type_data)
+```
+
+Get users payment, could be filter by type.
+
+Parameters:
+- `id_user`: (int), User ID
+- `id`:(int | None = None), Payment ID
+- `type_data`: (str | None = None), Type of payment method
+
+Returns: Dict with all users payments
+
+Example Usage:
+
+```py
+id_payment = pm.get_data(id_user=1, type_data="credit_card")
+# Returns: [
+#   {
+#     "id": 1,
+#     "id_user": 1,
+#     "type_data": "credit_card",
+#     "data": "data token",
+#   }
+# ]
+```
+
+---
+
+```py
+update_data(id, id_user, type_data, data)
+```
+
+Update payment data
+
+> [!WARMING]
+> Do not use with cards. Only use for update money to a wallet or updating PayPal.
+
+Parameters:
+- `id`: (int), Payment ID
+- `type_data`: (str), Type method
+- `data`: (str), Information of payment
+- `id_user`: (str), User ID
+
+Returns: True
+
+Raises:
+- `APIException`: If could not delete the payment. Status code: 404
+
+Example Usage:
+
+```py
+updated = pm.update_data(id=2, id_user=1, data="New paypal")
+# Returns: True
+```
+
+---
+
+```py
+delete_data(id, id_user)
+```
+
+Delete payment
+
+Parameters:
+- `id`: (int), Payment ID
+- `id_user`: (str), User ID
+
+Returns: True
+
+Raises:
+- `APIException`: If could not delete the payment. Status code: 404
+
+Example Usage:
+
+```py
+deleted = pm.delete_data(id=1, id_user=1)
+# Returns: True
+```

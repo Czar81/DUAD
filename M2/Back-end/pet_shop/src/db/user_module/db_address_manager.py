@@ -1,8 +1,6 @@
 from sqlalchemy import insert, select, delete, update, and_
 from src.db.utils_db.helpers import _filter_locals
-from src.db.utils_db.verifies import _verify_user_own_address
 from src.utils.api_exception import APIException
-
 
 
 class DbAddressManager:
@@ -26,8 +24,8 @@ class DbAddressManager:
 
     def get_data(
         self,
+        id_user: int,
         id: int | None = None,
-        id_user: int | None = None,
         location: str | None = None,
     ):
         conditions = _filter_locals(self.address_table, locals())
@@ -36,20 +34,21 @@ class DbAddressManager:
             stmt = stmt.where(and_(*conditions))
 
         with self.engine.connect() as conn:
-            if not _verify_user_own_address(conn, id, id_user):
-                raise APIException(f"Address id:{id} not exist", 404)
             result = conn.execute(stmt).mappings().all()
             if not result:
                 return "Not address found"
             return [dict(row) for row in result]
 
-    def update_data(self, id_address: int, location: str, id_user: int | None = None):
+    def update_data(self, id_user: int, id_address: int, location: str):
         with self.engine.connect() as conn:
-            if not _verify_user_own_address(conn, id_address, id_user):
-                raise APIException(f"Address id:{id_address} not exist", 404)
             stmt = (
                 update(self.address_table)
-                .where(self.address_table.c.id == id_address)
+                .where(
+                    and_(
+                        self.address_table.c.id == id_address,
+                        self.address_table.c.id_user == id_user,
+                    )
+                )
                 .values(location=location)
             )
             result = conn.execute(stmt)
@@ -58,11 +57,14 @@ class DbAddressManager:
             conn.commit()
         return True
 
-    def delete_data(self, id_address: int, id_user: int | None = None):
+    def delete_data(self, id_user: int, id_address: int):
         with self.engine.connect() as conn:
-            if not _verify_user_own_address(conn, id_address, id_user):
-                raise APIException(f"Address id:{id_address} not exist", 404)
-            stmt = delete(self.address_table).where(self.address_table.c.id == id_address)
+            stmt = delete(self.address_table).where(
+                and_(
+                    self.address_table.c.id == id_address,
+                    self.address_table.c.id_user == id_user,
+                )
+            )
             result = conn.execute(stmt)
             if result.rowcount == 0:
                 raise APIException(f"Address id:{str(id_address)} not exist", 404)

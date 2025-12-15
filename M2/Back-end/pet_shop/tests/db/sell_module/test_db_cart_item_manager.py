@@ -41,7 +41,7 @@ def test_delete_cart_item(db_cart_item_manager, base_cart_item):
     id_cart_item = base_cart_item
     result_expected = "Not cart items found"
 
-    deleted = db_cart_item_manager.delete_data(id_cart_item)
+    deleted = db_cart_item_manager.delete_data(id_cart_item, id_user=1)
     cart_items = db_cart_item_manager.get_data()
 
     assert deleted == True

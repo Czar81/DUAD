@@ -26,35 +26,30 @@ class DbPaymentManager:
 
     def get_data(
         self,
+        id_user: int,
         id: int | None = None,
-        id_user: int | None = None,
         type_data: str | None = None,
-        data: str | None = None,
     ):
         conditions = _filter_locals(self.payment_table, locals())
         stmt = select(self.payment_table)
         if conditions:
             stmt = stmt.where(and_(*conditions))
-        with self.engine.connect() as conn:
-            if not _verify_user_own_payment(conn, id, id_user):
-                raise APIException(f"Payment id:{id} not exist", 404)       
+        with self.engine.connect() as conn:     
             result = conn.execute(stmt).mappings().all()
             if not result:
                 return "Not payments found"
             return [dict(row) for row in result]
 
     def update_data(
-        self, id: int, type_data: str, data: str, id_user: str | None = None
+        self, id: int, type_data: str, data: str, id_user: str
     ):
         values = filter_values(locals(), ("self", "id", "id_user"))
         stmt = (
             update(self.payment_table)
-            .where(self.payment_table.c.id == id)
+            .where(and_(self.payment_table.c.id == id, self.payment_table.c.id_user == id_user))
             .values(**values)
         )
         with self.engine.connect() as conn:
-            if not _verify_user_own_payment(conn, id, id_user):
-                raise APIException(f"Payment id:{id} not exist", 404)
             result = conn.execute(stmt)
             if result.rowcount == 0:
                 raise APIException(
@@ -63,8 +58,8 @@ class DbPaymentManager:
             conn.commit()
         return True
 
-    def delete_data(self, id: int, id_user: int | None = None):
-        stmt = delete(self.payment_table).where(self.payment_table.c.id == id)
+    def delete_data(self, id: int, id_user: int):
+        stmt = delete(self.payment_table).where(and_(self.payment_table.c.id == id, self.payment_table.c.id_user == id_user))
         with self.engine.connect() as conn:
             if not _verify_user_own_payment(conn, id, id_user):
                 raise APIException(f"Payment id:{id} not exist", 404)
