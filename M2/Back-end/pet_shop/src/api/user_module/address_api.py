@@ -21,20 +21,14 @@ def register_address(id_user, role, location):
 @address_bp.route("/me/address", methods=["GET"])
 @role_required(["admin", "user"])
 def get_address(id_user, role):
-    if role == "user":
-        address = db_address_manager.get_data(id_user=id_user)
-    else:
-        address = db_address_manager.get_data()
+    address = db_address_manager.get_data(id_user=id_user)
     return jsonify(data=address), 200
 
 
 @address_bp.route("/me/address/<id_address>", methods=["GET"])
 @role_required(["admin", "user"])
 def get_single_address(id_address, role, id_user):
-    if role == "user":
-        address = db_address_manager.get_data(id=id_address, id_user=id_user)
-    else:
-        address = db_address_manager.get_data(id=id_address)
+    address = db_address_manager.get_data(id=id_address, id_user=id_user)
     return jsonify(data=address), 200
 
 
@@ -42,18 +36,12 @@ def get_single_address(id_address, role, id_user):
 @role_required(["admin", "user"])
 @validate_fields(required=["location"])
 def update_address(id_user, role, id_address, location):
-    if role == "user":
-        db_address_manager.update_data(id_address, location, id_user)
-    else:
-        db_address_manager.update_data(id_address, location)
+    db_address_manager.update_data(id_address=id_address, location=location, id_user=id_user)
     return jsonify(message="Address updated"), 200
 
 
 @address_bp.route("/me/address/<id_address>", methods=["DELETE"])
 @role_required(["admin", "user"])
 def delete_address(id_user, role, id_address):
-    if role == "user":
-        db_address_manager.delete_data(id_address, id_user)
-    else:
-        db_address_manager.delete_data(id_address)
+    db_address_manager.delete_data(id_address, id_user)
     return jsonify(message="Address deleted"), 200

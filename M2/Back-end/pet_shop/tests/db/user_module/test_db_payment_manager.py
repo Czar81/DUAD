@@ -17,7 +17,7 @@ def test_get_all_payment(db_payment_manager, base_payment):
         {"id": 1, "id_user": 1, "type_data": "card", "data": "data_payment"}
     ]
 
-    payments = db_payment_manager.get_data()
+    payments = db_payment_manager.get_data(id_user=1)
 
     assert result_expected == payments
 
@@ -35,8 +35,8 @@ def test_update_all_payment_params(db_payment_manager, base_payment):
         }
     ]
 
-    updated = db_payment_manager.update_data(id_payment, new_type, new_data)
-    payments = db_payment_manager.get_data()
+    updated = db_payment_manager.update_data(id_payment, new_type, new_data, id_user=1)
+    payments = db_payment_manager.get_data(id_user=1)
 
     assert updated == True
     assert payments == result_expected
@@ -45,8 +45,8 @@ def test_update_all_payment_params(db_payment_manager, base_payment):
 def test_delete_payment(db_payment_manager, base_payment):
     id_payment = base_payment
     result_expected = "Not payments found"
-    deleted = db_payment_manager.delete_data(id_payment)
-    payments = db_payment_manager.get_data()
+    deleted = db_payment_manager.delete_data(id_payment, id_user=1)
+    payments = db_payment_manager.get_data(id_user=1)
 
     assert deleted == True
     assert payments == result_expected

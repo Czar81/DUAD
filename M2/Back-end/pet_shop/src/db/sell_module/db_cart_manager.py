@@ -13,7 +13,7 @@ class DbCartManager:
     def insert_data(self, id_user: int):
         values = {"id_user": id_user}
         with self.engine.connect() as conn:
-            if self.__verify_if_cart_is_active(conn, id_user):
+            if self.__verify_if_user_have_active(conn, id_user):
                 values["state"] = "inactive"
 
             stmt = (
@@ -114,10 +114,10 @@ class DbCartManager:
         return True
 
     def delete_data(self, id_cart: int, id_user: int):
-        stmt = delete(self.cart_table).where(and_(self.cart_table.c.id == id_cart, self.cart_table.id_user==id_user))
+        stmt = delete(self.cart_table).where(and_(self.cart_table.c.id == id_cart, self.cart_table.c.id_user==id_user))
         with self.engine.connect() as conn:
            
-            if self.__verify_if_cart_is_active(id_user):
+            if self.__verify_if_cart_is_active(conn, id_cart):
                 raise APIException(
                     f"Cart id:{id_cart} is active, can not delete an active cart", 400)
             result = conn.execute(stmt)
@@ -126,9 +126,17 @@ class DbCartManager:
             conn.commit()
         return True
 
-    def __verify_if_cart_is_active(self, conn, id_user: int | None = None):
-        if id_user is None:
-            return False
+    def __verify_if_cart_is_active(self, conn, id_cart: int ):
+        stmt = select(self.cart_table).where(
+            and_(
+                self.cart_table.c.id == id_cart,
+                self.cart_table.c.state == "active",
+            )
+        )
+        result = conn.execute(stmt).fetchone()
+        return bool(result)
+
+    def __verify_if_user_have_active(self, conn, id_user: int ):
         stmt = select(self.cart_table).where(
             and_(
                 self.cart_table.c.id_user == id_user,

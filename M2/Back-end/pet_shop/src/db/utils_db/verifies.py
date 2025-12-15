@@ -43,6 +43,7 @@ def _verify_user_own_cart(
             and_(cart_table.c.id_user == id_user, cart_table.c.id == id_cart)
         )
     result = conn.execute(stmt).scalar()
+    print("id",result)
     return bool(result and result == id_user)
 
 

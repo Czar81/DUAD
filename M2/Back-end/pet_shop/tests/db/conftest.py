@@ -105,7 +105,7 @@ def base_receipt(
         id_cart, id_product, 20, id_user
     )
     id_receip = db_receipt_manager.create_receipt(
-        id_cart, id_address, id_payment, "paid", id_user
+        id_cart, id_address, id_payment, id_user
     )
     return id_receip
 

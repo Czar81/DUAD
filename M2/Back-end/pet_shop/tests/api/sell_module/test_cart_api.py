@@ -34,12 +34,14 @@ def test_get_all_carts(client, base_cart_api):
 
 def test_get_current_cart(client, base_cart_item_api):
     id_cart, token = base_cart_item_api
-    expected_result = {"cart":{
-        "id": 1,
-        "id_user": 1,
-        "state": "active",
-        "items": [{"id": 1, "id_cart": 1, "id_product": 1, "amount": 10}],
-    }}
+    expected_result = {
+        "cart": {
+            "id": 1,
+            "id_user": 1,
+            "state": "active",
+            "items": [{"id": 1, "id_cart": 1, "id_product": 1, "amount": 10}],
+        }
+    }
     response = client.get("/cart", headers={"Authorization": f"Bearer {token}"})
     assert response.status_code == 200
     assert response.json == expected_result
@@ -47,7 +49,7 @@ def test_get_current_cart(client, base_cart_item_api):
 
 def test_update_cart(client, base_cart_api):
     id_cart, token = base_cart_api
-    expected_put_result = {"message":"Cart updated"}
+    expected_put_result = {"message": "Cart updated"}
     expected_get_result = {
         "carts": [
             {
@@ -66,7 +68,7 @@ def test_update_cart(client, base_cart_api):
     response = client.post(
         "/me/carts",
         headers={"Authorization": f"Bearer {token}"},
-    ) 
+    )
     response_put = client.put(
         f"/me/carts/{response.json['id']}",
         headers={"Authorization": f"Bearer {token}"},
@@ -85,10 +87,22 @@ def test_delete_cart(client, base_cart_api):
     id_cart, token = base_cart_api
     expected_delete_result = {"message": "Cart Deleted"}
     expected_get_result = {
-    "carts": 'Not carts found'
-}
+        "carts": [
+            {
+                "id": 1,
+                "id_user": 1,
+                "state": "active",
+            },
+        ],
+    }
+
+    # Create another cart to be able to delete the previous one
+    response_create = client.post(
+        f"/me/carts", headers={"Authorization": f"Bearer {token}"}
+    )
     response_delete = client.delete(
-        f"/me/carts/{id_cart}", headers={"Authorization": f"Bearer {token}"}
+        f"/me/carts/{response_create.json['id']}",
+        headers={"Authorization": f"Bearer {token}"},
     )
     response_get = client.get(
         f"/me/carts", headers={"Authorization": f"Bearer {token}"}

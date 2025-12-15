@@ -60,8 +60,12 @@ def test_updates_cart_state(db_cart_manager, base_cart):
 
 def test_delete_cart(db_cart_manager, base_cart):
     id_cart = base_cart
-    result_expected = "Not carts found"
-    deleted = db_cart_manager.delete_data(id_cart, 1)
+    result_expected = [{"id": 1, "id_user": 1, "state": "active"}]
+
+    # Create another cart to be able to delete the previous one
+    cart_created_id = db_cart_manager.insert_data(id_user=1)
+
+    deleted = db_cart_manager.delete_data(cart_created_id, id_user=1)
     carts = db_cart_manager.get_data(id_user=1)
 
     assert deleted == True
