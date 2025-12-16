@@ -3,7 +3,7 @@ import pytest
 
 def test_register_cart(client, get_token_user):
     token = get_token_user
-    expected_result = {"id": 1, "message": "Cart created"}
+    expected_result = {"id": 2, "message": "Cart created"}
 
     response = client.post(
         "/me/carts",
@@ -14,8 +14,8 @@ def test_register_cart(client, get_token_user):
     assert response.json == expected_result
 
 
-def test_get_all_carts(client, base_cart_api):
-    id_cart, token = base_cart_api
+def test_get_all_carts(client, get_token_user):
+    token = get_token_user
     expected_result = {
         "carts": [
             {
@@ -78,12 +78,8 @@ def test_update_cart(client, base_cart_api):
         ]
     }
 
-    response = client.post(
-        "/me/carts",
-        headers={"Authorization": f"Bearer {token}"},
-    )
     response_put = client.put(
-        f"/me/carts/{response.json['id']}",
+        f"/me/carts/{id_cart}",
         headers={"Authorization": f"Bearer {token}"},
     )
     response_get = client.get(
@@ -109,12 +105,8 @@ def test_delete_cart(client, base_cart_api):
         ],
     }
 
-    # Create another cart to be able to delete the previous one
-    response_create = client.post(
-        f"/me/carts", headers={"Authorization": f"Bearer {token}"}
-    )
     response_delete = client.delete(
-        f"/me/carts/{response_create.json['id']}",
+        f"/me/carts/{id_cart}",
         headers={"Authorization": f"Bearer {token}"},
     )
     response_get = client.get(

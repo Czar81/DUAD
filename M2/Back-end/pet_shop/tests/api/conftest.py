@@ -95,13 +95,13 @@ def base_cart_api(client, get_token_user):
 
 
 @pytest.fixture
-def base_cart_item_api(client, base_cart_api, base_product_api):
-    id_cart, token_user = base_cart_api
+def base_cart_item_api(client, get_token_user, base_product_api):
+    token_user = get_token_user
     id_product, token_admin = base_product_api
 
     response = client.post(
         "/add-item",
-        json={"id_cart": id_cart, "id_product": id_product, "amount": 10},
+        json={"id_cart": 1, "id_product": id_product, "amount": 10},
         headers={"Authorization": f"Bearer {token_user}"},
     )
     return response.json["id"], token_user

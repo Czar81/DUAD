@@ -1,5 +1,5 @@
 from flask import jsonify, Blueprint, request
-from src.extensions import db_user_manager, jwt_manager
+from src.extensions import db_user_manager, db_cart_manager, jwt_manager
 from src.utils import (
     role_required,
     validate_fields,
@@ -18,9 +18,12 @@ def register(username, password):
     x_admin_token = request.headers.get("X-ADMIN-TOKEN")
     if x_admin_token == os.getenv("ADMIN_BOOTSTRAP_TOKEN"):
         role = "admin"
+        
     id_user = db_user_manager.insert_data(username, password, role=role)
+    id_cart=db_cart_manager.insert_data(id_user)
     token = jwt_manager.encode({"id": id_user})
-    return jsonify(token=token), 201
+
+    return jsonify(token=token, id_cart=id_cart), 201
 
 
 @user_bp.route("/login", methods=["POST"])

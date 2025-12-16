@@ -1143,7 +1143,7 @@ update_data(id, id_user, type_data, data)
 
 Update payment data
 
-> [!WARMING]
+> [!WARNING]
 > Do not use with cards. Only use for update money to a wallet or updating PayPal.
 
 Parameters:
