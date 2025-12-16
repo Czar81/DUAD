@@ -1,5 +1,8 @@
 # Database Documentation
 
+## Overview
+This document describes the database structure, and usage guidelines for the data base. It provides a clear view of how data is organized, and stored.
+
 ## Index
 
 - [Schema Design](#schema-design)

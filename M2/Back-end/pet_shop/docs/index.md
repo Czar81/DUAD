@@ -1,7 +1,7 @@
 # PawPoint – Full Documentation
 
 Welcome to the Complete Documentation
-This documentation provides comprehensive information about the project architecture, API endpoints, database design, deployment procedures, and more.
+This documentation provides comprehensive information about the project architecture, API endpoints, database design, and more.
 
 ## Table of Contents
 - [API Reference](./01_api_reference.md)
@@ -9,8 +9,10 @@ This documentation provides comprehensive information about the project architec
     - Authentication requirements
     
 - [Database](./02_database.md)
-    - Entity Relationship Diagrams
+    - Schema Design
+    - Entity Relationship Diagram
     - Table structures and relationships
+    - Database Managers
 
 - [Testing Guide](./03_testing.md)
     - Unit tests

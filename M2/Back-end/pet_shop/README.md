@@ -7,7 +7,7 @@
 - [Quick Installation](#quick-installation)
 - [How to Run the Project](#how-to-run-the-project)
 - [How to run the unit testing](#how-to-run-the-unit-testing)
-- [Advanced Documentation](./docs/full_documentation.md)
+- [Advanced Documentation](./docs/index.md)
 
 ## What PawPoint is?
 
@@ -33,7 +33,6 @@ PawPoint is a modular system for managing pet products and veterinary services. 
 - **Redis** – Caching and session management
 - **python-dotenv** – Environment variable management (.env)
 - **PyJWT** – Authentication with JSON Web Tokens
-- **Requests** – HTTP client for API calls
 - **pytest** – Testing framework
 - **Click** – Command-line utilities
 
