@@ -94,17 +94,11 @@ _Headers Parameters_
 
 _Request Example_
 
-Headers
-
 ```bash
-Authorization: Token of the admin
+POST /products
+Authorization: Bearer <jwt_token>
 Content-Type: application/json
-```
-
-Body
-
-```bash
-{
+json = {
   "sku": "PROD-001",
   "name": "Wireless Mouse",
   "price": 2599, # for $25.99
@@ -159,16 +153,9 @@ _Headers Parameters_
 
 _Request Example_
 
-Headers
-
 ```bash
-Content-Type: application/json
-```
-
-Body
-
-```bash
-{
+GET /products
+json = {
   "price": 2599 # Filter by this price
 }
 ```
@@ -179,11 +166,15 @@ _Response Body Example_
 
 ```bash
 {
-  "id": 1
-  "sku": "PROD-001",
-  "name": "Wireless Mouse",
-  "price": 2599,
-  "amount": 100
+ "products:[
+  {
+   "id": 1
+   "sku": "PROD-001",
+   "name": "Wireless Mouse",
+   "price": 2599,
+   "amount": 100
+  }
+ ]
 }
 ```
 
@@ -211,13 +202,16 @@ _Path Parameters_
 _Response Body Example_
 
 ```bash
-# GET /products/1
 {
-  "id": 1
-  "sku": "PROD-001",
-  "name": "Wireless Mouse",
-  "price": 2599,
-  "amount": 100
+ "products:[
+  {
+   "id": 1
+   "sku": "PROD-001",
+   "name": "Wireless Mouse",
+   "price": 2599,
+   "amount": 100
+  }
+ ]
 }
 ```
 
@@ -226,6 +220,7 @@ _Response Body Example_
 ```BASH
 PUT /products/id_product
 ```
+
 Updates products data
 
 _Authentication_
@@ -261,18 +256,10 @@ _Path Parameters_
 
 _Request Example_
 
-Headers
-
 ```bash
-Authorization: Token of the admin
-Content-Type: application/json
-```
-
-Body
-
-```bash
-# PUT /products/1
-{
+PUT /products/1
+Authorization: Bearer <jwt_token>
+json = {
   "name": "Bluetooth Mouse",
 }
 ```
@@ -292,6 +279,7 @@ _Response Body Example_
 ```BASH
 DELETE /products/id_product
 ```
+
 Deletes a product
 
 ---
@@ -317,13 +305,23 @@ _Path Parameters_
 
 ---
 
-_Response Body Example_
+_Request Example_
+
 ```bash
-# DELETE /products/1
+DELETE /products/1
+Authorization: Bearer <jwt_token>
+```
+
+---
+
+_Response Body Example_
+
+```bash
 {
    "message": "Product Deleted"}
 }
 ```
+
 ---
 
 ### Cart
@@ -339,6 +337,271 @@ _Response Body Example_
 > `/me/carts`, base of the another 3 endpoints
 
 #### Endpoints
+
+```BASH
+POST /me/carts
+```
+
+Create a new cart for the authenticated user.
+
+> [!IMPORTANT]
+> When you send a request to /register, automatic creates a cart
+
+---
+
+_Authentication_
+
+Required: admin or user
+
+---
+
+_Header Parameters_
+| Name | Required | Description |
+| ------------- | -------- | -------------- |
+| Authorization | Yes | User JWT token |
+
+---
+
+_Request Example_
+
+```bash
+POST /me/carts
+Authorization: Bearer <jwt_token>
+```
+
+---
+
+Response Example
+
+```bash
+{
+  "message": "Cart created",
+  "id": 2
+}
+```
+
+---
+
+```bash
+GET /me/carts
+```
+
+Get all carts for the authenticated user or filter by parameters.
+
+_Authentication_
+
+Required: admin or user
+
+_Body Parameters_
+| Name | Type | Required | Description |
+| ------- | ------- | -------- | --------------------------------------- |
+| id_cart | integer | No | Cart ID |
+| state | string | No | Cart state (e.g. `active`, `archive`) |
+
+_Header Parameters_
+| Name | Required | Description |
+| ------------- | -------- | --------------------------------- |
+| Authorization | Yes | User JWT token |
+| Content-Type | No | Required only if filters are sent |
+
+---
+
+_Request Example_
+
+```bash
+GET /me/carts
+Authorization: Bearer <jwt_token>
+```
+
+---
+
+_Response Example_
+
+```bash
+{
+    "carts": [
+        {
+            "id": 1,
+            "id_user": 1,
+            "state": "active",
+        }
+    ]
+}
+```
+
+---
+
+```py
+GET /cart
+```
+
+Get the current active cart with its items.
+
+_Authentication_
+
+Required: admin or user
+
+---
+
+_Header Parameters_
+| Name | Required | Description |
+| ------------- | -------- | -------------- |
+| Authorization | Yes | User JWT token |
+
+---
+
+_Request Example_
+
+```bash
+GET /cart
+Authorization: Bearer <jwt_token>
+```
+
+---
+
+_Response Example_
+
+```bash
+{
+  "cart": {
+      "id": 1,
+      "id_user": 1,
+      "state": "active",
+      "items": [{
+        "id": 1,
+        "id_cart": 1,
+        "id_product": 1,
+        "amount": 10
+        }],
+  }
+}
+```
+
+---
+
+```py
+GET /me/carts/id_cart
+```
+
+Get a cart with its items.
+
+> [!NOTE]
+> If need active cart use `GET /cart`
+
+_Authentication_
+
+Required: admin or user
+
+---
+
+_Header Parameters_
+| Name | Required | Description |
+| ------------- | -------- | -------------- |
+| Authorization | Yes | User JWT token |
+
+---
+
+_Request Example_
+
+```bash
+GET /me/carts/2
+Authorization: Bearer <jwt_token>
+```
+
+---
+
+_Response Example_
+
+```bash
+{
+  "cart": {
+      "id": 2,
+      "id_user": 1,
+      "state": "archive",
+      "items": [{
+        "id": 1,
+        "id_cart": 1,
+        "id_product": 2,
+        "amount": 3
+        }],
+}
+```
+
+---
+
+```bash
+PUT /me/carts/id_cart
+```
+
+Update the cart status to active.
+
+---
+
+_Authentication_
+
+Required: admin or user
+
+---
+
+_Path Parameters_
+| Name | Type | Required | Description |
+| ------- | ------- | -------- | ----------- |
+| id_cart | integer | Yes | Cart ID |
+
+---
+
+_Example Request_
+
+```bash
+PUT /me/carts/1
+Authorization: Bearer <jwt_token>
+```
+
+_Response Example_
+
+```bash
+{
+  "message": "Cart updated"
+}
+```
+
+---
+
+```bash
+DELETE /me/carts/id_cart
+```
+
+Delete a cart owned by the authenticated user.
+
+---
+
+_Authentication_
+
+Required: admin or user
+
+---
+
+_Path Parameters_
+| Name | Type | Required | Description |
+| ------- | ------- | -------- | ----------- |
+| id_cart | integer | Yes | Cart ID |
+
+---
+
+_Example Request_
+
+```bash
+DELETE /me/carts/1
+Authorization: Bearer <jwt_token>
+```
+
+_Response Example_
+
+```
+{
+  "message": "Cart Deleted"
+}
+```
 
 ---
 
@@ -365,8 +628,7 @@ _Response Body Example_
 /me/receipt
 ```
 
-> [!NOTE]
-> `/me/receipt`, base of anothers endpoints, `create-receipt` just to create the receipt
+> [!NOTE] > `/me/receipt`, base of anothers endpoints, `create-receipt` just to create the receipt
 
 #### Endpoints
 
@@ -383,8 +645,7 @@ _Response Body Example_
 /users
 ```
 
-> [!NOTE]
-> `/me` use in three endpoints
+> [!NOTE] > `/me` use in three endpoints
 
 #### Endpoints
 
