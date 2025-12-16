@@ -30,7 +30,19 @@ def test_get_active_cart(db_cart_manager, base_cart_item):
         "state": "active",
         "items": [{"id": 1, "id_cart": 1, "id_product": 1, "amount": 10}],
     }
-    cart = db_cart_manager.get_active_cart(id_user=1)
+    cart = db_cart_manager.get_cart_with_items(id_user=1)
+    assert result_expected == cart
+
+
+def test_get_items_cart(db_cart_manager, base_cart_item):
+    id_cart = base_cart_item
+    result_expected = {
+        "id": 1,
+        "id_user": 1,
+        "state": "active",
+        "items": [{"id": 1, "id_cart": 1, "id_product": 1, "amount": 10}],
+    }
+    cart = db_cart_manager.get_cart_with_items(id_user=1, active=False)
     assert result_expected == cart
 
 

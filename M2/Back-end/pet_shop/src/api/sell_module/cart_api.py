@@ -29,7 +29,13 @@ def get_cart(id_user, role, id_cart:int|None=None, state:str|None=None):
 @cart_bp.route("/cart", methods=["GET"])
 @role_required(["admin", "user"])
 def get_current_cart(id_user, role):
-    cart = db_cart_manager.get_active_cart(id_user)
+    cart = db_cart_manager.get_cart_with_items(id_user)
+    return jsonify(cart=cart), 200
+
+@cart_bp.route("/me/carts/<id_cart>", methods=["GET"])
+@role_required(["admin", "user"])
+def get_cart_with_items(id_user, role, id_cart):
+    cart = db_cart_manager.get_cart_with_items(id_user, id_cart)
     return jsonify(cart=cart), 200
 
 

@@ -5,17 +5,24 @@
 - [Schema Design](#schema-design)
   - [Entity Relationship Diagram](#entity-relationship-diagram)
   - [Table Structures](#table-structures)
+    - [user](#user-table)
+    - [product](#product-table)
+    - [cart](#cart-table)
+    - [cart item](#cart_item-table)
+    - [address](#address-table)
+    - [payment](#payment-table)
+    - [receipt](#receipt-table)
   - [Relationships](#relationships)
 - [Database Manager](#database-manager)
   - [Sell Module](#sell-module)
     - [Product Manager](#product-manager)
-    - [Cart Manager](#cart_item)
+    - [Cart Manager](#cart-manager)
     - [Cart Item Manager](#cart-item-manager)
-    - [Receipt Manager](#receipt)
+    - [Receipt Manager](#receipt-manager)
   - [User Module](#user-module)
-    - [User Manager](#user)
-    - [Address Manager](#address)
-    - [Payment Manager](#payment)
+    - [User Manager](#user-manager)
+    - [Address Manager](#address-manager)
+    - [Payment Manager](#payment-manager)
 
 ## Schema Design
 
@@ -61,7 +68,7 @@ manager.user_table
 
 ### Table Structures
 
-#### user
+#### user table
 
 **Description:** Stores user account information and authentication data.
 
@@ -80,7 +87,7 @@ manager.user_table
 
 ---
 
-#### product
+#### product table
 
 **Description:** Product catalog with inventory management.
 
@@ -105,7 +112,7 @@ manager.user_table
 
 ---
 
-#### cart
+#### cart table
 
 **Description:** Shopping carts for users to collect products before checkout.
 
@@ -124,7 +131,7 @@ manager.user_table
 
 ---
 
-#### cart_item
+#### cart_item table
 
 **Description:** Individual items within shopping carts (junction table between cart and product).
 
@@ -145,7 +152,7 @@ manager.user_table
 
 ---
 
-#### address
+#### address table
 
 **Description:** User delivery addresses for shipping.
 
@@ -165,7 +172,7 @@ manager.user_table
 
 ---
 
-#### payment
+#### payment table
 
 **Description:** User payment methods (credit cards, PayPal, etc.).
 
@@ -187,7 +194,7 @@ manager.user_table
 
 ---
 
-#### receipt
+#### receipt table
 
 **Description:** Purchase receipts generated from completed carts.
 
@@ -442,21 +449,26 @@ cart = cm.get_cart(id_user=1, state="archive")
 ---
 
 ```py
-get_active_cart(id_user)
+get_cart_with_items(id_user)
 ```
 
-Retrieves active cart details with its items.
+Retrieves cart details with its items.
 
 Parameters:
 
-- id_user (int): User ID
+- `id_user` (int): User ID
+- `id_cart`: (int | None = None), Cart ID
+- `active`: (bool = True), If need active the cart
+
+> [!IMPORTANT]
+> If use id_cart also use active=False. Do NOT use id_cart with active blank or True
 
 Returns: Dict with cart data including items
 
 Example Usage:
 
 ```py
-cart = cm.get_cart(id_user=1, state="archive")
+cart = cm.get_cart_with_items(id_user=1)
 # Returns: {
 #     'id': 500,
 #     'id_user': 1,

@@ -41,9 +41,11 @@ class DbCartManager:
                 return "Not carts found"
             return [dict(row) for row in result]
 
-    def get_active_cart(
+    def get_cart_with_items(
         self,
         id_user: int,
+        id_cart: int | None = None,
+        active: bool = True,
     ):
         stmt = (
             select(self.cart_table, self.cart_item_table)
@@ -53,12 +55,13 @@ class DbCartManager:
                 isouter=True,
             )
             .where(
-                and_(
                     self.cart_table.c.id_user == id_user,
-                    self.cart_table.c.state == "active",
-                )
             )
         )
+        if id_cart is not None:
+            stmt = stmt.where(self.cart_table.c.id == id_cart)
+        elif active:
+            stmt = stmt.where(self.cart_table.c.state == "active")
 
         with self.engine.connect() as conn:
             rows = conn.execute(stmt).mappings().all()
@@ -76,7 +79,7 @@ class DbCartManager:
                 if item_dict["id"] is not None:
                     items.append(item_dict)
 
-            cart_data["items"] = items  # Changed this line
+            cart_data["items"] = items 
             return cart_data
 
     def update_data(self, id_cart: int, state: str, id_user: int):

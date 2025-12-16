@@ -46,6 +46,19 @@ def test_get_current_cart(client, base_cart_item_api):
     assert response.status_code == 200
     assert response.json == expected_result
 
+def test_get_items_cart(client, base_cart_item_api):
+    id_cart, token = base_cart_item_api
+    expected_result = {
+        "cart": {
+            "id": 1,
+            "id_user": 1,
+            "state": "active",
+            "items": [{"id": 1, "id_cart": 1, "id_product": 1, "amount": 10}],
+        }
+    }
+    response = client.get(f"/me/carts/{id_cart}", headers={"Authorization": f"Bearer {token}"})
+    assert response.status_code == 200
+    assert response.json == expected_result
 
 def test_update_cart(client, base_cart_api):
     id_cart, token = base_cart_api
