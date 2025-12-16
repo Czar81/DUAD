@@ -3,6 +3,24 @@
 ## Overview
 This document describes the database structure, and usage guidelines for the data base. It provides a clear view of how data is organized, and stored.
 
+## Architecture Overview
+```bash
+src/db/
+│── __init__.py
+│
+│── sell_module/
+│   ├── db_cart_manager.py
+│   ├── db_cart_item_manager.py
+│   ├── db_product_manager.py
+│   └── db_receipt_manager.py
+│
+│── user_module/
+│   ├── db_user_manager.py
+│   ├── db_address_manager.py
+│   └── db_payment_manager.py
+
+```
+
 ## Index
 
 - [Schema Design](#schema-design)
@@ -70,6 +88,9 @@ manager.user_table
 ---
 
 ### Table Structures
+
+> [!NOTE]
+> Import managers from src.db
 
 #### user table
 

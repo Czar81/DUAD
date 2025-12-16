@@ -14,11 +14,7 @@ This documentation provides comprehensive information about the project architec
     - Table structures and relationships
     - Database Managers
 
-- [Testing Guide](./03_testing.md)
-    - Unit tests
-    - Running tests
-
-- [Utils Reference](./04_utils.md)
+- [Utils Reference](./03_utils.md)
     - Helper functions
     - Validators
     - Cache Manager

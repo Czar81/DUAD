@@ -19,7 +19,7 @@ def register_error_handlers(blueprint):
     def handle_integrity_error(e):
         logger.warning(f"Integrity error: {str(e)}")
         traceback.print_exc()
-        return jsonify(error=f"Database integrity error: {e}"), 400
+        return jsonify(error=f"Database integrity error: {e}"), 409
 
     @blueprint.errorhandler(SQLAlchemyError)
     def handle_db_error(e):

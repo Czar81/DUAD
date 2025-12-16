@@ -7,7 +7,7 @@
 - [Quick Installation](#quick-installation)
 - [How to Run the Project](#how-to-run-the-project)
 - [How to run the unit testing](#how-to-run-the-unit-testing)
-- [Advanced Documentation](./docs/index.md)
+- [Advanced Documentation](#advanced-documentation)
 
 ## What PawPoint is?
 
