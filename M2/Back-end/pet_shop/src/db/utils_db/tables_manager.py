@@ -17,7 +17,20 @@ load_dotenv()
 
 
 class TablesManager:
+    """
+    Centralized manager for SQLAlchemy engine and table definitions.
+
+    This class initializes the database engine and defines all database tables
+    used by the application. It also provides a helper method to create
+    all tables in the database.
+    """
+
     def __init__(self, url=environ.get("URL_POSTGRES")):
+        """
+        Initialize the database engine.
+
+        :param url: Database connection URL
+        """
         self.engine = create_engine(url)
 
     metadata_obj = MetaData()
@@ -84,4 +97,9 @@ class TablesManager:
     )
 
     def create_tables(self):
+        """
+        Create all database tables defined in metadata.
+
+        This method should be executed once during application setup.
+        """
         self.metadata_obj.create_all(self.engine)

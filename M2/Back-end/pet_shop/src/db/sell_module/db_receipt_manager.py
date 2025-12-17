@@ -10,7 +10,18 @@ from src.db.utils_db.verifies import (
 
 
 class DbReceiptManager:
+    """
+    Database manager for receipts.
+    Handles receipt creation, retrieval, updates and returns,
+    including stock management and ownership validation.
+    """
+
     def __init__(self, TablesManager):
+        """
+        Database manager for receipts.
+        Handles receipt creation, retrieval, updates and returns,
+        including stock management and ownership validation.
+        """
         self.cart_item_table = TablesManager.cart_item_table
         self.cart_table = TablesManager.cart_table
         self.receipt_table = TablesManager.receipt_table
@@ -25,6 +36,18 @@ class DbReceiptManager:
         id_user: int,
         state: str = "paid",
     ):
+        """
+        Create a receipt from an active cart.
+        Validates ownership, updates product stock, marks cart as bought
+        and creates a new active cart for the user.
+
+        :param id_cart: Cart ID
+        :param id_address: Address ID
+        :param id_payment: Payment method ID
+        :param id_user: User ID
+        :param state: Initial receipt state (default: paid)
+        :return: Newly created receipt ID
+        """
         with self.engine.connect() as conn:
             if not _verify_user_own_cart(conn, id_user, id_cart=id_cart):
                 raise APIException(
@@ -34,7 +57,7 @@ class DbReceiptManager:
                 raise APIException(
                     f"Address id:{id_address} not owned by user or not exist", 403
                 )
-            if not _verify_user_own_payment(conn, id_payment, id_user ):
+            if not _verify_user_own_payment(conn, id_payment, id_user):
                 raise APIException(
                     f"Payment id:{id_payment} not owned by user or not exist", 403
                 )
@@ -86,13 +109,14 @@ class DbReceiptManager:
             stmt_update_cart = (
                 update(self.cart_table)
                 .where(self.cart_table.c.id == id_cart)
-                .values(state="bought"))
+                .values(state="bought")
+            )
             result = conn.execute(stmt_update_cart)
             if result.rowcount == 0:
                 raise APIException(f"Could not update the cart state", 500)
-            stmt_create_cart=(
-                insert(self.cart_table)
-                .values(id_user=id_user, state="active"))
+            stmt_create_cart = insert(self.cart_table).values(
+                id_user=id_user, state="active"
+            )
             result = conn.execute(stmt_create_cart)
             if result.rowcount == 0:
                 raise APIException(f"Could not created new active cart state", 500)
@@ -111,10 +135,25 @@ class DbReceiptManager:
         entry_date: str | None = None,
         state: str | None = None,
     ):
+        """
+        Create a receipt from an active cart.
+        Validates ownership, updates product stock, marks cart as bought
+        and creates a new active cart for the user.
+
+        :param id_cart: Cart ID
+        :param id_address: Address ID
+        :param id_payment: Payment method ID
+        :param id_user: User ID
+        :param state: Initial receipt state (default: paid)
+        :return: Newly created receipt ID
+        """
         conditions = _filter_locals(
             self.receipt_table,
             locals(),
-            exclude=("self", "id_user",)
+            exclude=(
+                "self",
+                "id_user",
+            ),
         )
         with self.engine.connect() as conn:
             if id_user is not None and id is not None:
@@ -139,13 +178,25 @@ class DbReceiptManager:
         raise APIException(error_msg, 404)
 
     def update_data(self, id: int, state: str, id_user: int | None = None):
+        """
+        Retrieve receipts based on provided filters.
+
+        :param id: Receipt ID
+        :param id_user: User ID
+        :param id_cart: Cart ID
+        :param id_address: Address ID
+        :param id_payment: Payment method ID
+        :param entry_date: Entry date (YYYY-MM-DD)
+        :param state: Receipt state
+        :return: List of receipts
+        """
         with self.engine.connect() as conn:
-            stmt_get_cart_id=select(self.receipt_table.c.id_cart).where(self.receipt_table.c.id == id)
-            id_cart=conn.execute(stmt_get_cart_id).scalar()
+            stmt_get_cart_id = select(self.receipt_table.c.id_cart).where(
+                self.receipt_table.c.id == id
+            )
+            id_cart = conn.execute(stmt_get_cart_id).scalar()
             if not _verify_user_own_cart(conn, id_user, id_cart=id_cart):
-                raise APIException(
-                    f"Cart id:{id} not owned by user or not exist", 403
-                )
+                raise APIException(f"Cart id:{id} not owned by user or not exist", 403)
             stmt = (
                 update(self.receipt_table)
                 .where(self.receipt_table.c.id == id)
@@ -158,10 +209,17 @@ class DbReceiptManager:
         return True
 
     def return_receipt(self, id: int, id_user: int):
+        """
+        Update the state of a receipt.
+        Validates that the receipt belongs to the user's cart.
+
+        :param id: Receipt ID
+        :param state: New receipt state
+        :param id_user: User ID
+        :return: True if updated successfully
+        """
         with self.engine.connect() as conn:
-            if not _verify_user_own_cart(
-                conn, id_user, id, table=self.receipt_table
-            ):
+            if not _verify_user_own_cart(conn, id_user, id, table=self.receipt_table):
                 raise APIException(
                     f"Receipt id:{id} not owned by user or not exist", 403
                 )
@@ -204,6 +262,12 @@ class DbReceiptManager:
         return True
 
     def __validate_date_str(self, date_str: str):
+        """
+        Validate date format (YYYY-MM-DD).
+
+        :param date_str: Date string
+        :raises APIException: If date format is invalid
+        """
         try:
             datetime.strptime(date_str, "%Y-%m-%d")
         except ValueError:

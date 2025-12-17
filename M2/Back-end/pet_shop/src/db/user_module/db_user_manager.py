@@ -4,12 +4,30 @@ from src.utils.api_exception import APIException
 
 
 class DbUserManager:
+    """
+    Database manager for user-related operations.
+    Handles CRUD operations for users.
+    """
 
     def __init__(self, TablesManager):
+        """
+        Initialize the user database manager.
+
+        :param TablesManager: Instance containing database tables and engine
+        """
+
         self.user_table = TablesManager.user_table
         self.engine = TablesManager.engine
 
     def insert_data(self, username: str, password: str, role: str | None = None):
+        """
+        Create a new user in the database.
+
+        :param username: User's username
+        :param password: User's password
+        :param role: Optional user role (admin/user)
+        :return: Newly created user ID
+        """
         values = filter_values(locals())
         stmt = insert(self.user_table).returning(self.user_table.c.id).values(**values)
         with self.engine.connect() as conn:
@@ -20,9 +38,15 @@ class DbUserManager:
         return result
 
     def get_data(self, id_user: int | None = None):
+        """
+        Retrieve user data.
+
+        :param id_user: Optional user ID to retrieve a single user
+        :return: List of users or a specific user
+        """
         stmt = select(self.user_table)
         if id_user is not None:
-            stmt=stmt.where(self.user_table.c.id == id_user)
+            stmt = stmt.where(self.user_table.c.id == id_user)
         with self.engine.connect() as conn:
             result = conn.execute(stmt).mappings().all()
             if result == []:
@@ -30,6 +54,13 @@ class DbUserManager:
             return [dict(row) for row in result]
 
     def get_user(self, username: str, password: str):
+        """
+        Retrieve a user ID using credentials.
+
+        :param username: User's username
+        :param password: User's password
+        :return: User ID if found, otherwise None
+        """
         stmt = (
             select(self.user_table)
             .where(self.user_table.c.username == username)
@@ -40,6 +71,12 @@ class DbUserManager:
             return result
 
     def get_role_by_id(self, id_user: int):
+        """
+        Retrieve the role of a user by ID.
+
+        :param id_user: User ID
+        :return: User role
+        """
         stmt = select(self.user_table.c.role).where(self.user_table.c.id == id_user)
         with self.engine.connect() as conn:
             result = conn.execute(stmt)
@@ -55,6 +92,15 @@ class DbUserManager:
         password: str | None = None,
         role: str | None = None,
     ):
+        """
+        Update user data.
+
+        :param id_user: User ID
+        :param username: New username (optional)
+        :param password: New password (optional)
+        :param role: New role (optional)
+        :return: True if updated successfully
+        """
         values = filter_values(locals(), ("self", "id_user"))
         stmt = update(self.user_table).where(self.user_table.c.id == id_user)
         if values:
@@ -69,6 +115,12 @@ class DbUserManager:
         return True
 
     def delete_data(self, id_user: int):
+        """
+        Delete a user by ID.
+
+        :param id_user: User ID
+        :return: True if deleted successfully
+        """
         stmt = delete(self.user_table).where(self.user_table.c.id == id_user)
         with self.engine.connect() as conn:
             result = conn.execute(stmt)

@@ -5,8 +5,18 @@ from src.utils.api_exception import APIException
 
 
 class DbCartItemsManager:
+    """
+    Database manager for cart items.
+    Handles creation, retrieval, update and deletion
+    of products inside shopping carts.
+    """
 
     def __init__(self, TablesManager):
+        """
+        Initialize the cart items database manager.
+
+        :param TablesManager: Instance containing database tables and engine
+        """
         self.cart_item_table = TablesManager.cart_item_table
         self.cart_table = TablesManager.cart_table
         self.engine = TablesManager.engine
@@ -14,7 +24,15 @@ class DbCartItemsManager:
     def insert_data(
         self, id_cart: int, id_product: int, amount: int, id_user: int | None = None
     ):
+        """
+        Add a product to a user's cart.
 
+        :param id_cart: Cart ID
+        :param id_product: Product ID
+        :param amount: Quantity to add
+        :param id_user: User ID
+        :return: Newly created cart item ID
+        """
         with self.engine.connect() as conn:
             if not _verify_user_own_cart(conn=conn, id_user=id_user, id_cart=id_cart):
                 raise APIException(
@@ -40,6 +58,17 @@ class DbCartItemsManager:
         id_product: int | None = None,
         amount: int | None = None,
     ):
+        """
+        Retrieve cart items using optional filters.
+        Validates that the cart belongs to the user.
+
+        :param id_item: Cart item ID
+        :param id_user: User ID
+        :param id_cart: Cart ID
+        :param id_product: Product ID
+        :param amount: Item quantity
+        :return: List of cart items
+        """
         conditions = _filter_locals(self.cart_item_table, locals())
         with self.engine.connect() as conn:
             if not _verify_user_own_cart(
@@ -64,6 +93,15 @@ class DbCartItemsManager:
         amount: int,
         id_user: int,
     ):
+        """
+        Update the quantity of a product in a cart.
+        Verifies product stock before updating.
+
+        :param id_item: Cart item ID
+        :param amount: New quantity
+        :param id_user: User ID
+        :return: True if updated successfully
+        """
         with self.engine.connect() as conn:
             if not _verify_user_own_cart(
                 conn=conn, id_user=id_user, id_table=id_item, table=self.cart_item_table
@@ -86,6 +124,13 @@ class DbCartItemsManager:
         return True
 
     def delete_data(self, id_item: int, id_user: int | None = None):
+        """
+        Remove an item from a user's cart.
+
+        :param id_item: Cart item ID
+        :param id_user: User ID
+        :return: True if deleted successfully
+        """
         with self.engine.connect() as conn:
             if not _verify_user_own_cart(
                 conn=conn, id_user=id_user, id_table=id_item, table=self.cart_item_table
