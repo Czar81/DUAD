@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 
-class JWT_Manager:
+class JWTManager:
     def __init__(self):
         self.private_key = environ.get("PRIVATE_KEY")
         self.public_key = environ.get("PUBLIC_KEY")

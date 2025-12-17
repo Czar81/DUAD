@@ -1,6 +1,6 @@
 from .cache_manager import CacheManager
 from .api_exception import APIException
-from .encoding import JWT_Manager
+from .encoding import JWTManager
 from .verify_data import role_required, validate_fields
 from .helpers import filter_values, generate_cache_based_filters, generate_cache_key, get_cache_if_exist
 from .error_handler import register_error_handlers
@@ -8,7 +8,7 @@ from .error_handler import register_error_handlers
 __all__ = [
     "CacheManager",
     "APIException",
-    "JWT_Manager",
+    "JWTManager",
     "role_required",
     "validate_fields",
     "filter_values"
