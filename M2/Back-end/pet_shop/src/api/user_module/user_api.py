@@ -52,12 +52,9 @@ def get_users(id_user, role):
 
 @user_bp.route("/me", methods=["PUT"])
 @role_required(["admin", "user"])
-@validate_fields(optional=["username", "password", "new_role"])
+@validate_fields(optional=["username", "password"])
 def update_profile(id_user, role, username:str|None=None, password:str|None=None, new_role:str|None=None):
-    if role == "admin":
-        db_user_manager.update_data(id_user, username, password, new_role)
-    else:
-        db_user_manager.update_data(id_user, username, password)
+    db_user_manager.update_data(id_user, username, password)
     return jsonify({"message": "User updated"}), 200
 
 
