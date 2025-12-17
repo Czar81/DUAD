@@ -3,7 +3,19 @@ from functools import wraps
 
 
 def role_required(allowed_roles):
-    from src.extensions import db_user_manager, jwt_manager
+    """
+    Decorator to restrict endpoint access based on user roles.
+
+    Validates JWT token from Authorization header, extracts user ID,
+    retrieves the user's role from database, and verifies permissions.
+
+    Injects into the endpoint:
+        - id_user: authenticated user ID
+        - role: authenticated user role
+
+    :param allowed_roles: List of allowed roles (e.g. ["admin", "user"])
+    """
+    from src.extensions import db_user_manager, jwt_manager # Avoid circular import
 
     def decorator(func):
         @wraps(func)
@@ -27,6 +39,16 @@ def role_required(allowed_roles):
 
 
 def validate_fields(required=None, optional=None):
+    """
+    Decorator to validate and extract JSON body fields.
+
+    - Ensures required fields are present
+    - Optionally extracts optional fields
+    - Injects validated fields as keyword arguments
+
+    :param required: List of required field names
+    :param optional: List of optional field names
+    """
     def decorator(func):
         @wraps(func)
         def wrapper(*args, **kwargs):

@@ -8,9 +8,22 @@ load_dotenv()
 
 
 class CacheManager:
+    """
+    Redis cache manager responsible for storing, retrieving and deleting cached data.
+
+    This class abstracts Redis operations and provides simple methods
+    for cache handling with optional TTL support.
+    """
+
     def __init__(
         self,
     ):
+        """
+        Redis cache manager responsible for storing, retrieving and deleting cached data.
+
+        This class abstracts Redis operations and provides simple methods
+        for cache handling with optional TTL support.
+        """
         self.host = environ.get("REDIS_HOST")
         self.port = int(environ.get("REDIS_PORT"))
         self.password = environ.get("REDIS_KEY")
@@ -19,6 +32,15 @@ class CacheManager:
         )
 
     def store_data(self, key: str, values: list, time_to_live: int = None):
+        """
+        Store data in Redis under a specific key.
+
+        Data is serialized to JSON before storing.
+
+        :param key: Cache key
+        :param values: Data to be cached (must be JSON serializable)
+        :param time_to_live: Optional TTL in seconds
+        """
         try:
             list_str = dumps(values)
             if time_to_live is None:
@@ -29,6 +51,15 @@ class CacheManager:
             raise RedisError(f"An error ocurred while storing data in Redis: {error}")
 
     def check_key(self, key: str):
+        """
+        Store data in Redis under a specific key.
+
+        Data is serialized to JSON before storing.
+
+        :param key: Cache key
+        :param values: Data to be cached (must be JSON serializable)
+        :param time_to_live: Optional TTL in seconds
+        """
         try:
             key_exists = self.redis_client.exists(key)
             if key_exists:
@@ -38,6 +69,14 @@ class CacheManager:
             raise RedisError(f"An error ocurred while checking a key in Redis: {error}")
 
     def get_data(self, key: str):
+        """
+        Retrieve cached data from Redis.
+
+        The stored JSON value is deserialized before returning.
+
+        :param key: Cache key
+        :return: Cached data if found, otherwise None
+        """
         try:
             output = self.redis_client.get(key)
 
@@ -52,6 +91,11 @@ class CacheManager:
             raise RedisError(f"An error ocurred while retrieving data from Redis: {e}")
 
     def delete_data(self, key: str):
+        """
+        Delete a specific key from Redis.
+
+        :param key: Cache key
+        """
         try:
             output = self.redis_client.delete(key)
 
@@ -59,6 +103,13 @@ class CacheManager:
             raise RedisError(f"An error ocurred while deleting data from Redis: {e}")
 
     def delete_data_with_pattern(self, pattern):
+        """
+        Delete all Redis keys matching a given pattern.
+
+        Useful for invalidating cache groups (e.g., list endpoints).
+
+        :param pattern: Redis key pattern (e.g., 'getProducts:*')
+        """
         try:
             for key in self.redis_client.scan_iter(match=pattern):
                 self.redis_client.delete(key)
