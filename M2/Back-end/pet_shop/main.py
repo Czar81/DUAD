@@ -14,10 +14,15 @@ from os import environ
 
 load_dotenv()
 
+# Register API blueprints
 app = Flask("Store-service")
 
+# Register API blueprints
 if __name__ == "__main__":
+     # Create database tables if they do not exist
     tm.create_tables()
+
+    # Register API blueprints
     app.register_blueprint(product_bp)
     app.register_blueprint(user_bp)
     app.register_blueprint(address_bp)
