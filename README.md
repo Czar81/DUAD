@@ -138,5 +138,8 @@ Each module contains its own weeks, and the weeks have their topics and README f
 
   - #### [Week 8](/M2/Back-end/S8/README.md)
     - [Store with redis](/M2/Back-end/S8/store)
+
+  - #### [Back-end final project](/M2/Back-end/pet_shop)
+    - [Get started](/M2/Back-end/pet_shop/README.md)  
 ---
 ![https://giphy.com/gifs/cbs-hacker-h50-26Ff8qu2JXRWKtppm/](https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExdmhwaGtsdzAzdHlxYmt2dHFra3RhY3V6OThjNTk4Z2gzaHdjNm1iaiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/26Ff8qu2JXRWKtppm/giphy.gif)
