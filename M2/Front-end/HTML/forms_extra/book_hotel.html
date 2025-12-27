@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reservar</title>
+</head>
+<body>
+    <h1>Formulario de reservacion</h1>
+    <form action="./confirmacion.html">
+        <label for="name">Nombre</label>
+        <br>
+        <input type="text" id="name" name="name" required>
+        <br>
+        <label for="email">Correo electronico</label>
+        <br>
+        <input type="email" name="email" id="email" required>
+        <br>
+        <label for="arrival_date">Fecha de llegada</label>
+        <br>
+        <input type="date" name="arrival_date" id="arrival_date" required>
+        <br>
+        <label for="departure_date">Fecha de Salida</label>
+        <br>
+        <input type="date" name="departure_date" id="departure_date" required>
+        <fieldset>
+            <legend>Seleccione el Tipo de Habitacion</legend>
+            <input type="radio" name="room_type" id="room_1" value="standard" required> 
+            <label for="room_1">Estándar</label>
+            <input type="radio" name="room_type" id="room_2" value="premium" required>
+            <label for="room_2">Premium</label>
+            <input type="radio" name="room_type" id="room_3" value="suite" required>
+            <label for="room_3">Suite</label>
+        </fieldset>
+        <fieldset>
+            <legend>Seleccione Servicios Adicionales</legend>
+            <input type="checkbox" name="services" id="service_1" value="breakfast">
+            <label for="service_1">Desayuno</label>
+            <input type="checkbox" name="services" id="service_1" value="wifi">
+            <label for="service_2">Wifi</label>
+            <input type="checkbox" name="services" id="service_1" value="parking">
+            <label for="service_3">Parqueo</label>
+        </fieldset>
+        <input type="submit" value="Reservar">
+    </form>
+</body>
+</html>

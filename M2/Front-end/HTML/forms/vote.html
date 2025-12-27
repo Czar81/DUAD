@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <form action="https://dummyjson.com/test" method="POST">
+        <h1>Llene todos los campos para votar</h1>
+        <label for="user_name">Nombre:</label>
+        <br>
+        <input type="text" id="user_name" name="name" required>
+        <br>
+        <label for="email">Email:</label>
+        <br>
+        <input type="email" id="email" name="email" required>
+        <br>
+        <label for="identification">Numero de Identificacion:</label>
+        <br>
+        <input type="text" id="identification" name="identification" required>
+        <br>
+        <label for="phone">Telefono:</label>
+        <br>
+        <input type="text" id="phone" name="phone" required>
+        <br>
+        <label for="candidate">Seleccione un candidato:</label>
+        <br>
+        <select name="candidate" id="candidate" required>
+            <option hidden>Seleccione un candidato</option>
+            <option value="candidate_1">Candidato #1</option>
+            <option value="candidate_2">Candidato #2</option>
+            <option value="candidate_3">Candidato #3</option>
+            <option value="candidate_4">Candidato #4</option>
+            <option value="candidate_5">Candidato #5</option>
+            <option value="candidate_6">Candidato #6</option>
+            <option value="candidate_7">Candidato #7</option>
+            <option value="candidate_8">Candidato #8</option>
+            <option value="candidate_9">Candidato #9</option>
+            <option value="candidate_10">Candidato #10</option>
+            <option value="candidate_11">Candidato #11</option>
+            <option value="candidate_12">Candidato #12</option>
+         </select>
+        <br>
+        <input type="submit" value="Votar">
+    </form>
+</body>
+</html>

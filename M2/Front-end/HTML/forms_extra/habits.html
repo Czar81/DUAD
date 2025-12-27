@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Habitos de lectura</title>
+</head>
+<body>
+    <form action="./resumen.html">
+        <h1>Habitos de lectura</h1>
+        <label for="name">Nombre</label>
+        <br>
+        <input type="text" id="name" name="name" required>
+        <br>
+        <label for="age">Edad</label>
+        <br>
+        <input type="number" id="age" name="age" required>
+
+        <fieldset>
+            <legend>¿Con qué frecuencia lee libros?</legend>
+            <input type="radio" id="daily" name="frequency" value="daily" required>
+            <label for="daily">Diario</label>
+            <input type="radio" id="weekly" name="frequency" value="weekly" required>
+            <label for="weekly">Semanal</label>
+            <input type="radio" id="almost_never" name="frequency" value="almost_never" required>
+            <label for="almost_never">Casi nunca</label>
+        </fieldset>
+        <label for="favorite_book">Recomiende su libro favorito y por que lo es</label>
+        <br>
+        <textarea id="favorite_book" name="favorite_book" required></textarea>
+        <br>
+        <input type="submit" value="Enviar">
+    </form>
+</body>
+</html>
