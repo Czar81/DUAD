@@ -64,10 +64,19 @@ h6 {
     isolation: isolate;
 }
 
+/* My fonts */
+@font-face {
+  font-family: 'Degular Display'; 
+  src: url('./fonts/fonnts.com-DegularDemo-Medium.otf') format('woff2'), 
+       url('./fonts/fonnts.com-DegularDemo-Bold.otf') format('woff'); 
+  font-weight: normal; 
+  font-style: normal;
+}
+
 /* Blog styles */
 
 * {
-    font-family: 'Degular Display', sans-serif;
+    font-family: 'Inter', sans-serif;
     font-size: 1rem;
     color: #4d4c4b;
 }
@@ -127,6 +136,7 @@ main, #head-post, #post-content {
 
 
 #title-post {
+    font-family: "Degular Display", "Inter";
     font-size: 2.6rem;
     font-weight: 800;
     color: #2d2e2e;
