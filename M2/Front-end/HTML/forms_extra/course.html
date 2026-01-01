@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inscripcion a curso</title>
+</head>
+<body>
+    <form action="./gracias.html" method="POST">
+        <h1>Inscribase ya</h1>
+        <label for="fullname">Nombre completo</label>
+        <br>
+        <input type="text" id="fullname" name="fullname" required>
+        <br>
+        <label for="email">Correo electronico</label>
+        <br>
+        <input type="email" name="email" id="email" required>
+        <br>
+        <label for="id">Cédula o ID</label>
+        <br>
+        <input type="text" id="id" name="identification" required>
+        <br>
+        <label for="courses">Cursos</label>
+        <br>
+        <select name="courses" id="courses" required>
+            <option hidden>Seleccione una opcion</option>
+            <option value="develop_web">Desarrollo Web</option>
+            <option value="networking">Redes</option>
+            <option value="cybersecurity">Ciberseguridad</option>
+        </select>
+        <br>
+        <input type="checkbox" id="terms_conditions" name="terms_conditions" required>
+        <label for="terms_conditions">Terminos y condiciones</label>
+        <br>
+        <input type="submit" value="Inscribirse">
+    </form>
+</body>
+</html>
