@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <title>Hiring</title>
+  </head>
+  <body>
+    <div class="form-container">
+    <form action="https://dummyjson.com/test" method="POST">
+      <hr id="hyphen">
+      <h1 id="form-title">Contact us!</h1>
+      <p id="form-subtitle">Got something to say? Fire away!</p>
+
+      <br />
+      <input class="form-input" type="text" id="first_name" name="firstName" placeholder="First name*" required/>
+      <br />
+      <input class="form-input" type="text" id="last_name" name="lastName" placeholder="Last name*" required/>
+      <br />
+      <input class="form-input" type="text" id="email" name="email" placeholder="Email*" required/>
+      <br />
+      <select id="form-select" class="form-input" name="type" required>
+        <option value="" hidden selected>What's your message about?*</option>
+        <option value="question">Question</option>
+        <option value="suggestion">Suggestion</option>
+      </select>
+      <br />
+      <textarea class="form-input" id="form-textarea" name="message" placeholder="Fire away!" required></textarea>
+      <br />
+
+      <input class="form-input form-submit" type="submit" value="Send my message" />
+    </form>
+    </div>
+  </body>
+</html>

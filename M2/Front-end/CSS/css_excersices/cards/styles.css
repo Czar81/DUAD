@@ -1,0 +1,34 @@
+*{
+    font-family: "Inter", "Arial", sans-serif;
+    color: #423f39;
+}
+
+html, body, main{
+    width: 99%;
+    height: 99%;
+    background-color: #f5f4f4;
+}
+main {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+.animal-card {
+    background-color: #ffffff;
+    width: 20%;
+    border: 1px solid #ccccce;
+    padding: 0.8rem;
+    margin: 2rem;
+    border-radius: 5px;
+}
+.animal-card img{
+    width: 100%;
+    border-radius: 2px;
+
+}
+
+.animal-card h2 {
+    font-size: 1.5rem;
+    margin: 0.5rem 0;
+}
