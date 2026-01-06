@@ -1,0 +1,298 @@
+/* CSS reset */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+*:not(dialog) {
+    margin: 0;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    html {
+        interpolate-size: allow-keywords;
+    }
+}
+
+body {
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+}
+
+
+img,
+picture,
+video,
+canvas,
+svg {
+    display: block;
+    max-width: 100%;
+}
+
+input,
+button,
+textarea,
+select {
+    font: inherit;
+}
+
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    overflow-wrap: break-word;
+}
+
+p {
+    text-wrap: pretty;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    text-wrap: balance;
+}
+
+#root,
+#__next {
+    isolation: isolate;
+}
+
+/* Layout Styles */
+* {
+    font-family: "Inter", "Helvetica Neue", Arial, sans-serif;
+    color: #333;
+}
+
+html,
+body {
+    width: 100%;
+}
+
+body {
+    display: grid;
+    grid-template-columns: 1fr minmax(320px, 1200px) 1fr;
+}
+
+header,
+main,
+footer {
+    grid-column: 2;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Header Styles */
+
+header {
+    background-color: #f8f9fb;
+    display: flex;
+    justify-content: left;
+    gap: 1rem;
+    padding: 0.5rem 1rem;
+    border-radius: 3px;
+    margin: 1rem;
+}
+
+header img {
+    width: 2.5rem;
+}
+
+header h1 {
+    font-size: 2.2rem;
+}
+
+nav ul {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    list-style-type: none;
+}
+
+nav a {
+    text-decoration: none;
+    color: #929292;
+
+}
+
+.searchbox {
+    margin-left: auto;
+    padding: 0.3rem;
+    border: 1px solid #ccc;
+}
+
+#nav-home {
+    font-weight: bold;
+    color: #333;
+}
+
+/* Banner Styles */
+.banner {
+    background-color: #feeae8;
+    display: flex;
+    align-items: stretch;
+    text-align: left;
+    padding: 4rem 3rem;
+    margin: 2rem 1rem;
+    border-radius: 5px;
+}
+
+.content-banner h3 {
+    font-size: 2.5rem;
+}
+
+.content-banner p {
+    color: #626262;
+    margin-top: 1rem;
+}
+
+.content-banner .price-banner {
+    font-size: 2.2rem;
+    font-weight: 600;
+    margin-top: 2rem;
+    color: #ff3887;
+}
+
+.btn-pink {
+    background-color: #ff3887;
+    box-shadow: 1px 2px 5px #333;
+    color: #eee;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    border: none;
+    font-weight: 600;
+}
+
+.btn-pink:hover,
+.btn-pink:active {
+    background-color: #e03e81;
+    cursor: pointer;
+}
+
+.btn-pink:active {
+    background-color: #ff4593;
+    cursor: pointer;
+}
+
+.banner img {
+    width: 40%;
+    border-radius: 10px;
+    object-fit: cover;
+
+}
+
+/* Fruits */
+.fruits-section {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    margin: 2rem;
+    gap: 2rem;
+    margin-top: 5rem;
+}
+
+.fruits-section h2 {
+    grid-column: span 3;
+    font-size: 2rem;
+    font-weight: 700;
+}
+
+/* Fruits card */
+.card-product {
+
+    box-shadow: 5px 5px 20px #6f6f6f59;
+    border-radius: 5px;
+    padding: 1.5rem 2rem;
+    text-align: center;
+}
+
+.card-product img {
+    width: 100%;
+    object-fit: cover;
+}
+
+.card-info {
+    margin-top: 2rem;
+}
+
+.card-info h3 {
+    font-size: 1.5em;
+}
+
+.card-info p {
+    color: #626262;
+    margin-top: 0.6rem;
+    font-size: 0.8rem;
+}
+
+.card-info .price-card {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #333;
+}
+
+.btn-card {
+    background-color: #222;
+    color: #ccc;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    margin-top: 0.6rem;
+}
+
+.btn-card:hover,
+.btn-card:focus {
+    background-color: #5b5a5a;
+}
+
+.btn-card:active {
+    background-color: #222;
+}
+
+/* Footer styles */
+footer{
+    margin: 2rem;
+}
+
+.form-conteiner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    background-color: #feeae8;
+    padding: 4rem 2rem;
+    border-radius: 5px;
+}
+
+#form-contact {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+#form-contact h2 {
+    font-size: 2rem;
+}
+
+#form-contact p{
+    color: #5e5e5e;
+}
+
+#form-contact label {
+    margin-top: 1rem;
+}
+.email-input{
+    margin-left: 0;
+    margin-bottom: 1rem;
+    width: 100%;
+    padding: 0.5rem;
+    border: none;
+    border-radius: 3px;
+}
