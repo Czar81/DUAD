@@ -1,4 +1,4 @@
-function student_resume(student) {
+function student_summary(student) {
   const average =
     student.grades.reduce((average, g) => {
       return (average += g.grade);
