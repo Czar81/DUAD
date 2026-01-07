@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div>
+      <button id="add_li" onclick="addItem()">Add item</button>
+      <button id="delete_all_li" onclick="deleteList()">Delete all items</button>
+    </div>
+    <ol id="list"></ol>
+
+    <script>
+      function addItem() {
+        const list = document.getElementById("list");
+        const item = document.createElement("li");
+        item.innerHTML="Item";
+        list.appendChild(item);
+      };
+
+      function deleteList(){
+        const list = document.getElementById("list");
+        while(list.firstChild){
+            list.removeChild(list.firstChild)
+        }
+      }
+    </script>
+  </body>
+</html>

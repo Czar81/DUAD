@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <input type="text" id="input-text" placeholder="Add text to show" >
+    <button onclick="showText()">Show text</button>
+    <br>
+    <br>
+    <textarea name="display" id="display_text"  disabled style="resize:none"></textarea>
+    
+    <script>
+        function showText(){
+            const input = document.getElementById("input-text");
+            const textarea = document.getElementById("display_text");
+
+            textarea.value = input.value
+            input.value = ""
+        }
+    </script>
+
+</body>
+</html>
