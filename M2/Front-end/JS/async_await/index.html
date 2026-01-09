@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <input type="text" id="input" />
+    <button id="btn-send">Send</button>
+    <pre id="display"></pre>
+    <script>
+      async function getUser(userID) {
+        // With https://reqres.in/api/users/2 receive 403, I think from claudflare, not sure
+        const url = `https://jsonplaceholder.typicode.com/users/${userID}`;
+        const display = document.getElementById("display");
+        try {
+          const response = await fetch(url);
+
+          if (!response.ok) {
+            throw new Error(`HTTP error ${response.status}`);
+          }
+
+          const data = await response.json();
+          const formatted = {
+            name: data.name,
+            username: data.username,
+            email: data.email
+          };
+          display.innerHTML = `${JSON.stringify(formatted, null, 2)}`;
+        } catch (err) {
+          display.innerHTML = err.message;
+        }
+      }
+
+      const btn = document.getElementById("btn-send");
+      const input = document.getElementById("input");
+      
+      btn.addEventListener("click", () => {
+        const input_value = input.value;
+        if (input_value !== "") {
+          getUser(input_value);
+        }
+      });
+    </script>
+  </body>
+</html>
