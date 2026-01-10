@@ -22,7 +22,7 @@ async function createUser(name, email, password, address) {
       return response.json();
     } else {
       throw new Error(
-        `could not receive user id: ${userID}, ${response.status}`
+        `could not receive user, ${response.status}`
       );
     }
   } catch (error) {

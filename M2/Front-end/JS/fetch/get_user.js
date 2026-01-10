@@ -12,10 +12,15 @@ async function getUser(userID) {
     }
   } catch (error) {
     console.error(`${error}`);
+    return null
   }
 }
 
-const user = await getUser("ff8081819782e69e019ba549354804ce");
-console.log(user);
+const user_ok = await getUser("ff8081819782e69e019ba549354804ce");
 
-await getUser("ff8081819782e69e019ba5493548041");
+const user_fal = await getUser("ff8081819782e69e019ba5493548041");
+
+Promise.all([user_ok, user_fal]).then((value) => {
+  console.log(value);
+});
+
