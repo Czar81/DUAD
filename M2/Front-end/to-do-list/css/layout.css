@@ -1,0 +1,44 @@
+/* Gobal styles */
+html,
+body {
+    width: 100vw;
+    height: 100vh;
+}
+
+/* login & sign up styles */
+.img-container-aside,
+.img-aside {
+    width: 100%;
+    height: 100%;
+}
+
+.img-aside {
+    object-fit: cover;
+    object-position: right;
+}
+
+/* login styles */
+#login {
+    width: 100%;
+    height: 100%;
+    display: flex;
+}
+
+#login > main{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 1.2rem;
+    min-width: 30%;
+    padding: 2rem;
+}
+
+#form-login{
+    display: grid;
+    gap: 1rem;
+}
+
+.btn-submit{
+    margin-top: 1rem;
+}
+
