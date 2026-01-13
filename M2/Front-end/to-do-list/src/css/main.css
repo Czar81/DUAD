@@ -1,25 +1,4 @@
 @import url(./css_reset.css);
+@import url(./variables.css);
 @import url(./layout.css);
 @import url(./componets.css);
-
-
-:root {
-    --clr-primary: #24283B;
-    --clr-secondary:#373F66;
-    --clr-tertiary: #313756;
-    --clr-text-light: #F5F5F5;
-    --clr-text-dark: #605F5F;
-    --clr-accent: #7AA2F7;
-    --clr-accent-strong: #2d6cf3;
-    --bg-danger: #F7768E;
-    --bg-danger-strong: #f81e46;
-    --bg-surface: #EBEBEB;
-    --clr-success: #59eead;
-    --clr-warning: #fdee69;
-    --clr-info: #82e6ff;
-}
-
-* {
-    font-family: 'Inter', sans-serif;
-    box-sizing: border-box;
-}

@@ -1,0 +1,17 @@
+:root {
+    --clr-primary: #24283B;
+    --clr-secondary:#373F66;
+    --clr-tertiary: #313756;
+    --clr-text-light: #F5F5F5;
+    --clr-text-medium: #a1a1a1;
+    --clr-text-dark: #605F5F;
+    --clr-accent-light: #9bb7f5;
+    --clr-accent: #7AA2F7;
+    --clr-accent-strong: #4178ee;
+    --bg-danger: #F7768E;
+    --bg-danger-strong: #f81e46;
+    --bg-surface: #EBEBEB;
+    --clr-success: #59eead;
+    --clr-warning: #fdee69;
+    --clr-info: #82e6ff;
+}
