@@ -1,20 +1,24 @@
 /* Gobal styles */
 html,
 body {
-    width: 100dvw;
-    height: 100dvh;
+    width: 100%;
+    min-height: 100vh;
 }
 
 /* login & sign up styles */
 .img-container-aside,
 .img-aside {
     width: 100%;
-    height: 100%;
+    min-height: 100%;
 }
 
 .img-aside {
     object-fit: cover;
     object-position: right;
+}
+
+#to-do-list-body{
+    padding: 1rem;
 }
 
 #login,
@@ -105,7 +109,7 @@ body.about {
   align-items: center;
   max-width: 1400px;
   padding: 1rem;
-   margin: 0 auto;
+  margin: 0 auto;
 }
 
 #to-do-main{
@@ -134,4 +138,10 @@ body.about {
   padding: 0;
   margin: 0;
   list-style: none;
+}
+
+#name-log-container{
+    display: flex;
+    align-items: center;
+    gap: 0.;
 }
