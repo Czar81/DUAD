@@ -3,6 +3,9 @@
     box-sizing: border-box;
 }
 
+button, .check{
+    cursor: pointer;
+}
 /*Background*/
 #login, #sign-up{
     color: var(--clr-text-light);
@@ -59,4 +62,15 @@
 .btn-submit:active{
     background-color: var(--clr-accent-light);
     color: var(--clr-primary);
+}
+
+/*Checkbox*/
+.check:checked{
+    accent-color: var(--clr-accent);
+}
+
+.check {
+  transform: scale(1.25);
+  transform-origin: center;
+  accent-color: var(--clr-accent);
 }

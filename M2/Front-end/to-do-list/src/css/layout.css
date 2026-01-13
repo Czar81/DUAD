@@ -61,6 +61,12 @@ body {
     width: 40%;
 }
 
+.terms_conditions-container {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
 /*About style*/
 
 body.about {

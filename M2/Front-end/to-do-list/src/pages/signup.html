@@ -11,14 +11,21 @@
     <link rel="stylesheet" href="../css/main.css" />
     <title>Sign up</title>
   </head>
-  <body id="sign-up">   
+  <body id="sign-up">
     <div class="displayMsg"></div>
     <aside class="img-container-aside">
-      <img src="../assets/imgs/to-do-list.jpg" alt="To Do List" class="img-aside" id="signup-bg-img" />
+      <img
+        src="../assets/imgs/to-do-list.jpg"
+        alt="To Do List"
+        class="img-aside"
+        id="signup-bg-img"
+      />
     </aside>
     <main>
       <h1 class="main-title">Create an account</h1>
-      <p>Already have an account? <a href="./login.html" class="link">Log in</a></p>
+      <p>
+        Already have an account? <a href="./login.html" class="link">Log in</a>
+      </p>
       <form id="form-signup">
         <div id="fullname">
           <input
@@ -56,19 +63,20 @@
           required
         />
         <div class="terms_conditions-container">
-          <div id="terms-container">
-            <input
-              type="checkbox"
-              name="terms_conditions"
-              id="terms_conditions"
-              required
-            />
-            <label for="terms_conditions">
-              I agree to the Terms & Conditions
-            </label>
-          </div>
+          <input
+            type="checkbox"
+            name="terms_conditions"
+            class="check"
+            id="terms-conditions"
+            required
+          />
+          <label for="terms-conditions">
+            I agree to the Terms & Conditions
+          </label>
         </div>
-        <button type="submit" class="btn-submit"  id="btn-signup">Sign up</button>
+        <button type="submit" class="btn-submit" id="btn-signup">
+          Sign up
+        </button>
       </form>
     </main>
   </body>
