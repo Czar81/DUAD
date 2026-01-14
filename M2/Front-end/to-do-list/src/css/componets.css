@@ -15,6 +15,10 @@ button,
     background-color: var(--clr-primary);
 }
 
+#about{
+    background-color: var(--clr-text-light);
+    color: var(--clr-text-dark);
+}
 /*Titles*/
 .main-title {
     font-weight: 700;
@@ -146,6 +150,11 @@ button,
     width: 2rem;
 }
 
+#header-about{
+    background-color: var(--clr-primary);
+    color: var(--clr-text-light);
+}
+
 /*Task componets*/
 #to-do-list-body,
 #to-do-main,
@@ -222,4 +231,15 @@ button,
     color: var(--clr-text-dark);
     font-weight: 600;
     font-size: large;
+}
+
+/*about*/
+#about-container{
+    box-shadow: 0 0 10px var(--clr-text-medium);
+    border-radius: 5px;
+}
+
+#about-footer{
+    background-color: var(--clr-primary);
+    color: var(--clr-text-light);
 }
