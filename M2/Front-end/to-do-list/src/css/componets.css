@@ -114,6 +114,10 @@ button,
     background-color: var(--bg-danger);
 }
 
+#btn-go-back{
+    margin-right: 1rem;
+}
+
 /*Checkbox*/
 .check {
     transform: scale(1.25);
