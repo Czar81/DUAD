@@ -4,10 +4,12 @@ import { setUserId, clearUserId } from "../storage/sessionStorage";
 export const signUp = async (data) => {
   try {
     const response = await apiClient.post("/objects", data);
-    if (response) {
+    if (response?.data?.id) {
       setUserId(response.data.id);
       return response.data.id;
     }
+    console.error("Error while signing up");
+    return null;
   } catch (err) {
     console.error(err);
     return null;
@@ -17,11 +19,13 @@ export const signUp = async (data) => {
 export const login = async (uid) => {
   try {
     const response = await apiClient.get(`/objects/${uid}`);
-    if (response) {
+    if (response?.data?.id) {
       setUserId(response.data.id);
       return response.data.id;
     }
-  } catch (error) {
+    console.error("Error while logging in");
+    return null;
+  } catch (err) {
     console.error(err);
     return null;
   }
