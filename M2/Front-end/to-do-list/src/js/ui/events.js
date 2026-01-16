@@ -4,18 +4,9 @@ export const bindSignupEvents = () => {
   const formSignUp = document.getElementById("form-signup");
   if (!formSignUp) return;
 
-  const chkTerms = document.getElementById("terms-conditions");
-  if (!chkTerms) return;
-
-  const btnSubmit = document.getElementById("btn-signup");
-  if (!btnSubmit) return;
-
   chkTerms.addEventListener("change", () => {
-    if (chkTerms.checked == true) {
-      btnSubmit.disabled = false;
-    } else {
-      btnSubmit.disabled = true;
-    }
+    btnSubmit.disabled = !chkTerms.checked;
+    
   });
   formSignUp.addEventListener("submit", async (e) => {
     e.preventDefault();
@@ -31,7 +22,19 @@ export const bindSignupEvents = () => {
 
     const success = await signUp(data);
     if (success) {
-      window.location.replace("/M2/Front-end/to-do-list/src/pages/to-do.html");
+      location.replace("/M2/Front-end/to-do-list/src/pages/to-do.html");
+    }
+  });
+};
+
+export const bindLoginEvents = () => {
+  const formLogin = document.getElementById("form-login");
+  if (!formLogin) return;
+  formLogin.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const success = await login(e.target.uid.value);
+    if (success) {
+      location.replace("/M2/Front-end/to-do-list/src/pages/to-do.html");
     }
   });
 };
