@@ -1,4 +1,4 @@
-import { setCookie, getCookie, deleteCookie } from "../utils/cookie";
+import { setCookie, getCookie, deleteCookie } from "../utils/cookie.js";
 
 const UID_KEY = "uid";
 

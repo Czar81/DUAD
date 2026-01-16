@@ -1,5 +1,5 @@
-import apiClient from "../api/apiClient";
-import { setUserId, clearUserId } from "../storage/sessionStorage";
+import apiClient from "../api/apiClient.js";
+import { setUserId, clearUserId } from "../storage/sessionStorage.js";
 
 export const signUp = async (data) => {
   try {
