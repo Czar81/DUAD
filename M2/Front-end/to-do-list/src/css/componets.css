@@ -15,10 +15,11 @@ button,
     background-color: var(--clr-primary);
 }
 
-#about{
+#about {
     background-color: var(--clr-text-light);
     color: var(--clr-text-dark);
 }
+
 /*Titles*/
 .main-title {
     font-weight: 700;
@@ -83,7 +84,13 @@ button,
     color: var(--clr-primary);
 }
 
-.btn-delete, .btn-blue-white{
+.btn-submit:disabled {
+    pointer-events: none;
+    opacity: 0.6;
+}
+
+.btn-delete,
+.btn-blue-white {
     padding: 0.5rem 1rem;
     border-radius: 5px;
     font-weight: 500;
@@ -102,19 +109,20 @@ button,
     background-color: var(--clr-accent);
 }
 
-.btn-delete{
+.btn-delete {
     background-color: var(--bg-danger);
 }
 
-.btn-delete:hover{
+.btn-delete:hover {
     background-color: var(--bg-danger-strong);
 
 }
-.btn-delete:active{
+
+.btn-delete:active {
     background-color: var(--bg-danger);
 }
 
-#btn-go-back{
+#btn-go-back {
     margin-right: 1rem;
 }
 
@@ -154,7 +162,7 @@ button,
     width: 2rem;
 }
 
-#header-about{
+#header-about {
     background-color: var(--clr-primary);
     color: var(--clr-text-light);
 }
@@ -209,16 +217,17 @@ button,
     color: var(--clr-text);
 }
 
-.task-completed{
-    border-color: var(--clr-accent) ;
+.task-completed {
+    border-color: var(--clr-accent);
 }
-.task-completed-text{
+
+.task-completed-text {
     text-decoration: line-through;
     color: var(--clr-text);
 }
 
 
-#not-tasks{
+#not-tasks {
     text-align: center;
     width: 100%;
     height: 100%;
@@ -238,12 +247,12 @@ button,
 }
 
 /*about*/
-#about-container{
+#about-container {
     box-shadow: 0 0 10px var(--clr-text-medium);
     border-radius: 5px;
 }
 
-#about-footer{
+#about-footer {
     background-color: var(--clr-primary);
     color: var(--clr-text-light);
 }
