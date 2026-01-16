@@ -9,10 +9,10 @@ export const signUp = async (data) => {
       return response.data;
     }
     console.error("Error while signing up");
-    return null;
+    return false;
   } catch (err) {
     console.error(err);
-    return null;
+    return false;
   }
 };
 
@@ -24,12 +24,25 @@ export const login = async (uid) => {
       return response.data;
     }
     console.error("Error while logging in");
-    return null;
+    return false;
   } catch (err) {
     console.error(err);
-    return null;
+    return false;
   }
 };
+
+export const checkSession = async (uid) => {
+  try {
+    const response = await apiClient.get(`/objects/${uid}`);
+    if (response?.data?.id) {
+      return true
+    }
+    return !!response
+  } catch (err) {
+    console.error(err);
+    return false
+  }
+}
 
 export const logout = () => {
   clearUserId();
