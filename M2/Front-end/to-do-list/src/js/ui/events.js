@@ -1,4 +1,4 @@
-import { signUp, login } from "../services/authService.js";
+import { signUp, login, logout } from "../services/authService.js";
 
 export const bindSignupEvents = () => {
   const formSignUp = document.getElementById("form-signup");
@@ -38,3 +38,13 @@ export const bindLoginEvents = () => {
     }
   });
 };
+
+export const bindToDoEvents = () => {
+  const btnOut = document.getElementById("btn-logout")
+  if(!btnOut) return;
+
+  btnOut.addEventListener("click", ()=>{
+    logout()
+    location.replace("/M2/Front-end/to-do-list/src/pages/to-do.html");
+  })
+}
