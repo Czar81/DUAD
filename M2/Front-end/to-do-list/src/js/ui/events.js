@@ -3,7 +3,8 @@ import { signUp, login, logout } from "../services/authService.js";
 export const bindSignupEvents = () => {
   const formSignUp = document.getElementById("form-signup");
   if (!formSignUp) return;
-
+  const btnSubmit = document.getElementById("btn-signup")
+  const chkTerms = document.getElementById("terms-conditions")
   chkTerms.addEventListener("change", () => {
     btnSubmit.disabled = !chkTerms.checked;
     

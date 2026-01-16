@@ -10,7 +10,7 @@ switch (page) {
     initLoginPage();
     break;
 
-  case "signup":
+  case "sign-up":
     initSignupPage();
     break;
 
