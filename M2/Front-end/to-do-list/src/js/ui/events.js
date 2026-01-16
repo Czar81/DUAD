@@ -2,10 +2,21 @@ import { signUp, login } from "../services/authService.js";
 
 export const bindSignupEvents = () => {
   const formSignUp = document.getElementById("form-signup");
-  if (!formSignUp) {
-    return;
-  }
+  if (!formSignUp) return;
 
+  const chkTerms = document.getElementById("terms-conditions");
+  if (!chkTerms) return;
+
+  const btnSubmit = document.getElementById("btn-signup");
+  if (!btnSubmit) return;
+
+  chkTerms.addEventListener("change", () => {
+    if (chkTerms.checked == true) {
+      btnSubmit.disabled = false;
+    } else {
+      btnSubmit.disabled = true;
+    }
+  });
   formSignUp.addEventListener("submit", async (e) => {
     e.preventDefault();
 
