@@ -16,15 +16,18 @@ export const signUp = async (data) => {
   }
 };
 
-export const login = async (uid) => {
+export const login = async (uid, password) => {
   try {
     const response = await apiClient.get(`/objects/${uid}`);
-    if (response?.data?.id) {
-      setUserId(response.data.id); 
-      return response.data;
+    if (!response?.data?.id) {
+      return false;
     }
-    console.error("Error while logging in");
-    return false;
+    if (password === response.data.data.password) {
+      setUserId(response.data.id);
+      return response.data;
+    } else {
+      return false;
+    }
   } catch (err) {
     console.error(err);
     return false;
@@ -35,14 +38,14 @@ export const checkSession = async (uid) => {
   try {
     const response = await apiClient.get(`/objects/${uid}`);
     if (response?.data?.id) {
-      return true
+      return true;
     }
-    return !!response
+    return !!response;
   } catch (err) {
     console.error(err);
-    return false
+    return false;
   }
-}
+};
 
 export const logout = () => {
   clearUserId();
