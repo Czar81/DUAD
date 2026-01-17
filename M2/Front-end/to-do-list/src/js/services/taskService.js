@@ -31,6 +31,19 @@ export const getTasks = async () => {
   }
 };
 
+export const getOneTask = async (taskID) => {
+  try {
+    const task = await apiClient.get(`/objects/${taskID}`);
+    if (task?.data?.id) {
+      return task.data;
+    }
+    return null;
+  } catch (err) {
+    console.error(err);
+    return null;
+  }
+};
+
 export const updateTask = async (taskID, data) => {
   try {
     const response = await apiClient.put(`/objects/${taskID}`, data);
