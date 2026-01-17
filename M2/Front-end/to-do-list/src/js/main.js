@@ -2,6 +2,7 @@ import { initLoginPage } from "./pages/login.js";
 import { initSignupPage } from "./pages/signup.js";
 import { initToDoListPage } from "./pages/to_do.js";
 import { initAboutPage } from "./pages/about.js";
+import { initIndexPage } from "./pages/index.js";
 
 const page = document.body.dataset.page;
 
@@ -20,6 +21,10 @@ switch (page) {
 
   case "about":
     initAboutPage();
+    break;
+
+  case "index":
+    initIndexPage();
     break;
 
   default:
