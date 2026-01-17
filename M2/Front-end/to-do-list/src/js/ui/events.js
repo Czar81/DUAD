@@ -1,5 +1,5 @@
 import { signUp, login, logout } from "../services/authService.js";
-import { createTask, getOneTask, updateTask } from "../services/taskService.js";
+import { createTask, getOneTask, updateTask, deleteTask } from "../services/taskService.js";
 import { formatDate } from "../utils/helpers.js";
 import { renderTask } from "./render.js";
 
@@ -35,10 +35,11 @@ export const bindLoginEvents = () => {
   if (!formLogin) return;
   formLogin.addEventListener("submit", async (e) => {
     e.preventDefault();
-    const success = await login(e.target.uid.value);
+    const success = await login(e.target.uid.value, e.target.password.value);
     if (success) {
       location.replace("/M2/Front-end/to-do-list/src/pages/to-do.html");
     }
+    return;
   });
 };
 
@@ -66,6 +67,7 @@ export const bindToDoEvents = () => {
       },
     };
     const taskID = await createTask(data);
+    if (!taskID) return;
     noTaskYet.hidden = true;
     inputNewTask.value = "";
     data.id = taskID.id;
@@ -81,4 +83,15 @@ export const bindToDoEvents = () => {
       updateTask(task.dataset.id, actualTask);
     }
   });
+
+  taskContainer.addEventListener("click", (e) => {
+    if(e.target.classList.contains("btn-delete")){
+      const task = e.target.closest(".task-card");
+      deleteTask(task.dataset.id)
+      task.remove();
+      if (task.children.length === 2) {
+        noTaskYet.hidden=false
+      }
+    }
+  })
 };
