@@ -8,9 +8,6 @@ export const renderTask = (data) => {
   const taskContainer = document.getElementById("task-container");
 
   const li = document.createElement("li");
-  li.className = "task-card";
-  li.dataset.id = data.id;
-
   const taskContent = document.createElement("div");
   taskContent.className = "task-content";
 
@@ -32,6 +29,14 @@ export const renderTask = (data) => {
   const btnDelete = document.createElement("button");
   btnDelete.className = "btn-delete";
   btnDelete.textContent = "Delete";
+  console.log(data.data.completed)
+  if (data.data.completed) {
+    li.className = "task-card completed"
+    checkbox.checked = true
+  } else {
+    li.className = "task-card"
+  }
+  li.dataset.id = data.id;
 
   taskDesc.append(taskText, taskDate);
   taskContent.append(checkbox, taskDesc);

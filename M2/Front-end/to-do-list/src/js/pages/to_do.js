@@ -2,7 +2,8 @@ import { bindToDoEvents } from "../ui/events.js";
 import { checkSession } from "../services/authService.js";
 import { getCookie } from "../utils/cookie.js";
 import { getUser } from "../services/userService.js";
-import { renderUserName } from "../ui/render.js";
+import { renderUserName, renderTask } from "../ui/render.js";
+import { getTasks } from "../services/taskService.js";
 
 export const initToDoListPage = async () => {
   const uid = getCookie("uid");
@@ -17,5 +18,11 @@ export const initToDoListPage = async () => {
   if (user?.name) {
     renderUserName(user?.name)
   }
-  bindToDoEvents(); 
+  const tasks = await getTasks()
+  if (Array.isArray(tasks) && tasks.length > 0) {
+    tasks.forEach(task => renderTask(task))
+  }else{
+    document.getElementById("not-tasks").hidden=false;
+  }
+  bindToDoEvents();
 };
