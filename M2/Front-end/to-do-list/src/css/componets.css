@@ -217,11 +217,11 @@ button,
     color: var(--clr-text);
 }
 
-.task-completed {
+.completed {
     border-color: var(--clr-accent);
 }
 
-.task-completed-text {
+.completed  .task-text {
     text-decoration: line-through;
     color: var(--clr-text);
 }
