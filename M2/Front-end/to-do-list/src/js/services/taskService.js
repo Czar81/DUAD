@@ -22,7 +22,7 @@ export const getTasks = async () => {
     if (taskIDs.lenght === 0) {
       return [];
     }
-    const resquests = taskIDs.map((id) => apiClient.get(`/objects${id}`));
+    const resquests = taskIDs.map((id) => apiClient.get(`/objects/${id}`));
     const responses = await Promise.all(resquests);
     return responses.map((res) => res.data);
   } catch (err) {

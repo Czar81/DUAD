@@ -53,12 +53,13 @@ export const bindToDoEvents = () => {
 
   btnOut.addEventListener("click", () => {
     logout();
-    location.replace("/M2/Front-end/to-do-list/src/pages/to-do.html");
+    location.replace("/M2/Front-end/to-do-list/src/pages/login.html");
   });
 
   if (!btnNewTask) return;
 
   btnNewTask.addEventListener("click", async () => {
+    if (!inputNewTask.value.trim()) return;
     const data = {
       name: inputNewTask.value,
       data: {
@@ -80,7 +81,7 @@ export const bindToDoEvents = () => {
       task.classList.toggle("completed", e.target.checked);
       const actualTask = await getOneTask(task.dataset.id);
       actualTask.data.completed = e.target.checked;
-      updateTask(task.dataset.id, actualTask);
+      await updateTask(task.dataset.id, actualTask);
     }
   });
 
