@@ -1,0 +1,258 @@
+* {
+    font-family: 'Inter', sans-serif;
+    box-sizing: border-box;
+}
+
+button,
+.check {
+    cursor: pointer;
+}
+
+/*Background*/
+#login,
+#sign-up {
+    color: var(--clr-text-light);
+    background-color: var(--clr-primary);
+}
+
+#about {
+    background-color: var(--clr-text-light);
+    color: var(--clr-text-dark);
+}
+
+/*Titles*/
+.main-title {
+    font-weight: 700;
+    font-size: 2.5rem;
+}
+
+/*Link <a></a>*/
+.link {
+    color: var(--clr-accent);
+}
+
+.link:hover {
+    color: var(--clr-accent-strong);
+
+}
+
+/*Input Form*/
+.input-form {
+    background-color: var(--clr-tertiary);
+    padding: 0.5rem;
+    border-radius: 4px;
+    color: var(--clr-text-light);
+
+}
+
+.input-form:focus,
+#input-add-task:focus {
+    outline: 2px solid var(--clr-accent);
+}
+
+.input-form::placeholder,
+#input-add-task::placeholder {
+    color: var(--clr-text-medium);
+
+}
+
+#input-add-task {
+    padding: 0.5rem;
+    border-radius: 4px;
+    width: 100%;
+    font-size: 1.2rem;
+}
+
+/*Button*/
+.btn-submit {
+    background-color: var(--clr-accent);
+    padding: 0.5rem;
+    color: var(--clr-text-light);
+    font-weight: 600;
+    border-radius: 3px;
+
+}
+
+.btn-submit:hover,
+.btn-blue-white:hover {
+    background-color: var(--clr-accent-strong);
+}
+
+.btn-submit:active,
+.btn-blue-white:active {
+    background-color: var(--clr-accent-light);
+    color: var(--clr-primary);
+}
+
+.btn-submit:disabled {
+    pointer-events: none;
+    opacity: 0.6;
+}
+
+.btn-delete,
+.btn-blue-white {
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    font-weight: 500;
+    color: var(--clr-text-light);
+}
+
+.btn-blue-white {
+    background-color: var(--clr-accent);
+}
+
+.btn-active {
+    background-color: var(--clr-accent-strong);
+}
+
+.btn-active:hover {
+    background-color: var(--clr-accent);
+}
+
+.btn-delete {
+    background-color: var(--bg-danger);
+}
+
+.btn-delete:hover {
+    background-color: var(--bg-danger-strong);
+
+}
+
+.btn-delete:active {
+    background-color: var(--bg-danger);
+}
+
+#btn-go-back {
+    margin-right: 1rem;
+}
+
+/*Checkbox*/
+.check {
+    transform: scale(1.25);
+    transform-origin: center;
+    accent-color: var(--clr-accent);
+}
+
+.check-task {
+    accent-color: var(--clr-accent-strong) !important;
+    transform: scale(2);
+    transform-origin: center;
+    margin: 0 1rem 0 1rem;
+}
+
+/*Headers*/
+#to-do-header {
+    background-color: var(--clr-primary);
+    border-radius: 10px;
+    color: var(--clr-text-light);
+}
+
+#to-do-header>h1 {
+    margin-left: 1rem;
+}
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    margin-right: 1rem;
+}
+
+#name-log-container>img {
+    width: 2rem;
+}
+
+#header-about {
+    background-color: var(--clr-primary);
+    color: var(--clr-text-light);
+}
+
+/*Task componets*/
+#to-do-list-body,
+#to-do-main,
+#input-add-task {
+    background-color: var(--clr-text-light);
+}
+
+#to-do-main {
+    box-shadow: 0 0 10px #0000007c;
+    border-radius: 10px;
+    margin-top: 3rem;
+}
+
+#to-do-main>h2 {
+    color: var(--clr-text-dark);
+    font-weight: 700;
+    font-size: 2rem;
+}
+
+#create-task-container {
+    background-color: var(--clr-surface-strong);
+    border-radius: 10px;
+}
+
+.task-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    background-color: var(--clr-text-light);
+    border: 2px solid var(--clr-surface-strong);
+    border-radius: 0.5rem;
+}
+
+.task-content {
+    display: flex;
+    gap: 1rem;
+}
+
+.task-text {
+    font-size: 1.3rem;
+    font-weight: 500;
+    color: var(--clr-text-dark);
+}
+
+.task-date {
+    font-size: 0.9rem;
+    color: var(--clr-text);
+}
+
+.task-completed {
+    border-color: var(--clr-accent);
+}
+
+.task-completed-text {
+    text-decoration: line-through;
+    color: var(--clr-text);
+}
+
+
+#not-tasks {
+    text-align: center;
+    width: 100%;
+    height: 100%;
+    font-weight: 700;
+    color: var(--clr-text-dark);
+    border: 2px solid var(--clr-surface-strong);
+    padding: 2rem;
+    border-radius: 0.5rem;
+}
+
+#sumary-task {
+    background-color: var(--clr-surface-strong);
+    border-radius: 10px;
+    color: var(--clr-text-dark);
+    font-weight: 600;
+    font-size: large;
+}
+
+/*about*/
+#about-container {
+    box-shadow: 0 0 10px var(--clr-text-medium);
+    border-radius: 5px;
+}
+
+#about-footer {
+    background-color: var(--clr-primary);
+    color: var(--clr-text-light);
+}
