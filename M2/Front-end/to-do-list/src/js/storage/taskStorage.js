@@ -4,7 +4,7 @@ export const getTaskIDs = () =>
 export const addTaskID = (taskID) => {
   const ids = getTaskIDs();
   if (!ids.includes(taskID)) {
-    localStorage.setItem("taskIds", JSON.stringify([...ids, taskID]));
+    localStorage.setItem("taskIDs", JSON.stringify([...ids, taskID]));
   }
 };
 
