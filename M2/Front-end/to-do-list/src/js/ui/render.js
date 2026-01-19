@@ -43,3 +43,13 @@ export const renderTask = (data) => {
   li.append(taskContent, btnDelete);
   taskContainer.appendChild(li);
 };
+
+export const renderTaskStats = (stats) => {
+  const total = document.getElementById("total-tasks")
+  const pending = document.getElementById("pending-tasks")
+  const completed = document.getElementById("completed-tasks")
+
+  total.textContent = stats.total
+  pending.textContent = stats.pending
+  completed.textContent = stats.completed
+}
