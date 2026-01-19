@@ -1,8 +1,8 @@
-import { initLoginPage } from "./pages/login.js";
-import { initSignupPage } from "./pages/signup.js";
-import { initToDoListPage } from "./pages/to_do.js";
-import { initAboutPage } from "./pages/about.js";
-import { initIndexPage } from "./pages/index.js";
+import { initLoginPage } from "@pages/login.js";
+import { initSignupPage } from "@pages/signup.js";
+import { initToDoListPage } from "@pages/to_do.js";
+import { initAboutPage } from "@pages/about.js";
+import { initIndexPage } from "@pages/index.js";
 
 try {
   const page = document.body.dataset.page;
@@ -32,5 +32,5 @@ try {
       console.warn("Unknown page");
   }
 } catch (err) {
-    console.error(err)
+  console.error(err);
 }

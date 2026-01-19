@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -79,7 +79,23 @@
         </button>
       </form>
     </main>
+    <script type="importmap">
+      {
+        "imports": {
+          "@api/": "/src/js/api/",
+          "@services/": "/src/js/services/",
+          "@state/": "/src/js/state/",
+          "@storage/": "/src/js/storage/",
+          "@utils/": "/src/js/utils/",
+          "@ui/": "/src/js/ui/",
+          "@events/": "/src/js/ui/events/",
+          "@render/": "/src/js/ui/render/",
+          "@pages/": "/src/js/pages/"
+        }
+      }
+    </script>
+
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <script type="module" src="../js/main.js"></script>
+    <script type="module" src="/src/js/main.js"></script>
   </body>
 </html>

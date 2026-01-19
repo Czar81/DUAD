@@ -1,23 +1,3 @@
-import { getTasksFromState } from "../state/taskState.js";
-import { getTaskStats } from "../utils/helpers.js";
-
-export const renderUserName = (name) => {
-  const display = document.getElementById("name-log");
-  if (!display) return;
-  display.textContent = name;
-};
-
-export const changeBtnState = (containerFilters, btnClick) => {
-    containerFilters
-      .querySelectorAll("button")
-      .forEach(button =>{ 
-        button.classList.remove("btn-active")
-        button.disabled = false
-      });
-      btnClick.classList.add("btn-active")
-      btnClick.disabled = true
-}
-
 export const renderTask = (data) => {
   const taskContainer = document.getElementById("task-container");
 
@@ -44,10 +24,10 @@ export const renderTask = (data) => {
   btnDelete.className = "btn-delete";
   btnDelete.textContent = "Delete";
   if (data.data.completed) {
-    li.className = "task-card completed"
-    checkbox.checked = true
+    li.className = "task-card completed";
+    checkbox.checked = true;
   } else {
-    li.className = "task-card"
+    li.className = "task-card";
   }
   li.dataset.id = data.id;
 
@@ -55,14 +35,4 @@ export const renderTask = (data) => {
   taskContent.append(checkbox, taskDesc);
   li.append(taskContent, btnDelete);
   taskContainer.appendChild(li);
-};
-
-export const renderTaskStats = () => {
-  const tasks = getTasksFromState();
-
-  const { total, completed, pending } = getTaskStats(tasks);
-
-  document.getElementById("total-tasks").textContent = total;
-  document.getElementById("completed-tasks").textContent = completed;
-  document.getElementById("pending-tasks").textContent = pending;
 };

@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -12,14 +12,12 @@
         <h1>To Do List Credit</h1>
         <p>Learn more about</p>
       </div>
-      <a href="./to-do.html" class="btn-delete" id="btn-go-back">
-        Go back
-      </a>
+      <a href="./to-do.html" class="btn-delete" id="btn-go-back"> Go back </a>
     </header>
     <main id="about-container">
       <section id="about-web">
         <h2>About the web</h2>
-        <hr/>
+        <hr />
         <p>
           This web application was developed as an educational project to
           demonstrate modern web design capabilities using HTML, CSS, and
@@ -66,7 +64,7 @@
       </section>
       <section id="references">
         <h2>References</h2>
-        <hr>
+        <hr />
         <ul></ul>
       </section>
     </main>
@@ -74,7 +72,23 @@
       <small>© 2026 Ian. All rights reserved.</small>
       <small>Developed with love and lots of coffee</small>
     </footer>
+    <script type="importmap">
+      {
+        "imports": {
+          "@api/": "/src/js/api/",
+          "@services/": "/src/js/services/",
+          "@state/": "/src/js/state/",
+          "@storage/": "/src/js/storage/",
+          "@utils/": "/src/js/utils/",
+          "@ui/": "/src/js/ui/",
+          "@events/": "/src/js/ui/events/",
+          "@render/": "/src/js/ui/render/",
+          "@pages/": "/src/js/pages/"
+        }
+      }
+    </script>
+
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <script type="module" src="../js/main.js"></script>
+    <script type="module" src="/src/js/main.js"></script>
   </body>
 </html>

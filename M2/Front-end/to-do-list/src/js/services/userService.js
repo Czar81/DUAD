@@ -1,4 +1,4 @@
-import apiClient from "../api/apiClient.js";
+import apiClient from "@api/apiClient.js";
 
 export const getUser = async (uid) => {
   try {

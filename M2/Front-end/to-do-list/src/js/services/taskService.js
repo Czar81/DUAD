@@ -1,5 +1,5 @@
-import apiClient from "../api/apiClient.js";
-import { addTaskID, getTaskIDs, removeTaskID } from "../storage/taskStorage.js";
+import apiClient from "@api/apiClient.js";
+import { addTaskID, getTaskIDs, removeTaskID } from "@storage/taskStorage.js";
 
 export const createTask = async (data) => {
   try {

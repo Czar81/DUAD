@@ -11,6 +11,22 @@
     <title>Redirecting...</title>
   </head>
   <body data-page="index"></body>
+  <script type="importmap">
+    {
+      "imports": {
+        "@api/": "/src/js/api/",
+        "@services/": "/src/js/services/",
+        "@state/": "/src/js/state/",
+        "@storage/": "/src/js/storage/",
+        "@utils/": "/src/js/utils/",
+        "@ui/": "/src/js/ui/",
+        "@events/": "/src/js/ui/events/",
+        "@render/": "/src/js/ui/render/",
+        "@pages/": "/src/js/pages/"
+      }
+    }
+  </script>
+
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   <script type="module" src="./src/js/main.js"></script>
 </html>
