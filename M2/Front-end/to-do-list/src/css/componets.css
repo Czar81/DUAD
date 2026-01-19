@@ -103,10 +103,12 @@ button,
 
 .btn-active {
     background-color: var(--clr-accent-strong);
+    cursor: none;
 }
 
-.btn-active:hover {
-    background-color: var(--clr-accent);
+.btn-active:disabled {
+    pointer-events: none;
+    background-color: none;
 }
 
 .btn-delete {
