@@ -1,8 +1,22 @@
 import { signUp, login, logout } from "../services/authService.js";
-import { createTask, getOneTask, updateTask, deleteTask } from "../services/taskService.js";
-import { formatDate } from "../utils/helpers.js";
-import { renderTask, renderTaskStats } from "./render.js";
-import { addTaskToState, updateTaskInState, getTasksFromState, removeTaskFromState } from "../state/taskState.js";
+import {
+  createTask,
+  getOneTask,
+  updateTask,
+  deleteTask,
+} from "../services/taskService.js";
+import {
+  formatDate,
+  getPendingTask,
+  getCompletedTask,
+} from "../utils/helpers.js";
+import { renderTask, renderTaskStats, changeBtnState } from "./render.js";
+import {
+  addTaskToState,
+  updateTaskInState,
+  getTasksFromState,
+  removeTaskFromState,
+} from "../state/taskState.js";
 
 export const bindSignupEvents = () => {
   const formSignUp = document.getElementById("form-signup");
@@ -50,6 +64,8 @@ export const bindToDoEvents = () => {
   const inputNewTask = document.getElementById("input-add-task");
   const taskContainer = document.getElementById("task-container");
   const noTaskYet = document.getElementById("not-tasks");
+  const containerFilters = document.getElementById("btn-filters");
+
   if (!btnOut) return;
 
   btnOut.addEventListener("click", () => {
@@ -70,12 +86,12 @@ export const bindToDoEvents = () => {
     };
     const task = await createTask(data);
     if (!task) return;
-    addTaskToState(task)
+    addTaskToState(task);
     noTaskYet.hidden = true;
     inputNewTask.value = "";
     data.id = task.id;
     renderTask(data);
-    renderTaskStats()
+    renderTaskStats();
   });
   if (!taskContainer) return;
   taskContainer.addEventListener("change", async (e) => {
@@ -85,22 +101,37 @@ export const bindToDoEvents = () => {
       const actualTask = await getOneTask(task.dataset.id);
       actualTask.data.completed = e.target.checked;
       await updateTask(task.dataset.id, actualTask);
-      updateTaskInState(task.dataset.id, e.target.checked)
-      renderTaskStats()
+      updateTaskInState(task.dataset.id, e.target.checked);
     }
   });
 
   taskContainer.addEventListener("click", (e) => {
     if (e.target.classList.contains("btn-delete")) {
       const task = e.target.closest(".task-card");
-      deleteTask(task.dataset.id)
+      deleteTask(task.dataset.id);
       task.remove();
       if (task.children.length === 2) {
-        noTaskYet.hidden = false
+        noTaskYet.hidden = false;
       }
-      removeTaskFromState(task.dataset.id)
-      renderTaskStats()
-
+      removeTaskFromState(task.dataset.id);
     }
-  })
+  });
+  if (containerFilters) {
+    containerFilters.addEventListener("click", (e) => {
+      const btn = e.target.closest("button");
+      if (!btn) return;
+      let tasks = [];
+      taskContainer.innerHTML = "";
+      const taskFromState = getTasksFromState();
+      if (btn.id === "btn-get-all") {
+        tasks = taskFromState;
+      } else if (btn.id === "btn-get-pending") {
+        tasks = getPendingTask(taskFromState);
+      } else if (btn.id === "btn-get-completed") {
+        tasks = getCompletedTask(taskFromState);
+      }
+      tasks.forEach((task) => renderTask(task));
+      changeBtnState(containerFilters, btn);
+    });
+  }
 };
