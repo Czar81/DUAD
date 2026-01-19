@@ -11,7 +11,7 @@ export const getTaskStats = (tasks) => {
   let completed = 0;
   let pending = 0;
 
-  tasks.forEach(task => {
+  tasks.forEach((task) => {
     total++;
     if (task.data.completed) {
       completed++;
@@ -21,4 +21,12 @@ export const getTaskStats = (tasks) => {
   });
 
   return { total, completed, pending };
+};
+
+export const getPendingTask = (tasks) => {
+  return tasks.filter((task) => task?.data?.completed === false);
+};
+
+export const getCompletedTask = (tasks) => {
+  return tasks.filter((task) => task?.data?.completed === true);
 };
