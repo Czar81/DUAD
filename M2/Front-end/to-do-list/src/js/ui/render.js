@@ -1,3 +1,6 @@
+import { getTasksFromState } from "../state/taskState.js";
+import { getTaskStats } from "../utils/helpers.js";
+
 export const renderUserName = (name) => {
   const display = document.getElementById("name-log");
   if (!display) return;
@@ -29,7 +32,6 @@ export const renderTask = (data) => {
   const btnDelete = document.createElement("button");
   btnDelete.className = "btn-delete";
   btnDelete.textContent = "Delete";
-  console.log(data.data.completed)
   if (data.data.completed) {
     li.className = "task-card completed"
     checkbox.checked = true
@@ -44,12 +46,12 @@ export const renderTask = (data) => {
   taskContainer.appendChild(li);
 };
 
-export const renderTaskStats = (stats) => {
-  const total = document.getElementById("total-tasks")
-  const pending = document.getElementById("pending-tasks")
-  const completed = document.getElementById("completed-tasks")
+export const renderTaskStats = () => {
+  const tasks = getTasksFromState();
 
-  total.textContent = stats.total
-  pending.textContent = stats.pending
-  completed.textContent = stats.completed
-}
+  const { total, completed, pending } = getTaskStats(tasks);
+
+  document.getElementById("total-tasks").textContent = total;
+  document.getElementById("completed-tasks").textContent = completed;
+  document.getElementById("pending-tasks").textContent = pending;
+};

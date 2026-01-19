@@ -1,7 +1,8 @@
 import { signUp, login, logout } from "../services/authService.js";
 import { createTask, getOneTask, updateTask, deleteTask } from "../services/taskService.js";
 import { formatDate } from "../utils/helpers.js";
-import { renderTask } from "./render.js";
+import { renderTask, renderTaskStats } from "./render.js";
+import { addTaskToState, updateTaskInState, getTasksFromState, removeTaskFromState } from "../state/taskState.js";
 
 export const bindSignupEvents = () => {
   const formSignUp = document.getElementById("form-signup");
@@ -67,12 +68,14 @@ export const bindToDoEvents = () => {
         completed: false,
       },
     };
-    const taskID = await createTask(data);
-    if (!taskID) return;
+    const task = await createTask(data);
+    if (!task) return;
+    addTaskToState(task)
     noTaskYet.hidden = true;
     inputNewTask.value = "";
-    data.id = taskID.id;
+    data.id = task.id;
     renderTask(data);
+    renderTaskStats()
   });
   if (!taskContainer) return;
   taskContainer.addEventListener("change", async (e) => {
@@ -82,17 +85,22 @@ export const bindToDoEvents = () => {
       const actualTask = await getOneTask(task.dataset.id);
       actualTask.data.completed = e.target.checked;
       await updateTask(task.dataset.id, actualTask);
+      updateTaskInState(task.dataset.id, e.target.checked)
+      renderTaskStats()
     }
   });
 
   taskContainer.addEventListener("click", (e) => {
-    if(e.target.classList.contains("btn-delete")){
+    if (e.target.classList.contains("btn-delete")) {
       const task = e.target.closest(".task-card");
       deleteTask(task.dataset.id)
       task.remove();
       if (task.children.length === 2) {
-        noTaskYet.hidden=false
+        noTaskYet.hidden = false
       }
+      removeTaskFromState(task.dataset.id)
+      renderTaskStats()
+
     }
   })
 };
