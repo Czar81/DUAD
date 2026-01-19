@@ -5,3 +5,20 @@ export const formatDate = (date = new Date()) => {
     year: "numeric",
   }).format(date);
 };
+
+export const getTaskStats = (tasks) => {
+  let total = 0;
+  let completed = 0;
+  let pending = 0;
+
+  tasks.forEach(task => {
+    total++;
+    if (task.data.completed) {
+      completed++;
+    } else {
+      pending++;
+    }
+  });
+
+  return { total, completed, pending };
+};
