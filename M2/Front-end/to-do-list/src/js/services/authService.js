@@ -1,4 +1,5 @@
 import apiClient from "@api/apiClient.js";
+import { openPopup } from "@popup/initPopup.js";
 import { setUserId, clearUserId } from "@storage/sessionStorage.js";
 
 export const signUp = async (data) => {
@@ -8,10 +9,17 @@ export const signUp = async (data) => {
       setUserId(response.data.id);
       return response.data;
     }
-    console.error("Error while signing up");
+    openPopup({
+      type: "error",
+      message: "Error while signing up",
+    });
     return false;
   } catch (err) {
     console.error(err);
+    openPopup({
+      type: "error",
+      message: `Error signing up: ${err.message}`,
+    });
     return false;
   }
 };
@@ -30,6 +38,10 @@ export const login = async (uid, password) => {
     }
   } catch (err) {
     console.error(err);
+    openPopup({
+      type: "error",
+      message: `Error login: ${err.message}`,
+    });
     return false;
   }
 };
@@ -40,7 +52,7 @@ export const checkSession = async (uid) => {
     if (response?.data?.id) {
       return true;
     }
-    return !!response;
+    return false;
   } catch (err) {
     console.error(err);
     return false;

@@ -1,4 +1,5 @@
 import apiClient from "@api/apiClient.js";
+import { openPopup } from "@popup/initPopup.js";
 import { addTaskID, getTaskIDs, removeTaskID } from "@storage/taskStorage.js";
 
 export const createTask = async (data) => {
@@ -8,10 +9,17 @@ export const createTask = async (data) => {
       addTaskID(response.data.id);
       return response.data;
     }
-    console.error("Error creating task");
+    openPopup({
+      type:"error",
+      message:"Could not create task"
+    })
     return null;
   } catch (err) {
     console.error(err);
+     openPopup({
+      type:"error",
+      message:`Error creating task: ${err.message}`
+    })
     return null;
   }
 };
@@ -27,6 +35,10 @@ export const getTasks = async () => {
     return responses.map((res) => res.data);
   } catch (err) {
     console.error(err);
+    openPopup({
+      type:"error",
+      message:`Error getting task: ${err.message}`
+    })
     return [];
   }
 };
@@ -37,9 +49,17 @@ export const getOneTask = async (taskID) => {
     if (task?.data?.id) {
       return task.data;
     }
+    openPopup({
+      type:"error",
+      message:"Error getting one task"
+    })
     return null;
   } catch (err) {
     console.error(err);
+    openPopup({
+      type:"error",
+      message:`Error getting one task: ${err.message}`
+    })
     return null;
   }
 };
@@ -50,10 +70,17 @@ export const updateTask = async (taskID, data) => {
     if (response?.data?.id) {
       return response.data;
     }
-    console.error("Error updated task");
+     openPopup({
+      type:"error",
+      message:"Could not update a task"
+    })
     return null;
   } catch (err) {
     console.error(err);
+     openPopup({
+      type:"error",
+      message:`Error updating a task: ${err.message}`
+    })
     return null;
   }
 };

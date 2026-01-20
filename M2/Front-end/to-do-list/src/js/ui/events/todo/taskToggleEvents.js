@@ -1,6 +1,7 @@
 import { getOneTask, updateTask } from "@services/taskService.js";
 import { updateTaskInState } from "@state/taskState.js";
 import { renderTaskStats } from "@render/taskStatsRender.js";
+import { openPopup } from "@popup/initPopup.js";
 
 export const bindTaskToggleEvents = () => {
   const taskContainer = document.getElementById("task-container");
@@ -14,6 +15,10 @@ export const bindTaskToggleEvents = () => {
       await updateTask(task.dataset.id, actualTask);
       updateTaskInState(task.dataset.id, e.target.checked);
       renderTaskStats();
+      openPopup({
+        type: "info",
+        message: "Tarea actualizada",
+      });
     }
   });
 };

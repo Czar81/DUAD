@@ -1,5 +1,5 @@
 import { popup } from "./popup.js";
-import {showPopupProfile} from "./profilePopup.js"
+//import {showPopupProfile} from "./profilePopup.js"
 
 export const openPopup = ({ type, message }) => {
   switch (type) {
@@ -13,11 +13,16 @@ export const openPopup = ({ type, message }) => {
       popup("popup-warn", "Warn", "/src/assets/icons/warn.svg", message);
       break;
     case "success":
-      popup("popup-success", "Success", "/src/assets/icons/success.svg", message,);
+      popup(
+        "popup-success",
+        "Success",
+        "/src/assets/icons/success.svg",
+        message,
+      );
       break;
-    case profile:
-      showPopupProfile()
-      break;
+    //case profile:
+    //  showPopupProfile()
+    //  break;
     default:
       console.warn("Unknow popup type");
       break;

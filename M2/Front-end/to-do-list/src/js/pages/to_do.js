@@ -7,6 +7,7 @@ import { setTasksState } from "@state/taskState.js";
 import { renderTaskStats } from "@render/taskStatsRender.js";
 import { renderTask } from "@render/taskRender.js";
 import { renderUserName } from "@render/userRender.js";
+import { openPopup } from "@popup/initPopup.js";
 
 export const initToDoListPage = async () => {
   const uid = getCookie("uid");
@@ -20,6 +21,11 @@ export const initToDoListPage = async () => {
   const user = await getUser(uid);
   if (user?.name) {
     renderUserName(user?.name);
+  } else {
+    openPopup({
+      type: "warn",
+      message: "Could render name",
+    });
   }
   const tasks = await getTasks();
   setTasksState(tasks);

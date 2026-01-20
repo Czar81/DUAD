@@ -1,4 +1,5 @@
 import { signUp } from "@services/authService.js";
+import { openPopup } from "@popup/initPopup.js";
 
 export const bindSignupEvents = () => {
   const formSignUp = document.getElementById("form-signup");
@@ -23,11 +24,22 @@ export const bindSignupEvents = () => {
 
     try {
       const success = await signUp(data);
+
       if (success) {
-        location.replace("/src/pages/to-do.html");
+        openPopup({
+          type: "success",
+          message: `User created, id: ${success.id}`,
+        });
+        setTimeout(() => {
+          location.replace("/src/pages/to-do.html");
+        }, 5000);
       }
     } catch (err) {
       console.error("Signup failed: ", err);
+      openPopup({
+        type: "error",
+        message: `Error signup ${err.message}`,
+      });
     }
   });
 };

@@ -1,6 +1,7 @@
 import { deleteTask } from "@services/taskService.js";
 import { removeTaskFromState } from "@state/taskState.js";
 import { renderTaskStats } from "@render/taskStatsRender.js";
+import { openPopup } from "@popup/initPopup.js";
 
 export const bindTaskDeleteEvents = () => {
   const taskContainer = document.getElementById("task-container");
@@ -15,6 +16,10 @@ export const bindTaskDeleteEvents = () => {
         noTaskYet.hidden = false;
       }
       renderTaskStats();
+      openPopup({
+        type: "info",
+        message: "Tarea borrada",
+      });
     }
   });
 };

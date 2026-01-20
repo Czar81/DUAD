@@ -24,5 +24,5 @@ const popup = document.createElement("div");
 
   setTimeout(() => {
     popup.remove();
-  }, 3000);
+  }, 5000);
 }

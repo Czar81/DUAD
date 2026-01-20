@@ -3,6 +3,7 @@ import { renderTaskStats } from "@render/taskStatsRender.js";
 import { renderTask } from "@render/taskRender.js";
 import { createTask } from "@services/taskService.js";
 import { formatDate } from "@utils/helpers.js";
+import { openPopup } from "@popup/initPopup.js";
 
 export const bindAddTaskEvents = () => {
   const btnNewTask = document.getElementById("btn-add");
@@ -27,5 +28,9 @@ export const bindAddTaskEvents = () => {
     data.id = task.id;
     renderTask(data);
     renderTaskStats();
+    openPopup({
+      type:"info", 
+      message:"Tarea creada"
+    })
   });
 };
