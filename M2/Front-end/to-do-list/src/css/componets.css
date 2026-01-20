@@ -147,20 +147,20 @@ button,
     z-index: 9999;
 }
 
-.popup__icon {
+.popup-icon {
     width: 20px;
     height: 20px;
     transform: translateY(-2px);
     margin-right: 8px;
 }
 
-.popup__title {
+.popup-title {
     font-weight: 500;
     font-size: 14px;
     color: var(--clr-text-light);
 }
 
-.popup__close {
+.popup-close {
     width: 20px;
     height: 20px;
     cursor: pointer;
@@ -168,20 +168,20 @@ button,
 }
 
 
-.error {
+.popup-error {
     background: var(--bg-danger-strong);
 
 }
 
-.success {
+.popup-success {
     background: var(--clr-success);
 }
 
-.info {
+.popup-info {
     background: var(--clr-info);
 }
 
-.warm {
+.popup-warm {
     background-color: var(--clr-warning);
 }
 
