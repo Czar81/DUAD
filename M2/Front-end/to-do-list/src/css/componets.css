@@ -130,59 +130,116 @@ button,
 
 /*Popup*/
 .popup {
-  width: 320px;
-  padding: 12px;
+    width: 320px;
+    padding: 12px;
 
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: start;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: start;
 
-  border-radius: 8px;
-  box-shadow: 0px 0px 5px -3px #111;
+    border-radius: 8px;
+    box-shadow: 0px 0px 5px -3px #111;
 
-  position: fixed;
-  top: 20px;
-  right: 20px;
-  z-index: 9999;
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 9999;
 }
 
 .popup__icon {
-  width: 20px;
-  height: 20px;
-  transform: translateY(-2px);
-  margin-right: 8px;
+    width: 20px;
+    height: 20px;
+    transform: translateY(-2px);
+    margin-right: 8px;
 }
 
 .popup__title {
-  font-weight: 500;
-  font-size: 14px;
-  color: var(--clr-text-light);
+    font-weight: 500;
+    font-size: 14px;
+    color: var(--clr-text-light);
 }
 
 .popup__close {
-  width: 20px;
-  height: 20px;
-  cursor: pointer;
-  margin-left: auto;
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    margin-left: auto;
 }
 
 
-.error{
-  background: var(--bg-danger-strong);
+.error {
+    background: var(--bg-danger-strong);
 
 }
 
-.success{
-  background: var( --clr-success);
+.success {
+    background: var(--clr-success);
 }
 
-.info{
-  background: var( --clr-info);
+.info {
+    background: var(--clr-info);
 }
 
-.warm{
+.warm {
     background-color: var(--clr-warning);
+}
+
+/*Card*/
+.card-info {
+    background: var(--bg-surface);
+    border-radius: 12px;
+    padding: 1rem 1.4rem;
+    width: 300px;
+    box-shadow: 0 10px 30px var(--clr-primary);
+    position: fixed;
+    top: 2rem;
+    right: 2rem;
+    display: none;
+    flex-direction: column;
+    z-index: 1000;
+    color: var(--clr-text-dark);
+    font-size: 1rem;
+}
+
+.card-info h2 {
+    margin: 0 0 12px;
+    font-size: 1.5rem;
+    color: var(--clr-primary);
+}
+
+.card-info .icon {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 1rem;
+}
+
+.card-info .icon img {
+    width: 46px;
+    height: 46px;
+}
+
+.card-info p {
+    margin: 6px 0;
+}
+
+.card-info strong {
+    color: var(--clr-primary);
+}
+
+.close-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: transparent;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--clr-text-medium);
+}
+
+.close-btn:hover {
+    color: var(--bg-danger-strong);
 }
 
 /*Checkbox*/
