@@ -23,6 +23,7 @@
             class="avatar"
             src="../assets/icons/icon_profile.svg"
             alt="User profile icon"
+            onclick="openPopup()"
           />
           <p id="name-log"></p>
         </div>
@@ -78,11 +79,12 @@
           "@ui/": "/src/js/ui/",
           "@events/": "/src/js/ui/events/",
           "@render/": "/src/js/ui/render/",
+          "@popup/": "/src/js/ui/popup/",
+          "@assets/": "/src/assets",
           "@pages/": "/src/js/pages/"
         }
       }
     </script>
-
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script type="module" src="/src/js/main.js"></script>
   </body>
