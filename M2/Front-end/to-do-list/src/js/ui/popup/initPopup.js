@@ -1,28 +1,25 @@
-import { popup } from "./popup.js";
-//import {showPopupProfile} from "./profilePopup.js"
+import { popup } from "@render/popupRender.js";
+import {showPopupProfile} from "./profilePopup.js"
 
 export const openPopup = ({ type, message }) => {
   switch (type) {
     case "error":
-      popup("popup-error", "Error", "/src/assets/icons/error.svg", message);
+      popup("popup-error", "/src/assets/icons/error.svg", "Error", message);
       break;
     case "info":
-      popup("popup-info", "Info", "/src/assets/icons/info.svg", message);
+      popup("popup-info", "/src/assets/icons/info.svg", "Info", message);
       break;
     case "warn":
-      popup("popup-warn", "Warn", "/src/assets/icons/warn.svg", message);
+      popup("popup-warn", "/src/assets/icons/warn.svg", "Warn", message);
       break;
     case "success":
       popup(
         "popup-success",
-        "Success",
         "/src/assets/icons/success.svg",
+        "Success",
         message,
       );
       break;
-    //case profile:
-    //  showPopupProfile()
-    //  break;
     default:
       console.warn("Unknow popup type");
       break;

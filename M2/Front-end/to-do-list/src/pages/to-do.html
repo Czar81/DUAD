@@ -23,7 +23,7 @@
             class="avatar"
             src="../assets/icons/icon_profile.svg"
             alt="User profile icon"
-            onclick="openPopup()"
+            id="name-img"
           />
           <p id="name-log"></p>
         </div>
@@ -32,6 +32,18 @@
         </button>
       </div>
     </header>
+    <div class="card-info">
+      <button class="close-btn">x</button>
+      <div class="icon">
+        <img
+          src="../assets/icons/icon_profile_black.svg"
+          alt="Icono de perfil"
+        />
+      </div>
+      <h2><span id="name-card"></span> <span id="last-name-card"></span></h2>
+      <p><strong>ID:</strong> <span id="info-id"></span></p>
+      <p><strong>Email:</strong> <span id="info-email"></span></p>
+    </div>
     <main id="to-do-main">
       <h2>My Tasks</h2>
       <div id="btn-filters">
@@ -85,6 +97,7 @@
         }
       }
     </script>
+
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script type="module" src="/src/js/main.js"></script>
   </body>
