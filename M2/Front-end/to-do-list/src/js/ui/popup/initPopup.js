@@ -1,5 +1,4 @@
 import { popup } from "@render/popupRender.js";
-import {showPopupProfile} from "./profilePopup.js"
 
 export const openPopup = ({ type, message }) => {
   switch (type) {

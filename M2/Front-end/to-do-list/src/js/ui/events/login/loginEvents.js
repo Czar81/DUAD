@@ -9,17 +9,15 @@ export const bindLoginEvents = () => {
     try {
       const { uid, password } = e.target.elements;
 
-      const userId = uid.value.trim();
-      const pass = password.value.trim();
 
-      if (!userId || !pass) {
+      if (!uid.value.trim() || !password.value.trim()) {
         openPopup({
           type: "warn",
           message: "One or more inputs are blank",
         });
         return;
       }
-      const success = await login(uid, pass);
+      const success = await login(uid.value, password.value);
       if (success) {
         openPopup({
           type: "success",

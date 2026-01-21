@@ -1,7 +1,7 @@
 import { showPopupProfile, closePopupProfile } from "@popup/profilePopup.js";
 
 export const bindProfileEvents = () => {
-  const profile = document.getElementById("name-log-container");
+  const profile = document.getElementById("name-img");
   profile.addEventListener("click", () => {
     showPopupProfile();
   });

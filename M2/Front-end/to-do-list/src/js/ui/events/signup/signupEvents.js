@@ -27,7 +27,7 @@ export const bindSignupEvents = () => {
       });
       return;
     }
-    if (isValidPass(password.value)) {
+    if (!isValidPass(password.value)) {
       openPopup({
         type: "warn",
         message: "Password must be at least 8 characters and contain letters and numbers",
