@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Iniciar Sesion</title>
+  </head>
+  <body>
+    <form id="form-login">
+      <input
+        type="text"
+        name="id"
+        id="user-id"
+        placeholder="ff*********"
+        required
+      />
+      <input
+        type="password"
+        name="password"
+        id="password-user"
+        placeholder="Your password"
+        required
+      />
+      <div id="errorMsg"></div>
+      <button type="submit" id="btn-login">Ingresar</button>
+      <p>No tienes cuenta <a href="../register/register.html">Registrate</a></p>
+    </form>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="./script.js"></script>
+  </body>
+</html>
