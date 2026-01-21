@@ -13,6 +13,20 @@ export const bindSignupEvents = () => {
   formSignUp.addEventListener("submit", async (e) => {
     e.preventDefault();
     const { name, lastName, email, password } = e.target.elements;
+
+    if (
+      !name.value.trim() ||
+      !lastName.value.trim() ||
+      !email.value.trim() ||
+      !password.value.trim()
+    ) {
+      openPopup({
+        type: "warn",
+        message: "Uno o más inputs estan vacios",
+      });
+      return;
+    }
+
     const data = {
       name: name.value,
       data: {

@@ -7,7 +7,19 @@ export const bindLoginEvents = () => {
   formLogin.addEventListener("submit", async (e) => {
     e.preventDefault();
     try {
-      const success = await login(e.target.uid.value, e.target.password.value);
+      const { uid, password } = e.target.elements;
+
+      const userId = uid.value.trim();
+      const pass = password.value.trim();
+
+      if (!userId || !pass) {
+        openPopup({
+          type: "warn",
+          message: "Uno o más inputs estan vacios",
+        });
+        return;
+      }
+      const success = await login(uid, pass);
       if (success) {
         openPopup({
           type: "success",

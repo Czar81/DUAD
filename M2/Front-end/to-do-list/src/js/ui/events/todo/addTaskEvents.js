@@ -12,7 +12,13 @@ export const bindAddTaskEvents = () => {
   if (!btnNewTask) return;
 
   btnNewTask.addEventListener("click", async () => {
-    if (!inputNewTask.value.trim()) return;
+    if (!inputNewTask.value.trim()){ 
+      openPopup({
+        type:"warn", 
+        message:"La tarea no puede ser vacia"
+      })
+      return;
+    };
     const data = {
       name: inputNewTask.value,
       data: {
