@@ -15,7 +15,7 @@ export const bindLoginEvents = () => {
       if (!userId || !pass) {
         openPopup({
           type: "warn",
-          message: "Uno o más inputs estan vacios",
+          message: "One or more inputs are blank",
         });
         return;
       }

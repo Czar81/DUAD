@@ -30,3 +30,11 @@ export const getPendingTask = (tasks) => {
 export const getCompletedTask = (tasks) => {
   return tasks.filter((task) => task?.data?.completed === true);
 };
+
+export const isValidPass = (pass) => {
+  const hasMinLength = pass.length >= 8;
+  const hasLetter = /[a-zA-Z]/.test(pass);
+  const hasNumber = /\d/.test(pass);
+
+  return hasMinLength && hasLetter && hasNumber;
+};

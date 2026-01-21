@@ -1,5 +1,6 @@
 import { signUp } from "@services/authService.js";
 import { openPopup } from "@popup/initPopup.js";
+import { isValidPass } from "@utils/helper.js"
 
 export const bindSignupEvents = () => {
   const formSignUp = document.getElementById("form-signup");
@@ -22,11 +23,17 @@ export const bindSignupEvents = () => {
     ) {
       openPopup({
         type: "warn",
-        message: "Uno o más inputs estan vacios",
+        message: "One or more inputs are blank",
       });
       return;
     }
-
+    if (isValidPass(password.value)) {
+      openPopup({
+        type: "warn",
+        message: "Password must be at least 8 characters and contain letters and numbers",
+      });
+      return;
+    }
     const data = {
       name: name.value,
       data: {
