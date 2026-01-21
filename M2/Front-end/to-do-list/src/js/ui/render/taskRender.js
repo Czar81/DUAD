@@ -36,3 +36,22 @@ export const renderTask = (data) => {
   li.append(taskContent, btnDelete);
   taskContainer.appendChild(li);
 };
+
+export const renderNoTask = (type) => {
+  const container = document.getElementById("task-container");
+  const noTask = document.createElement("li")
+  noTask.id="not-tasks"
+  const messages = {
+    all: "No tasks yet",
+    pending: "No tasks pending",
+    completed: "No tasks completed",
+  };
+
+  noTask.textContent = messages[type] ?? "Unknown type";
+  container.appendChild(noTask)
+};
+
+export const hiddeNoTask = () => {
+  const noTaskYet = document.getElementById("not-tasks");
+  noTaskYet.remove()
+};

@@ -8,7 +8,7 @@ export const bindLogoutEvents = () => {
   btnOut.addEventListener("click", () => {
     openPopup({
       type: "info",
-      message: "Cerrando sesion bye",
+      message: "Cerrando sesion",
     });
     logout();
     setTimeout(() => {

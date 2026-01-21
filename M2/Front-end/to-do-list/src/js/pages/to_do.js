@@ -5,9 +5,10 @@ import { getUser } from "@services/userService.js";
 import { getTasks } from "@services/taskService.js";
 import { setTasksState } from "@state/taskState.js";
 import { renderTaskStats } from "@render/taskStatsRender.js";
-import { renderTask } from "@render/taskRender.js";
+import { renderTask, renderNoTask } from "@render/taskRender.js";
 import { renderUserName } from "@render/userRender.js";
 import { openPopup } from "@popup/initPopup.js";
+import { setUserState } from "@state/userState.js"
 
 export const initToDoListPage = async () => {
   const uid = getCookie("uid");
@@ -21,18 +22,19 @@ export const initToDoListPage = async () => {
   const user = await getUser(uid);
   if (user?.name) {
     renderUserName(user?.name);
+    setUserState(user)
   } else {
     openPopup({
       type: "warn",
-      message: "Could render name",
+      message: "Could set user",
     });
   }
   const tasks = await getTasks();
-  setTasksState(tasks);
   if (Array.isArray(tasks) && tasks.length > 0) {
+    setTasksState(tasks);
     tasks.forEach((task) => renderTask(task));
   } else {
-    document.getElementById("not-tasks").hidden = false;
+    renderNoTask("all")
   }
   bindToDoEvents();
   renderTaskStats();

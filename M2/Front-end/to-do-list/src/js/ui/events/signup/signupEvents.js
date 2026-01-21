@@ -1,6 +1,6 @@
 import { signUp } from "@services/authService.js";
 import { openPopup } from "@popup/initPopup.js";
-import { isValidPass } from "@utils/helper.js"
+import { isValidPass } from "@utils/helpers.js"
 
 export const bindSignupEvents = () => {
   const formSignUp = document.getElementById("form-signup");
