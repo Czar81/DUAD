@@ -181,7 +181,7 @@ button,
     background: var(--clr-info);
 }
 
-.popup-warm {
+.popup-warn {
     background-color: var(--clr-warning);
 }
 
@@ -274,8 +274,19 @@ button,
     margin-right: 1rem;
 }
 
-#name-log-container>img {
+#name-log-container > img {
     width: 2rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+#name-log-container:hover img {
+    width: 2.2rem;
+    transform: scale(1.1); 
+}
+
+#name-log-container img:active {
+    transform: scale(0.95); 
 }
 
 #header-about {
