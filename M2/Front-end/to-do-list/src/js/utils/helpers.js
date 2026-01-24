@@ -1,0 +1,40 @@
+export const formatDate = (date = new Date()) => {
+  return new Intl.DateTimeFormat("en-US", {
+    month: "long",
+    day: "numeric",
+    year: "numeric",
+  }).format(date);
+};
+
+export const getTaskStats = (tasks) => {
+  let total = 0;
+  let completed = 0;
+  let pending = 0;
+
+  tasks.forEach((task) => {
+    total++;
+    if (task.data.completed) {
+      completed++;
+    } else {
+      pending++;
+    }
+  });
+
+  return { total, completed, pending };
+};
+
+export const getPendingTask = (tasks) => {
+  return tasks.filter((task) => task?.data?.completed === false);
+};
+
+export const getCompletedTask = (tasks) => {
+  return tasks.filter((task) => task?.data?.completed === true);
+};
+
+export const isValidPass = (pass) => {
+  const hasMinLength = pass.length >= 8;
+  const hasLetter = /[a-zA-Z]/.test(pass);
+  const hasNumber = /\d/.test(pass);
+
+  return hasMinLength && hasLetter && hasNumber;
+};

@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="shortcut icon"
+      href="../assets/icons/favicon.svg"
+      type="image/svg+xml"
+    />
+    <link rel="stylesheet" href="../css/main.css" />
+    <title>Login</title>
+  </head>
+  <body id="login" data-page="login">
+    <div class="displayMsg"></div>
+    <main>
+      <h1 class="main-title">Login</h1>
+      <p>
+        Don't have an account? <a class="link" href="./signup.html">Sign up</a>
+      </p>
+      <form id="form-login">
+        <input
+          type="text"
+          name="uid"
+          class="input-form"
+          id="user-id"
+          placeholder="User ID"
+          required
+        />
+        <input
+          type="password"
+          name="password"
+          class="input-form"
+          id="password-user"
+          placeholder="Your password"
+          required
+        />
+        <button type="submit" class="btn-submit" id="btn-login">Login</button>
+      </form>
+    </main>
+    <aside class="img-container-aside">
+      <img
+        class="img-aside"
+        src="../assets/imgs/background.jpg"
+        alt="To Do List"
+      />
+    </aside>
+    <script type="importmap">
+      {
+        "imports": {
+          "@api/": "/src/js/api/",
+          "@services/": "/src/js/services/",
+          "@state/": "/src/js/state/",
+          "@storage/": "/src/js/storage/",
+          "@utils/": "/src/js/utils/",
+          "@ui/": "/src/js/ui/",
+          "@events/": "/src/js/ui/events/",
+          "@render/": "/src/js/ui/render/",
+          "@popup/": "/src/js/ui/popup/",
+          "@assets/": "/src/assets",
+          "@pages/": "/src/js/pages/"
+        }
+      }
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script type="module" src="/src/js/main.js"></script>
+  </body>
+</html>

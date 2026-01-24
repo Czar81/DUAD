@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <style>
+        form{
+            display: flex;
+            flex-direction: column;
+            width: 20%;
+            gap: 0.4rem;
+        }
+        #submit{
+            width: 30%;
+        }
+    </style>
+</head>
+<body>
+    <form action="https://dummyjson.com/test">
+        <h1>Register</h1>
+        <label for="email-user">Type your Email</label>
+        <input type="email" name="email-user" id="email-user" placeholder="email@example.com" required>
+        <label for="password-user">Enter your password</label>
+        <input type="password" name="password" id="password-user" placeholder="Minimum 8 characters" required>
+        <label for="first-name">Enter your first name</label>
+        <input type="text" name="first-name" id="first-name" placeholder="John" required>
+        <label for="first-name">Enter your last name</label>
+        <input type="text" name="last-name" id="last-name" placeholder="Doe" required>
+        <fieldset>
+            <legend>Are you employee?</legend>
+            <input type="radio" name="employee-radio" id="rdNoEmployee">No
+            <input type="radio" name="employee-radio" id="rdEmployee" required>Yes
+        </fieldset>
+        <label for="job-user" id="job-user-label"  hidden>What is your job?</label>
+        <input type="text" name="job" id="job-user-input" hidden>
+        <input type="submit" id="submit" value="Register">
+    </form>
+
+    <script>
+        function showJob(){
+            const input= document.getElementById("job-user-label")
+            document.getElementById("job-user-input").hidden=false
+            input.hidden=false
+            input.requierd=true
+        }
+        function hideJob(){
+            const input= document.getElementById("job-user-label").hidden=true
+            document.getElementById("job-user-input").hidden=true
+            input.hidden=true
+            input.requierd=false
+            input.value=""
+        }
+
+        const radio_yes = document.getElementById("rdEmployee")
+        const radio_no = document.getElementById("rdNoEmployee")
+        radio_yes.addEventListener("change", showJob)
+        radio_no.addEventListener("change", hideJob)
+    </script>
+</body>
+</html>

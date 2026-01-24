@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="shortcut icon"
+      href="../assets/icons/favicon.svg"
+      type="image/svg+xml"
+    />
+    <link rel="stylesheet" href="../css/main.css" />
+    <title>Sign up</title>
+  </head>
+  <body id="sign-up" data-page="sign-up">
+    <div class="displayMsg"></div>
+    <aside class="img-container-aside">
+      <img
+        src="../assets/imgs/to-do-list.jpg"
+        alt="To Do List"
+        class="img-aside"
+        id="signup-bg-img"
+      />
+    </aside>
+    <main>
+      <h1 class="main-title">Create an account</h1>
+      <p>
+        Already have an account? <a href="./login.html" class="link">Log in</a>
+      </p>
+      <form id="form-signup">
+        <div id="fullname">
+          <input
+            type="text"
+            name="name"
+            class="input-form"
+            id="name-user"
+            placeholder="Name"
+            required
+          />
+          <input
+            type="text"
+            name="lastName"
+            class="input-form"
+            id="lastName-user"
+            placeholder="Last Name"
+            required
+          />
+        </div>
+
+        <input
+          type="email"
+          name="email"
+          class="input-form"
+          id="email-user"
+          placeholder="Email"
+          required
+        />
+        <input
+          type="password"
+          name="password"
+          class="input-form"
+          id="password-user"
+          placeholder="Your password"
+          required
+        />
+        <div class="terms_conditions-container">
+          <input
+            type="checkbox"
+            name="terms_conditions"
+            class="check"
+            id="terms-conditions"
+            required
+          />
+          <label for="terms-conditions">
+            I agree to the Terms & Conditions
+          </label>
+        </div>
+        <button type="submit" class="btn-submit" id="btn-signup" disabled>
+          Sign up
+        </button>
+      </form>
+    </main>
+    <script type="importmap">
+      {
+        "imports": {
+          "@api/": "/src/js/api/",
+          "@services/": "/src/js/services/",
+          "@state/": "/src/js/state/",
+          "@storage/": "/src/js/storage/",
+          "@utils/": "/src/js/utils/",
+          "@ui/": "/src/js/ui/",
+          "@events/": "/src/js/ui/events/",
+          "@render/": "/src/js/ui/render/",
+          "@popup/": "/src/js/ui/popup/",
+          "@assets/": "/src/assets",
+          "@pages/": "/src/js/pages/"
+        }
+      }
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script type="module" src="/src/js/main.js"></script>
+  </body>
+</html>
